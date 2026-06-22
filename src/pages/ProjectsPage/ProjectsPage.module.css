@@ -1,0 +1,440 @@
+.projectsShell {
+  display: grid;
+  gap: var(--space-5);
+  min-height: calc(100vh - 164px);
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+}
+
+.heroPanel,
+.projectCard,
+.emptyState {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 220, 230, 0.11);
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(246, 166, 190, 0.14), transparent 40%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02)),
+    rgba(10, 7, 9, 0.76);
+  box-shadow:
+    0 28px 76px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.heroPanel {
+  display: grid;
+  gap: 10px;
+  align-content: center;
+  min-height: 210px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.heroPanel h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  line-height: 0.95;
+}
+
+.heroPanel span,
+.projectBody span,
+.projectBody p,
+.projectBody em,
+.emptyState span,
+.projectModal header span {
+  color: var(--color-text-muted);
+}
+
+.heroPanel button {
+  width: fit-content;
+  min-height: 42px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 0 18px;
+  color: white;
+  font-weight: 900;
+  background: var(--gradient-action);
+  box-shadow: var(--shadow-neon-strong);
+}
+
+.filterBar {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.filterButton,
+.activeFilter {
+  min-height: 40px;
+  border: 1px solid rgba(255, 210, 225, 0.12);
+  border-radius: 16px;
+  padding: 0 14px;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 900;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.016)),
+    rgba(18, 16, 18, 0.68);
+}
+
+.activeFilter {
+  color: white;
+  border-color: rgba(255, 210, 225, 0.22);
+  background: var(--gradient-action);
+  box-shadow: var(--shadow-neon);
+}
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.projectCard {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  gap: var(--space-4);
+  min-height: 260px;
+  padding: var(--space-4);
+}
+
+.projectAccent {
+  width: 8px;
+  min-height: 100%;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 24px currentColor;
+}
+
+.projectBody {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  color: white;
+  text-align: left;
+  background: transparent;
+}
+
+.projectBody span,
+.projectBody em,
+.projectProgress span {
+  font-family: var(--font-detail);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.projectBody em {
+  font-style: normal;
+}
+
+.projectBody strong {
+  font-size: 1.18rem;
+  line-height: 1.12;
+}
+
+.projectBody p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.projectProgress,
+.projectActions {
+  grid-column: 2;
+}
+
+.projectProgress {
+  display: grid;
+  gap: 8px;
+}
+
+.projectProgress > div:first-child {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.projectProgress strong {
+  font-family: var(--font-detail);
+  font-size: 1.25rem;
+}
+
+.progressTrack {
+  overflow: hidden;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 210, 225, 0.1);
+}
+
+.progressTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-action);
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.28);
+}
+
+.projectActions {
+  display: flex;
+  align-self: end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.completed {
+  opacity: 0.72;
+}
+
+.completed .projectBody strong {
+  text-decoration: line-through;
+}
+
+.archived {
+  opacity: 0.48;
+}
+
+.archiveButton {
+  color: #ffd8e2;
+}
+
+.emptyState {
+  display: grid;
+  min-height: 240px;
+  place-content: center;
+  gap: 8px;
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.emptyState h2 {
+  margin: 0;
+}
+
+.projectModal {
+  display: grid;
+  gap: var(--space-4);
+  min-width: min(560px, calc(100vw - 40px));
+}
+
+.projectModal header,
+.projectModal label {
+  display: grid;
+  gap: 8px;
+}
+
+.projectModal h2 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.projectModal label {
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.projectModal input,
+.projectModal textarea,
+.projectModal select {
+  width: 100%;
+  border: 1px solid rgba(255, 210, 225, 0.13);
+  border-radius: 16px;
+  padding: 12px 14px;
+  color: white;
+  background: rgba(18, 16, 18, 0.72);
+}
+
+.projectModal textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.formError {
+  margin: 0;
+  color: #ffc5d6;
+  font-weight: 800;
+}
+
+.projectModal footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.drawerLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-4);
+  background:
+    radial-gradient(circle at 78% 18%, rgba(246, 166, 190, 0.11), transparent 32%),
+    rgba(2, 1, 3, 0.34);
+  backdrop-filter: blur(8px);
+}
+
+.projectDrawer {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  width: min(480px, 100%);
+  height: 100%;
+  overflow: auto;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+}
+
+.drawerHeader,
+.drawerProgress > div:first-child,
+.drawerSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.drawerHeader h2 {
+  margin: 4px 0 0;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  line-height: 1;
+}
+
+.drawerMeta {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.drawerMeta span,
+.drawerProgress span,
+.drawerProgress p,
+.drawerTaskRow span,
+.drawerEmpty span,
+.drawerSectionHeader strong {
+  color: var(--color-text-muted);
+  font-family: var(--font-detail);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.drawerMeta span {
+  border: 1px solid rgba(255, 210, 225, 0.12);
+  border-radius: var(--radius-pill);
+  padding: 7px 10px;
+  background: rgba(18, 16, 18, 0.62);
+}
+
+.drawerDescription {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.drawerProgress,
+.drawerTasks,
+.drawerTaskRow,
+.drawerEmpty {
+  border: 1px solid rgba(255, 210, 225, 0.1);
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.016)),
+    rgba(18, 16, 18, 0.58);
+}
+
+.drawerProgress {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.drawerProgress strong {
+  font-family: var(--font-detail);
+  font-size: 2.1rem;
+  line-height: 1;
+}
+
+.drawerProgress p {
+  margin: 0;
+}
+
+.drawerActions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.drawerTasks {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.drawerSectionHeader strong {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  color: white;
+  background: rgba(18, 16, 18, 0.72);
+}
+
+.drawerTaskRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding: 12px;
+}
+
+.drawerTaskRow button:first-child {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  color: white;
+  text-align: left;
+  background: transparent;
+}
+
+.drawerTaskRow strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawerEmpty {
+  display: grid;
+  gap: 5px;
+  min-height: 116px;
+  place-content: center;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .projectGrid,
+  .modalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawerLayer {
+    padding: var(--space-2);
+  }
+}

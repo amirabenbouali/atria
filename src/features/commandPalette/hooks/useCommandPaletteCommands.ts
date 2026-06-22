@@ -4,6 +4,8 @@ import { routes } from '../../../app/routes';
 import { useCalendarStore } from '../../calendar/store/calendar.store';
 import { categoryColors } from '../../calendar/constants/calendar.constants';
 import { formatInputDate, getCurrentWeekDays } from '../../calendar/utils/calendarDates';
+import { useGoalsStore } from '../../goals/store/goals.store';
+import { useProjectsStore } from '../../projects/store/projects.store';
 import { useSettingsStore } from '../../settings/store/settings.store';
 import { useDefaultCalendarModalPreset } from '../../settings/hooks/useDefaultCalendarModalPreset';
 import type { CommandPaletteCommand } from '../types/commandPalette.types';
@@ -27,6 +29,8 @@ export function useCommandPaletteCommands({
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const openAddEventModal = useCalendarStore((state) => state.openAddEventModal);
   const openEditEventModal = useCalendarStore((state) => state.openEditEventModal);
+  const openGoalModal = useGoalsStore((state) => state.openGoalModal);
+  const openProjectModal = useProjectsStore((state) => state.openProjectModal);
   const todayDate = formatInputDate();
   const weekStartDate = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday)[0]?.isoDate ?? todayDate;
 
@@ -65,6 +69,54 @@ export function useCommandPaletteCommands({
         accentColor: categoryColors.Finance,
         execute: () => {
           navigate(routes.insights);
+          onClose();
+        },
+      },
+      {
+        id: 'navigate-tasks',
+        title: 'Go to Tasks',
+        subtitle: 'Open every flexible task by date',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Health,
+        execute: () => {
+          navigate(routes.tasks);
+          onClose();
+        },
+      },
+      {
+        id: 'navigate-goals',
+        title: 'Go to Goals',
+        subtitle: 'Open long-range objectives',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.goals);
+          onClose();
+        },
+      },
+      {
+        id: 'navigate-projects',
+        title: 'Go to Projects',
+        subtitle: 'Open structured workstreams',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Work,
+        execute: () => {
+          navigate(routes.projects);
+          onClose();
+        },
+      },
+      {
+        id: 'open-projects',
+        title: 'Open Projects',
+        subtitle: 'Inspect project workstreams and linked tasks',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Work,
+        execute: () => {
+          navigate(routes.projects);
           onClose();
         },
       },
@@ -117,6 +169,68 @@ export function useCommandPaletteCommands({
         },
       },
       {
+        id: 'create-task',
+        title: 'New Task',
+        subtitle: 'Create a flexible task for today',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Health,
+        execute: () => {
+          openAddEventModal(createDefaultPreset({ itemType: 'task', date: todayDate }));
+          onClose();
+        },
+      },
+      {
+        id: 'create-goal',
+        title: 'New Goal',
+        subtitle: 'Create a long-range objective',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.goals);
+          openGoalModal();
+          onClose();
+        },
+      },
+      {
+        id: 'create-project',
+        title: 'New Project',
+        subtitle: 'Create a structured workstream',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Work,
+        execute: () => {
+          navigate(routes.projects);
+          openProjectModal();
+          onClose();
+        },
+      },
+      {
+        id: 'create-task-for-goal',
+        title: 'New task for goal',
+        subtitle: 'Open a task and choose a linked goal',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          openAddEventModal(createDefaultPreset({ itemType: 'task', date: todayDate }));
+          onClose();
+        },
+      },
+      {
+        id: 'create-task-for-project',
+        title: 'New task for project',
+        subtitle: 'Open a task and choose a linked project',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Learning,
+        execute: () => {
+          openAddEventModal(createDefaultPreset({ itemType: 'task', date: todayDate }));
+          onClose();
+        },
+      },
+      {
         id: 'reset-demo-data',
         title: 'Reset demo data',
         subtitle: 'Restore the portfolio-ready sample week',
@@ -129,7 +243,17 @@ export function useCommandPaletteCommands({
         },
       },
     ],
-    [createDefaultPreset, navigate, onClose, onResetDemoData, openAddEventModal, todayDate, weekStartDate],
+    [
+      createDefaultPreset,
+      navigate,
+      onClose,
+      onResetDemoData,
+      openAddEventModal,
+      openGoalModal,
+      openProjectModal,
+      todayDate,
+      weekStartDate,
+    ],
   );
 
   const calendarCommands = useMemo<CommandPaletteCommand[]>(

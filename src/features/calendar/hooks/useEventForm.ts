@@ -36,6 +36,8 @@ function createInitialFormValues(
     category,
     description: '',
     accentColor: categoryColors[category],
+    goalId: preset?.goalId ?? '',
+    projectId: preset?.projectId ?? '',
     recurrence: 'none',
     recurrenceEndDate: '',
   };
@@ -51,6 +53,8 @@ function getFormValuesFromEvent(event: CalendarEvent): CalendarEventFormValues {
     category: event.category,
     description: event.description,
     accentColor: event.accentColor,
+    goalId: event.itemType === 'task' ? event.goalId ?? '' : '',
+    projectId: event.itemType === 'task' ? event.projectId ?? '' : '',
     recurrence: event.recurrence,
     recurrenceEndDate: event.recurrenceEndDate ?? '',
   };
@@ -114,6 +118,15 @@ export function useEventForm({
     setErrors({});
   };
 
+  const updateProject = (projectId: string, goalId?: string) => {
+    setValues((currentValues) => ({
+      ...currentValues,
+      projectId,
+      goalId: goalId ?? currentValues.goalId,
+    }));
+    setErrors({});
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -138,6 +151,8 @@ export function useEventForm({
         category: nextValues.category,
         description: nextValues.description,
         accentColor: nextValues.accentColor,
+        goalId: nextValues.goalId || undefined,
+        projectId: nextValues.projectId || undefined,
         recurrence: nextValues.recurrence,
         recurrenceEndDate: nextValues.recurrenceEndDate || undefined,
       });
@@ -165,5 +180,6 @@ export function useEventForm({
     updateCategory,
     updateField,
     updateItemType,
+    updateProject,
   };
 }

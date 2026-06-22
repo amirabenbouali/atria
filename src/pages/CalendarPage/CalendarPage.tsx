@@ -3,6 +3,7 @@ import AddEventModal from '../../features/calendar/components/AddEventModal/AddE
 import WeeklyCalendar from '../../features/calendar/components/WeeklyCalendar/WeeklyCalendar';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Toast from '../../shared/components/Toast/Toast';
@@ -35,7 +36,7 @@ export default function CalendarPage() {
   const copyEventToNextWeek = useCalendarStore((state) => state.copyEventToNextWeek);
   const moveCalendarItem = useCalendarStore((state) => state.moveCalendarItem);
   const moveTask = useCalendarStore((state) => state.moveTask);
-  const resetDemoData = useCalendarStore((state) => state.resetDemoData);
+  const resetDemoWorkspace = useResetDemoWorkspace();
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
@@ -65,9 +66,9 @@ export default function CalendarPage() {
   }, [copyEventToNextWeek]);
 
   const handleResetDemoData = useCallback(() => {
-    resetDemoData();
+    resetDemoWorkspace();
     setToastMessage('Demo week restored');
-  }, [resetDemoData]);
+  }, [resetDemoWorkspace]);
 
   return (
     <AppLayout

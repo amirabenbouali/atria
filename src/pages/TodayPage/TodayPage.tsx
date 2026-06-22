@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Toast from '../../shared/components/Toast/Toast';
@@ -41,7 +42,7 @@ export default function TodayPage() {
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
   const addEvent = useCalendarStore((state) => state.addEvent);
   const updateEvent = useCalendarStore((state) => state.updateEvent);
-  const resetDemoData = useCalendarStore((state) => state.resetDemoData);
+  const resetDemoWorkspace = useResetDemoWorkspace();
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
   const updateDailyFocus = useCalendarStore((state) => state.updateDailyFocus);
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
@@ -56,9 +57,9 @@ export default function TodayPage() {
   }, [toastMessage]);
 
   const handleResetDemoData = useCallback(() => {
-    resetDemoData();
+    resetDemoWorkspace();
     setToastMessage('Demo week restored');
-  }, [resetDemoData]);
+  }, [resetDemoWorkspace]);
 
   const handleSaveFocus = useCallback((focus: string) => {
     updateDailyFocus(todayIsoDate, focus);

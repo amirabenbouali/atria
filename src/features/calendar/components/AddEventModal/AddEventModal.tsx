@@ -1,7 +1,9 @@
 import { AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Button from '../../../../shared/components/Button/Button';
 import Modal from '../../../../shared/components/Modal/Modal';
+import { useGoalsStore } from '../../../goals/store/goals.store';
+import { useProjectsStore } from '../../../projects/store/projects.store';
 import {
   eventCategories,
 } from '../../constants/calendar.constants';
@@ -45,6 +47,7 @@ export default function AddEventModal({
     updateCategory,
     updateField,
     updateItemType,
+    updateProject,
   } = useEventForm({
     isOpen,
     editingEvent,
@@ -59,6 +62,10 @@ export default function AddEventModal({
       onAddEvent(eventDraft);
     },
   });
+  const goals = useGoalsStore((state) => state.goals);
+  const activeGoals = useMemo(() => goals.filter((goal) => goal.status === 'active'), [goals]);
+  const projects = useProjectsStore((state) => state.projects);
+  const activeProjects = useMemo(() => projects.filter((project) => project.status === 'active'), [projects]);
   const itemLabel = values.itemType === 'task' ? 'Task' : 'Event';
 
   useEffect(() => {
@@ -173,6 +180,35 @@ export default function AddEventModal({
                 ))}
               </select>
             </label>
+
+            {values.itemType === 'task' ? (
+              <div className={styles.formRow}>
+                <label>
+                  Linked Goal
+                  <select value={values.goalId} onChange={(event) => updateField('goalId', event.target.value)}>
+                    <option value="">No goal</option>
+                    {activeGoals.map((goal) => (
+                      <option key={goal.id} value={goal.id}>{goal.title}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Linked Project
+                  <select
+                    value={values.projectId}
+                    onChange={(event) => {
+                      const project = activeProjects.find((item) => item.id === event.target.value);
+                      updateProject(event.target.value, project?.goalId);
+                    }}
+                  >
+                    <option value="">No project</option>
+                    {activeProjects.map((project) => (
+                      <option key={project.id} value={project.id}>{project.title}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            ) : null}
 
             <div className={values.recurrence === 'none' ? styles.formRowSingle : styles.formRow}>
               <label>

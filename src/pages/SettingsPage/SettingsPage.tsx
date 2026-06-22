@@ -4,6 +4,7 @@ import { eventCategories } from '../../features/calendar/constants/calendar.cons
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import type { CalendarItemType, EventCategory } from '../../features/calendar/types/calendar.types';
+import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import type { DefaultView } from '../../features/settings/types/settings.types';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
@@ -42,7 +43,7 @@ export default function SettingsPage() {
   const closeAddEventModal = useCalendarStore((state) => state.closeAddEventModal);
   const addEvent = useCalendarStore((state) => state.addEvent);
   const updateEvent = useCalendarStore((state) => state.updateEvent);
-  const resetDemoData = useCalendarStore((state) => state.resetDemoData);
+  const resetDemoWorkspace = useResetDemoWorkspace();
   const clearCalendarData = useCalendarStore((state) => state.clearCalendarData);
   const clearDailyFocusData = useCalendarStore((state) => state.clearDailyFocusData);
   const goToToday = useCalendarStore((state) => state.goToToday);
@@ -80,7 +81,11 @@ export default function SettingsPage() {
       onGoToPreviousWeek={goToPreviousWeek}
       onGoToNextWeek={goToNextWeek}
       onCreateEvent={() => openAddEventModal(createDefaultPreset())}
-      onResetDemoData={() => confirmAction('Reset demo data? This replaces your current calendar items.', resetDemoData, 'Demo data restored')}
+      onResetDemoData={() => confirmAction(
+        'Reset demo data? This replaces your current calendar, goals, and projects.',
+        resetDemoWorkspace,
+        'Demo data restored',
+      )}
     >
       <GlassPanel className={styles.settingsShell}>
         <section className={styles.heroPanel}>
@@ -99,8 +104,8 @@ export default function SettingsPage() {
               <Button
                 variant="secondary"
                 onClick={() => confirmAction(
-                  'Reset demo data? This replaces your current calendar items.',
-                  resetDemoData,
+                  'Reset demo data? This replaces your current calendar, goals, and projects.',
+                  resetDemoWorkspace,
                   'Demo data restored',
                 )}
               >

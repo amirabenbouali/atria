@@ -23,9 +23,10 @@ export default function Sidebar({
   const navItems = [
     { label: 'Calendar', path: routes.calendar },
     { label: 'Today', path: routes.today },
+    { label: 'Tasks', path: routes.tasks },
+    { label: 'Goals', path: routes.goals },
+    { label: 'Projects', path: routes.projects },
     { label: 'Insights', path: routes.insights },
-    { label: 'Tasks' },
-    { label: 'Goals' },
     { label: 'Settings', path: routes.settings },
   ];
 
@@ -45,22 +46,15 @@ export default function Sidebar({
 
       <nav className={styles.nav} aria-label="Primary navigation">
         {navItems.map((item) => (
-          item.path ? (
-            <NavLink
-              className={({ isActive }) => (isActive ? styles.activeNavItem : styles.navItem)}
-              end
-              key={item.label}
-              to={item.path}
-            >
-              <span aria-hidden="true">{item.label.slice(0, 1)}</span>
-              {item.label}
-            </NavLink>
-          ) : (
-            <button className={styles.navItem} key={item.label} type="button">
-              <span aria-hidden="true">{item.label.slice(0, 1)}</span>
-              {item.label}
-            </button>
-          )
+          <NavLink
+            className={({ isActive }) => (isActive ? styles.activeNavItem : styles.navItem)}
+            end
+            key={item.label}
+            to={item.path}
+          >
+            <span aria-hidden="true">{item.label.slice(0, 1)}</span>
+            {item.label}
+          </NavLink>
         ))}
       </nav>
 

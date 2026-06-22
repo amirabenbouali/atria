@@ -166,9 +166,51 @@
 }
 
 .categoryStack,
-.routineStack {
+.routineStack,
+.projectInsightGrid {
   display: grid;
   gap: var(--space-3);
+}
+
+.projectInsightGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.projectInsightCard {
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(2, 4, 12, 0.48);
+}
+
+.projectInsightCard span {
+  color: var(--color-text-muted);
+  font-family: var(--font-detail);
+  font-size: 0.64rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.projectInsightCard strong {
+  font-family: var(--font-detail);
+  font-size: 1.8rem;
+}
+
+.projectCompletionTrack {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.projectCompletionTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-action);
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.2);
 }
 
 .categoryRow {

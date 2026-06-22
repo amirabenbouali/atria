@@ -17,6 +17,8 @@ type StoredCalendarEvent = Partial<CalendarEvent> & {
   day?: string;
   color?: string;
   order?: number;
+  goalId?: string;
+  projectId?: string;
 };
 
 const recurrenceOptions: CalendarRecurrence[] = ['none', 'daily', 'weekly', 'monthly'];
@@ -93,6 +95,8 @@ function normalizeStoredEvent(event: StoredCalendarEvent): CalendarEvent {
       ...normalizedBase,
       itemType: 'task',
       order: typeof event.order === 'number' ? event.order : 0,
+      goalId: typeof event.goalId === 'string' && event.goalId ? event.goalId : undefined,
+      projectId: typeof event.projectId === 'string' && event.projectId ? event.projectId : undefined,
     };
   }
 

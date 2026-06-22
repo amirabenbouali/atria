@@ -39,6 +39,7 @@ type CalendarState = {
   moveCalendarItem: (id: string, targetDate: string, targetTaskId?: string) => void;
   moveTask: (id: string, direction: 'up' | 'down') => void;
   updateDailyFocus: (date: string, focus: string) => void;
+  removeProjectLinks: (projectId: string) => void;
   resetDemoData: () => void;
   clearCalendarData: () => void;
   clearDailyFocusData: () => void;
@@ -202,6 +203,24 @@ export const useCalendarStore = create<CalendarState>((set) => ({
         ...state.dailyFocusByDate,
         [date]: focus,
       }),
+    })),
+  removeProjectLinks: (projectId) =>
+    set((state) => ({
+      events: persistEvents(
+        state.events.map((event) => {
+          if (event.itemType !== 'task' || event.projectId !== projectId) {
+            return event;
+          }
+
+          const { projectId: _projectId, ...taskWithoutProject } = event;
+          // MVP limitation: we cannot yet tell whether goalId was user-selected directly
+          // or inferred from the project, so goalId is preserved for safety.
+          return {
+            ...taskWithoutProject,
+            updatedAt: new Date().toISOString(),
+          };
+        }),
+      ),
     })),
   resetDemoData: () =>
     set({

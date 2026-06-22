@@ -31,6 +31,8 @@ export type ScheduledCalendarEvent = CalendarItemBase & {
 export type FlexibleCalendarTask = CalendarItemBase & {
   itemType: 'task';
   order: number;
+  goalId?: string;
+  projectId?: string;
   startTime?: string;
   endTime?: string;
 };
@@ -71,6 +73,8 @@ export type CalendarEventFormValues = {
   category: EventCategory;
   description: string;
   accentColor: string;
+  goalId: string;
+  projectId: string;
   recurrence: CalendarRecurrence;
   recurrenceEndDate: string;
 };
@@ -81,4 +85,6 @@ export type CalendarModalPreset = {
   itemType?: CalendarItemType;
   date?: string;
   category?: EventCategory;
+  goalId?: string;
+  projectId?: string;
 };
