@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router-dom';
+import { routes } from '../../../app/routes';
 import Button from '../Button/Button';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
 import styles from './Sidebar.module.css';
@@ -5,6 +7,7 @@ import styles from './Sidebar.module.css';
 type SidebarProps = {
   totalEvents: number;
   completedEvents: number;
+  createButtonLabel: string;
   onCreateEvent: () => void;
   onResetDemoData: () => void;
 };
@@ -12,11 +15,19 @@ type SidebarProps = {
 export default function Sidebar({
   totalEvents,
   completedEvents,
+  createButtonLabel,
   onCreateEvent,
   onResetDemoData,
 }: SidebarProps) {
   const completionRate = totalEvents === 0 ? 0 : Math.round((completedEvents / totalEvents) * 100);
-  const navItems = ['Calendar', 'Today', 'Tasks', 'Goals', 'Settings'];
+  const navItems = [
+    { label: 'Calendar', path: routes.calendar },
+    { label: 'Today', path: routes.today },
+    { label: 'Insights', path: routes.insights },
+    { label: 'Tasks' },
+    { label: 'Goals' },
+    { label: 'Settings', path: routes.settings },
+  ];
 
   return (
     <GlassPanel as="aside" className={styles.sidebar}>
@@ -29,19 +40,27 @@ export default function Sidebar({
       </div>
 
       <Button className={styles.sidebarAction} onClick={onCreateEvent}>
-        New Event
+        {createButtonLabel}
       </Button>
 
       <nav className={styles.nav} aria-label="Primary navigation">
         {navItems.map((item) => (
-          <button
-            className={item === 'Calendar' ? styles.activeNavItem : styles.navItem}
-            key={item}
-            type="button"
-          >
-            <span aria-hidden="true">{item.slice(0, 1)}</span>
-            {item}
-          </button>
+          item.path ? (
+            <NavLink
+              className={({ isActive }) => (isActive ? styles.activeNavItem : styles.navItem)}
+              end
+              key={item.label}
+              to={item.path}
+            >
+              <span aria-hidden="true">{item.label.slice(0, 1)}</span>
+              {item.label}
+            </NavLink>
+          ) : (
+            <button className={styles.navItem} key={item.label} type="button">
+              <span aria-hidden="true">{item.label.slice(0, 1)}</span>
+              {item.label}
+            </button>
+          )
         ))}
       </nav>
 

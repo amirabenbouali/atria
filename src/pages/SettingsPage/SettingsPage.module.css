@@ -1,0 +1,239 @@
+.settingsShell {
+  display: grid;
+  gap: var(--space-5);
+  min-height: calc(100vh - 164px);
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+}
+
+.heroPanel,
+.settingsSection {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 220, 230, 0.11);
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(246, 166, 190, 0.12), transparent 38%),
+    radial-gradient(circle at 92% 12%, rgba(214, 180, 255, 0.1), transparent 36%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02)),
+    rgba(10, 7, 9, 0.74);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.heroPanel::after,
+.settingsSection::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.54) 1px, transparent 0);
+  background-size: 8px 8px;
+  mask-image: linear-gradient(135deg, black, transparent 64%);
+}
+
+.heroPanel {
+  display: grid;
+  gap: 8px;
+  min-height: 170px;
+  align-content: center;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.heroPanel h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+.heroPanel span,
+.actionStack span,
+.themeCard span,
+.aboutCard span,
+.aboutCard em,
+.toggleRow em {
+  color: var(--color-text-muted);
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.settingsSection {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 6px;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.actionStack,
+.themeCard,
+.aboutCard,
+.toggleRow,
+.fieldRow {
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 220, 230, 0.09);
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.016)),
+    rgba(18, 16, 18, 0.62);
+  box-shadow:
+    0 0 24px rgba(246, 166, 190, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.actionStack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.actionStack div,
+.themeCard div,
+.aboutCard {
+  display: grid;
+  gap: 5px;
+}
+
+.actionStack strong,
+.themeCard strong,
+.aboutCard strong,
+.toggleRow strong {
+  font-size: 0.98rem;
+}
+
+.dangerButton {
+  color: #ffd8e2;
+}
+
+.toggleRow,
+.fieldRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 74px;
+  padding: var(--space-4);
+}
+
+.toggleRow > span {
+  display: grid;
+  gap: 5px;
+}
+
+.toggleRow input {
+  width: 48px;
+  height: 26px;
+  accent-color: #f6a6be;
+}
+
+.fieldRow span {
+  color: var(--color-text-muted);
+  font-family: var(--font-detail);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.fieldRow select {
+  min-width: 150px;
+  min-height: 42px;
+  border: 1px solid rgba(255, 210, 225, 0.14);
+  border-radius: 16px;
+  padding: 0 12px;
+  color: white;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018)),
+    rgba(18, 16, 18, 0.72);
+  outline: none;
+  box-shadow:
+    0 0 20px rgba(246, 166, 190, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.fieldRow select:focus {
+  border-color: rgba(255, 210, 225, 0.24);
+  box-shadow:
+    0 0 0 4px rgba(246, 166, 190, 0.08),
+    0 0 24px rgba(246, 166, 190, 0.1);
+}
+
+.themeCard {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.swatchRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.swatchRow span {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 13px;
+  box-shadow:
+    0 0 18px rgba(246, 166, 190, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.aboutCard {
+  padding: var(--space-4);
+}
+
+.aboutCard strong {
+  font-size: 1.4rem;
+}
+
+.aboutCard em {
+  font-family: var(--font-detail);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1060px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .settingsShell {
+    padding: var(--space-4);
+  }
+
+  .actionStack,
+  .toggleRow,
+  .fieldRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .fieldRow select {
+    width: 100%;
+  }
+}

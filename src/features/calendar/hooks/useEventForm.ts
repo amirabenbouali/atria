@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { useSettingsStore } from '../../settings/store/settings.store';
 import {
   categoryColors,
   defaultEventCategory,
@@ -21,16 +22,22 @@ import {
 function createInitialFormValues(
   selectedWeekDate: Date,
   preset?: CalendarModalPreset | null,
+  defaultCategory: EventCategory = defaultEventCategory,
+  defaultItemType: CalendarItemType = 'event',
 ): CalendarEventFormValues {
+  const category = preset?.category ?? defaultCategory;
+
   return {
-    itemType: preset?.itemType ?? 'event',
+    itemType: preset?.itemType ?? defaultItemType,
     title: '',
     date: preset?.date ?? formatInputDate(selectedWeekDate),
     startTime: '09:00',
     endTime: '10:00',
-    category: defaultEventCategory,
+    category,
     description: '',
-    accentColor: categoryColors[defaultEventCategory],
+    accentColor: categoryColors[category],
+    recurrence: 'none',
+    recurrenceEndDate: '',
   };
 }
 
@@ -44,6 +51,8 @@ function getFormValuesFromEvent(event: CalendarEvent): CalendarEventFormValues {
     category: event.category,
     description: event.description,
     accentColor: event.accentColor,
+    recurrence: event.recurrence,
+    recurrenceEndDate: event.recurrenceEndDate ?? '',
   };
 }
 
@@ -62,8 +71,10 @@ export function useEventForm({
   selectedWeekDate,
   onSubmit,
 }: UseEventFormOptions) {
+  const defaultCategory = useSettingsStore((state) => state.preferences.defaultCategory);
+  const defaultItemType = useSettingsStore((state) => state.preferences.defaultItemType);
   const [values, setValues] = useState<CalendarEventFormValues>(() =>
-    createInitialFormValues(selectedWeekDate, modalPreset),
+    createInitialFormValues(selectedWeekDate, modalPreset, defaultCategory, defaultItemType),
   );
   const [errors, setErrors] = useState<CalendarEventValidationErrors>({});
 
@@ -72,11 +83,11 @@ export function useEventForm({
       setValues(
         editingEvent
           ? getFormValuesFromEvent(editingEvent)
-          : createInitialFormValues(selectedWeekDate, modalPreset),
+          : createInitialFormValues(selectedWeekDate, modalPreset, defaultCategory, defaultItemType),
       );
       setErrors({});
     }
-  }, [editingEvent, isOpen, modalPreset, selectedWeekDate]);
+  }, [defaultCategory, defaultItemType, editingEvent, isOpen, modalPreset, selectedWeekDate]);
 
   const updateField = <Field extends keyof CalendarEventFormValues>(
     field: Field,
@@ -127,6 +138,8 @@ export function useEventForm({
         category: nextValues.category,
         description: nextValues.description,
         accentColor: nextValues.accentColor,
+        recurrence: nextValues.recurrence,
+        recurrenceEndDate: nextValues.recurrenceEndDate || undefined,
       });
       return;
     }
@@ -140,6 +153,8 @@ export function useEventForm({
       category: nextValues.category,
       description: nextValues.description,
       accentColor: nextValues.accentColor,
+      recurrence: nextValues.recurrence,
+      recurrenceEndDate: nextValues.recurrenceEndDate || undefined,
     });
   };
 

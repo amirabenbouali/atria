@@ -9,6 +9,30 @@
   isolation: isolate;
 }
 
+.appShell::before,
+.appShell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.appShell::before {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 26%, black, transparent 68%);
+  opacity: 0.18;
+}
+
+.appShell::after {
+  background:
+    radial-gradient(circle at 50% 18%, transparent 0%, rgba(0, 0, 0, 0.12) 42%, rgba(0, 0, 0, 0.6) 100%),
+    linear-gradient(180deg, rgba(1, 2, 8, 0.08), rgba(1, 2, 8, 0.68));
+}
+
 .mainPanel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -22,7 +46,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   min-height: 88px;
-  padding: var(--space-5) var(--space-6);
+  padding: 18px var(--space-6);
   border-radius: var(--radius-2xl);
   overflow: hidden;
 }
@@ -33,9 +57,10 @@
 
 .weekIdentity h1 {
   margin: 2px 0 0;
-  font-size: clamp(1.5rem, 2.4vw, 2.5rem);
+  font-size: clamp(1.65rem, 2.8vw, 3.1rem);
   line-height: 1;
   letter-spacing: 0;
+  text-shadow: 0 0 28px rgba(246, 166, 190, 0.16);
 }
 
 .topbarActions {
@@ -44,6 +69,18 @@
   justify-content: flex-end;
   gap: var(--space-2);
   flex-wrap: wrap;
+}
+
+.shortcutHint {
+  margin-left: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 3px 6px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-detail);
+  font-size: 0.68rem;
+  font-weight: 900;
+  background: rgba(2, 4, 12, 0.42);
 }
 
 @media (max-width: 960px) {

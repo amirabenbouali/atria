@@ -76,6 +76,7 @@ export default function EventCard({
         </button>
         <button className={styles.contentButton} type="button" onClick={() => onEdit(event.id)}>
           <h3>{event.title}</h3>
+          {event.recurrence !== 'none' ? <span className={styles.repeatBadge}>Repeat {event.recurrence}</span> : null}
           {event.description ? <p>{event.description}</p> : null}
           {event.completed ? <span className={styles.completedBadge}>Completed</span> : null}
         </button>

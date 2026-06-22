@@ -3,12 +3,22 @@ import AddEventModal from '../../features/calendar/components/AddEventModal/AddE
 import WeeklyCalendar from '../../features/calendar/components/WeeklyCalendar/WeeklyCalendar';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Toast from '../../shared/components/Toast/Toast';
 
 export default function CalendarPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const { events, selectedWeekDate, weekLabel, totalEventCount, completedEventCount } = useCalendarEvents();
+  const {
+    events,
+    sourceEvents,
+    selectedWeekDate,
+    weekStartsOnMonday,
+    weekLabel,
+    totalEventCount,
+    completedEventCount,
+  } = useCalendarEvents();
+  const createDefaultPreset = useDefaultCalendarModalPreset();
   const isAddEventModalOpen = useCalendarStore((state) => state.isAddEventModalOpen);
   const editingEventId = useCalendarStore((state) => state.editingEventId);
   const modalPreset = useCalendarStore((state) => state.modalPreset);
@@ -28,7 +38,7 @@ export default function CalendarPage() {
   const resetDemoData = useCalendarStore((state) => state.resetDemoData);
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
-  const editingEvent = events.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
 
   useEffect(() => {
     if (!toastMessage) {
@@ -67,12 +77,13 @@ export default function CalendarPage() {
       onGoToToday={goToToday}
       onGoToPreviousWeek={goToPreviousWeek}
       onGoToNextWeek={goToNextWeek}
-      onCreateEvent={openAddEventModal}
+      onCreateEvent={() => openAddEventModal(createDefaultPreset())}
       onResetDemoData={handleResetDemoData}
     >
       <WeeklyCalendar
         events={events}
         selectedWeekDate={selectedWeekDate}
+        weekStartsOnMonday={weekStartsOnMonday}
         onCreateItem={openAddEventModal}
         onEdit={openEditEventModal}
         onDuplicate={handleDuplicate}

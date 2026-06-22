@@ -12,6 +12,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(55, 119, 255, 0.16), transparent 38%),
+    var(--color-background);
 }
 
 .eyebrow,
@@ -19,7 +22,8 @@ body {
   margin: 0;
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.72rem;
+  letter-spacing: 0;
+  font-family: var(--font-detail);
+  font-size: 0.68rem;
   font-weight: 800;
 }

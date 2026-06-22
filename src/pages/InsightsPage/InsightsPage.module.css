@@ -1,0 +1,408 @@
+.insightsShell {
+  display: grid;
+  gap: var(--space-5);
+  min-height: calc(100vh - 164px);
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+}
+
+.heroPanel,
+.panel,
+.metricCard,
+.rhythmCard,
+.routineCard {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(246, 166, 190, 0.12), transparent 38%),
+    radial-gradient(circle at 92% 12%, rgba(246, 166, 190, 0.1), transparent 36%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.02)),
+    rgba(1, 3, 10, 0.74);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(24px);
+}
+
+.heroPanel::after,
+.panel::after,
+.metricCard::after,
+.rhythmCard::after,
+.routineCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.58) 1px, transparent 0);
+  background-size: 8px 8px;
+  mask-image: linear-gradient(135deg, black, transparent 64%);
+}
+
+.heroPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-5);
+  align-items: center;
+  border-radius: var(--radius-2xl);
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.heroPanel h2 {
+  margin: 8px 0;
+  font-size: clamp(1.7rem, 3vw, 3.2rem);
+  line-height: 1;
+}
+
+.heroPanel span {
+  color: var(--color-text-muted);
+}
+
+.heroProgress {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+.heroProgress strong {
+  font-family: var(--font-detail);
+  font-size: clamp(4rem, 9vw, 7rem);
+  line-height: 0.86;
+  text-shadow:
+    0 0 34px rgba(246, 166, 190, 0.22),
+    0 0 54px rgba(246, 166, 190, 0.12);
+}
+
+.heroProgress span,
+.metricCard span,
+.metricCard p,
+.sectionHeader strong,
+.categoryNumbers,
+.rhythmCard span,
+.rhythmCard p,
+.routineCard p,
+.routineCard em,
+.emptyPanel span {
+  font-family: var(--font-detail);
+}
+
+.metricGrid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.metricCard {
+  display: grid;
+  gap: 6px;
+  min-height: 128px;
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+
+.metricCard span {
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.metricCard strong {
+  font-family: var(--font-detail);
+  font-size: clamp(1.9rem, 4vw, 3.3rem);
+  line-height: 1;
+}
+
+.metricCard p {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: var(--space-5);
+}
+
+.primaryColumn,
+.sideColumn {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.panel {
+  display: grid;
+  gap: var(--space-4);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.sectionHeader strong {
+  display: grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  border: 1px solid rgba(246, 166, 190, 0.18);
+  border-radius: 14px;
+  color: white;
+  background: rgba(2, 4, 12, 0.62);
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.1);
+  font-size: 0.8rem;
+}
+
+.categoryStack,
+.routineStack {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.categoryRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(2, 4, 12, 0.48);
+}
+
+.categoryIdentity {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.categoryDot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 14px currentColor;
+}
+
+.categoryNumbers {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+}
+
+.categoryNumbers span {
+  color: var(--color-text-subtle);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.categoryNumbers strong {
+  font-size: 0.92rem;
+}
+
+.categoryBar {
+  grid-column: 1 / -1;
+  height: 7px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.categoryBar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: 0 0 16px currentColor;
+}
+
+.rhythmGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(92px, 1fr));
+  gap: var(--space-3);
+}
+
+.rhythmCard {
+  display: grid;
+  grid-template-rows: auto 132px auto;
+  gap: 12px;
+  min-height: 230px;
+  border-radius: var(--radius-card);
+  padding: 14px;
+}
+
+.rhythmCard div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rhythmCard span {
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.rhythmCard strong {
+  font-family: var(--font-detail);
+  font-size: 1.6rem;
+}
+
+.rhythmBars {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(2, 4, 12, 0.44);
+}
+
+.rhythmBars span {
+  width: 16px;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-action);
+  box-shadow: 0 0 20px rgba(246, 166, 190, 0.14);
+}
+
+.rhythmBars span:last-child {
+  background: var(--gradient-warm-action);
+}
+
+.rhythmCard p {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.64rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.routineCard {
+  display: grid;
+  gap: 12px;
+  border-radius: var(--radius-card);
+  padding: 14px;
+}
+
+.routineTopline {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.routineTopline > span {
+  width: 10px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 22px currentColor;
+}
+
+.routineTopline strong {
+  display: block;
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+
+.routineTopline p,
+.routineCard > p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.routineTopline em {
+  color: white;
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.routineMeter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.routineMeter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: 0 0 16px currentColor;
+}
+
+.emptyPanel {
+  display: grid;
+  gap: 4px;
+  min-height: 120px;
+  place-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-card);
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(246, 166, 190, 0.07), transparent 40%),
+    rgba(2, 4, 12, 0.48);
+}
+
+.emptyPanel span {
+  color: var(--color-text-subtle);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.emptyPanel strong {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+@media (max-width: 1120px) {
+  .dashboardGrid,
+  .heroPanel {
+    grid-template-columns: 1fr;
+  }
+
+  .heroProgress {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 860px) {
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rhythmGrid {
+    overflow-x: auto;
+    grid-template-columns: repeat(7, minmax(108px, 1fr));
+    padding-bottom: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .insightsShell {
+    padding: var(--space-4);
+  }
+
+  .metricGrid {
+    grid-template-columns: 1fr;
+  }
+}

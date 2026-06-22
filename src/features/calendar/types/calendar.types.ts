@@ -1,9 +1,13 @@
 export type EventCategory = 'Work' | 'Personal' | 'Fitness' | 'Learning' | 'Health' | 'Finance';
 
 export type CalendarItemType = 'event' | 'task';
+export type CalendarRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
 
 type CalendarItemBase = {
   id: string;
+  sourceId?: string;
+  occurrenceDate?: string;
+  isRecurringOccurrence?: boolean;
   itemType: CalendarItemType;
   title: string;
   date: string;
@@ -11,6 +15,9 @@ type CalendarItemBase = {
   description: string;
   accentColor: string;
   completed: boolean;
+  recurrence: CalendarRecurrence;
+  recurrenceEndDate?: string;
+  recurringCompletions: Record<string, boolean>;
   createdAt: string;
   updatedAt: string;
 };
@@ -31,8 +38,29 @@ export type FlexibleCalendarTask = CalendarItemBase & {
 export type CalendarEvent = ScheduledCalendarEvent | FlexibleCalendarTask;
 
 export type CalendarEventDraft =
-  | Omit<ScheduledCalendarEvent, 'id' | 'completed' | 'createdAt' | 'updatedAt'>
-  | Omit<FlexibleCalendarTask, 'id' | 'completed' | 'createdAt' | 'updatedAt' | 'order'>;
+  | Omit<
+      ScheduledCalendarEvent,
+      | 'id'
+      | 'sourceId'
+      | 'occurrenceDate'
+      | 'isRecurringOccurrence'
+      | 'completed'
+      | 'recurringCompletions'
+      | 'createdAt'
+      | 'updatedAt'
+    >
+  | Omit<
+      FlexibleCalendarTask,
+      | 'id'
+      | 'sourceId'
+      | 'occurrenceDate'
+      | 'isRecurringOccurrence'
+      | 'completed'
+      | 'recurringCompletions'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'order'
+    >;
 
 export type CalendarEventFormValues = {
   itemType: CalendarItemType;
@@ -43,6 +71,8 @@ export type CalendarEventFormValues = {
   category: EventCategory;
   description: string;
   accentColor: string;
+  recurrence: CalendarRecurrence;
+  recurrenceEndDate: string;
 };
 
 export type CalendarEventValidationErrors = Partial<Record<keyof CalendarEventFormValues, string>>;
@@ -50,4 +80,5 @@ export type CalendarEventValidationErrors = Partial<Record<keyof CalendarEventFo
 export type CalendarModalPreset = {
   itemType?: CalendarItemType;
   date?: string;
+  category?: EventCategory;
 };

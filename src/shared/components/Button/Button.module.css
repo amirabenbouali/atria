@@ -10,7 +10,8 @@
 }
 
 .button:hover {
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 210, 225, 0.2);
+  box-shadow: var(--shadow-neon);
 }
 
 .primary {
@@ -18,22 +19,45 @@
   padding: 0 20px;
   color: white;
   background: var(--gradient-action);
-  box-shadow: var(--shadow-neon);
+  box-shadow:
+    0 0 24px rgba(246, 166, 190, 0.22),
+    0 16px 34px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -14px 28px rgba(61, 31, 48, 0.18);
+}
+
+.primary:hover {
+  background: var(--gradient-action-hover);
+  box-shadow:
+    0 0 28px rgba(246, 166, 190, 0.35),
+    0 20px 42px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -14px 28px rgba(61, 31, 48, 0.16);
 }
 
 .secondary {
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 210, 225, 0.14);
   padding: 0 18px;
   color: white;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.018)),
+    var(--glass-button-secondary);
+  box-shadow:
+    0 0 24px rgba(246, 166, 190, 0.08),
+    0 14px 32px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .ghost,
 .icon {
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 210, 225, 0.12);
   color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.016)),
+    var(--glass-button-secondary);
+  box-shadow:
+    0 0 20px rgba(246, 166, 190, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 .ghost {
@@ -47,4 +71,6 @@
   height: 38px;
   min-height: 38px;
   padding: 0;
+  border-radius: 14px;
+  font-size: 1.2rem;
 }

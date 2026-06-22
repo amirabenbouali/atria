@@ -1,3 +1,7 @@
 export const routes = {
-  calendar: '/',
+  root: '/',
+  calendar: '/calendar',
+  today: '/today',
+  insights: '/insights',
+  settings: '/settings',
 } as const;

@@ -5,8 +5,10 @@
   display: grid;
   place-items: center;
   padding: var(--space-5);
-  background: rgba(3, 5, 18, 0.64);
-  backdrop-filter: blur(14px);
+  background:
+    radial-gradient(circle at 52% 12%, rgba(246, 166, 190, 0.12), transparent 34%),
+    rgba(1, 2, 8, 0.72);
+  backdrop-filter: blur(18px);
 }
 
 .modal {
@@ -15,6 +17,7 @@
   overflow-y: auto;
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
+  background: var(--glass-surface-raised);
 }
 
 @media (max-width: 640px) {

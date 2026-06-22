@@ -1,32 +1,51 @@
 :root {
-  --color-background: #080914;
-  --color-text: #f7f5ff;
-  --color-text-muted: rgba(247, 245, 255, 0.64);
-  --color-text-subtle: rgba(247, 245, 255, 0.44);
-  --color-glass-border: rgba(255, 255, 255, 0.16);
-  --color-glass-border-strong: rgba(255, 255, 255, 0.24);
+  --color-background: #080507;
+  --color-surface-ink: rgba(10, 7, 9, 0.78);
+  --color-surface-ink-strong: rgba(8, 5, 7, 0.9);
+  --color-text: #fbfbff;
+  --color-text-muted: rgba(245, 247, 255, 0.66);
+  --color-text-subtle: rgba(245, 247, 255, 0.42);
+  --color-glass-border: rgba(255, 220, 230, 0.12);
+  --color-glass-border-strong: rgba(255, 220, 230, 0.22);
+  --color-neon-pink: #f6a6be;
+  --color-neon-violet: #c89bff;
+  --color-neon-blue: #d6b4ff;
+  --color-neon-cyan: #ebc7d4;
+  --color-neon-lime: #f2a7a0;
+  --color-neon-orange: #c8a6a0;
   --gradient-page:
-    radial-gradient(circle at 18% 18%, rgba(139, 92, 246, 0.46), transparent 32%),
-    radial-gradient(circle at 74% 12%, rgba(56, 189, 248, 0.32), transparent 30%),
-    radial-gradient(circle at 54% 82%, rgba(244, 114, 182, 0.30), transparent 34%),
-    linear-gradient(135deg, #070712 0%, #101426 48%, #060815 100%);
-  --gradient-action: linear-gradient(135deg, #a855f7, #4f46e5 48%, #ec4899);
+    radial-gradient(circle at 18% 14%, rgba(246, 166, 190, 0.24), transparent 34%),
+    radial-gradient(circle at 78% 8%, rgba(214, 180, 255, 0.15), transparent 30%),
+    radial-gradient(circle at 90% 72%, rgba(255, 226, 196, 0.1), transparent 34%),
+    radial-gradient(circle at 36% 94%, rgba(242, 167, 160, 0.13), transparent 34%),
+    linear-gradient(145deg, #060304 0%, #120b10 40%, #151019 66%, #050304 100%);
+  --gradient-action: linear-gradient(135deg, #f6a6be 0%, #d989a6 45%, #9b6c8f 100%);
+  --gradient-action-hover: linear-gradient(135deg, #ffc0d0 0%, #e69ab4 45%, #b57aa0 100%);
+  --gradient-warm-action: linear-gradient(135deg, #f6a6be 0%, #d989a6 45%, #9b6c8f 100%);
+  --glass-button-secondary: rgba(18, 16, 18, 0.72);
   --glass-surface:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.052)),
-    rgba(8, 10, 24, 0.42);
-  --shadow-glass: 0 28px 90px rgba(0, 0, 0, 0.42), 0 0 56px rgba(99, 102, 241, 0.1);
-  --shadow-neon: 0 0 28px rgba(168, 85, 247, 0.42), 0 0 54px rgba(56, 189, 248, 0.12);
-  --blur-glass: 30px;
-  --radius-md: 16px;
-  --radius-lg: 18px;
-  --radius-xl: 22px;
-  --radius-2xl: 28px;
+    linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.026)),
+    linear-gradient(180deg, rgba(10, 7, 9, 0.9), rgba(18, 12, 16, 0.66));
+  --glass-surface-raised:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.035)),
+    rgba(10, 7, 9, 0.84);
+  --shadow-glass: 0 30px 96px rgba(0, 0, 0, 0.62), 0 0 72px rgba(246, 166, 190, 0.05);
+  --shadow-neon: 0 0 22px rgba(246, 166, 190, 0.2), 0 0 46px rgba(155, 108, 143, 0.12);
+  --shadow-neon-strong: 0 0 28px rgba(246, 166, 190, 0.35), 0 0 64px rgba(155, 108, 143, 0.18);
+  --blur-glass: 34px;
+  --blur-atmosphere: 68px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-xl: 26px;
+  --radius-2xl: 34px;
+  --radius-card: 24px;
   --radius-pill: 999px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --font-detail: "SF Mono", "Roboto Mono", ui-monospace, Menlo, Consolas, monospace;
   --duration-fast: 160ms;
   --z-modal: 10;
   --calendar-hour-height: 76px;

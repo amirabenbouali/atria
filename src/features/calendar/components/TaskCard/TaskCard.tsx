@@ -79,6 +79,7 @@ export default function TaskCard({
       </div>
       <button className={styles.contentButton} type="button" onClick={() => onEdit(task.id)}>
         <h3>{task.title}</h3>
+        {task.recurrence !== 'none' ? <span className={styles.repeatBadge}>Repeat {task.recurrence}</span> : null}
         {task.description ? <p>{task.description}</p> : null}
       </button>
       <div className={styles.taskActions}>

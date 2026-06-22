@@ -21,11 +21,17 @@
   place-items: center;
   width: 46px;
   height: 46px;
-  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 17px;
   color: white;
   font-weight: 800;
-  background: linear-gradient(135deg, #a855f7, #38bdf8 58%, #f472b6);
-  box-shadow: 0 0 34px rgba(168, 85, 247, 0.55);
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.34), transparent 26%),
+    var(--gradient-action);
+  box-shadow:
+    0 0 28px rgba(246, 166, 190, 0.28),
+    0 0 44px rgba(155, 108, 143, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
 .brandLockup p,
@@ -35,7 +41,7 @@
 }
 
 .brandLockup p {
-  font-size: 1.35rem;
+  font-size: 1.42rem;
   font-weight: 800;
 }
 
@@ -60,12 +66,15 @@
   gap: 12px;
   min-height: 46px;
   border: 1px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: 19px;
   padding: 0 12px;
   color: rgba(247, 245, 255, 0.72);
   font-weight: 800;
+  text-decoration: none;
   text-align: left;
-  background: transparent;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+    rgba(2, 4, 12, 0.24);
   transition:
     background var(--duration-fast) ease,
     border-color var(--duration-fast) ease,
@@ -76,8 +85,11 @@
 .navItem:hover,
 .activeNavItem {
   color: white;
-  border-color: rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 210, 225, 0.18);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.024)),
+    rgba(2, 4, 12, 0.58);
+  box-shadow: 0 0 24px rgba(246, 166, 190, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transform: translateX(2px);
 }
 
@@ -85,16 +97,21 @@
 .activeNavItem span {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.08);
+  font-family: var(--font-detail);
+  font-size: 0.72rem;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.04);
 }
 
 .activeNavItem span {
   background: var(--gradient-action);
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 22px rgba(246, 166, 190, 0.24), 0 0 34px rgba(155, 108, 143, 0.12);
 }
 
 .sidebarSection {
@@ -108,16 +125,20 @@
   justify-content: space-between;
   min-height: 66px;
   padding: var(--space-4);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: var(--radius-card);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.045)),
-    rgba(255, 255, 255, 0.05);
+    radial-gradient(circle at 82% 18%, rgba(246, 166, 190, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
+    rgba(2, 4, 12, 0.64);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .statCard strong {
-  font-size: 1.55rem;
+  font-family: var(--font-detail);
+  font-size: 1.72rem;
+  font-weight: 900;
+  text-shadow: 0 0 22px rgba(246, 166, 190, 0.14);
 }
 
 .completionMeter {
@@ -130,7 +151,8 @@
 .completionMeter div {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #a855f7, #38bdf8, #f472b6);
+  background: var(--gradient-action);
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.18);
 }
 
 .categoryList {
@@ -154,12 +176,12 @@
   border-radius: var(--radius-pill);
 }
 
-.work { background: #8b5cf6; }
-.personal { background: #f472b6; }
-.fitness { background: #34d399; }
-.learning { background: #38bdf8; }
-.health { background: #fb7185; }
-.finance { background: #fbbf24; }
+.work { background: var(--color-neon-violet); box-shadow: 0 0 14px rgba(200, 155, 255, 0.2); }
+.personal { background: var(--color-neon-pink); box-shadow: 0 0 14px rgba(246, 166, 190, 0.22); }
+.fitness { background: var(--color-neon-lime); box-shadow: 0 0 14px rgba(242, 167, 160, 0.2); }
+.learning { background: var(--color-neon-blue); box-shadow: 0 0 14px rgba(214, 180, 255, 0.2); }
+.health { background: var(--color-neon-cyan); box-shadow: 0 0 14px rgba(235, 199, 212, 0.18); }
+.finance { background: var(--color-neon-orange); box-shadow: 0 0 14px rgba(200, 166, 160, 0.18); }
 
 .demoSection {
   display: grid;
@@ -169,13 +191,13 @@
 
 .demoButton {
   min-height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 18px;
   color: rgba(255, 255, 255, 0.78);
   font-weight: 900;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.022)),
+    rgba(2, 4, 12, 0.54);
   transition:
     border-color var(--duration-fast) ease,
     color var(--duration-fast) ease,
@@ -184,10 +206,10 @@
 }
 
 .demoButton:hover {
-  border-color: rgba(56, 189, 248, 0.35);
+  border-color: rgba(255, 210, 225, 0.18);
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 24px rgba(246, 166, 190, 0.1);
 }
 
 @media (max-width: 960px) {

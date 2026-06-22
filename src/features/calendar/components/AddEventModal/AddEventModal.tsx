@@ -11,6 +11,7 @@ import type {
   CalendarEventDraft,
   CalendarItemType,
   CalendarModalPreset,
+  CalendarRecurrence,
   EventCategory,
 } from '../../types/calendar.types';
 import styles from './AddEventModal.module.css';
@@ -58,6 +59,7 @@ export default function AddEventModal({
       onAddEvent(eventDraft);
     },
   });
+  const itemLabel = values.itemType === 'task' ? 'Task' : 'Event';
 
   useEffect(() => {
     if (!isOpen) {
@@ -81,7 +83,7 @@ export default function AddEventModal({
           <div className={styles.modalHeader}>
             <div>
               <p className="eyebrow">{isEditing ? 'Refine Signal' : 'New Signal'}</p>
-              <h2 id={titleId}>{isEditing ? 'Edit Event' : 'New Event'}</h2>
+              <h2 id={titleId}>{isEditing ? `Edit ${itemLabel}` : `New ${itemLabel}`}</h2>
             </div>
             <Button variant="icon" onClick={onClose} aria-label="Close modal">
               ×
@@ -172,6 +174,42 @@ export default function AddEventModal({
               </select>
             </label>
 
+            <div className={values.recurrence === 'none' ? styles.formRowSingle : styles.formRow}>
+              <label>
+                Repeat
+                <select
+                  value={values.recurrence}
+                  onChange={(event) => updateField('recurrence', event.target.value as CalendarRecurrence)}
+                >
+                  <option value="none">Does not repeat</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </select>
+              </label>
+
+              {values.recurrence !== 'none' ? (
+                <label>
+                  Repeat until
+                  <input
+                    type="date"
+                    value={values.recurrenceEndDate}
+                    onChange={(event) => updateField('recurrenceEndDate', event.target.value)}
+                    aria-invalid={Boolean(errors.recurrenceEndDate)}
+                  />
+                  {errors.recurrenceEndDate ? (
+                    <span className={styles.fieldError}>{errors.recurrenceEndDate}</span>
+                  ) : null}
+                </label>
+              ) : null}
+            </div>
+
+            {values.recurrence !== 'none' ? (
+              <p className={styles.formHint}>
+                Recurring items appear automatically in matching weeks. Editing or deleting updates the whole series.
+              </p>
+            ) : null}
+
             <label>
               Description
               <textarea
@@ -184,7 +222,7 @@ export default function AddEventModal({
 
             <div className={styles.modalActions}>
               <Button variant="ghost" onClick={onClose}>Cancel</Button>
-              <Button type="submit">{isEditing ? 'Save Changes' : 'Create Event'}</Button>
+              <Button type="submit">{isEditing ? 'Save Changes' : `Create ${itemLabel}`}</Button>
             </div>
           </form>
         </Modal>

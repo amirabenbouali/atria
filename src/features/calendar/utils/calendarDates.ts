@@ -1,4 +1,5 @@
 import { addDays, format, isSameDay, parseISO, startOfWeek } from 'date-fns';
+import type { StartOfWeekOptions } from 'date-fns';
 
 export type WeekDay = {
   key: string;
@@ -9,11 +10,15 @@ export type WeekDay = {
   isToday: boolean;
 };
 
-export function getCurrentWeekDays(referenceDate = new Date()): WeekDay[] {
-  const monday = startOfWeek(referenceDate, { weekStartsOn: 1 });
+export function getWeekStartsOn(weekStartsOnMonday = true): StartOfWeekOptions['weekStartsOn'] {
+  return weekStartsOnMonday ? 1 : 0;
+}
+
+export function getCurrentWeekDays(referenceDate = new Date(), weekStartsOnMonday = true): WeekDay[] {
+  const weekStart = startOfWeek(referenceDate, { weekStartsOn: getWeekStartsOn(weekStartsOnMonday) });
 
   return Array.from({ length: 7 }, (_, index) => {
-    const date = addDays(monday, index);
+    const date = addDays(weekStart, index);
     const name = format(date, 'EEEE');
 
     return {
@@ -27,19 +32,19 @@ export function getCurrentWeekDays(referenceDate = new Date()): WeekDay[] {
   });
 }
 
-export function getWeekLabel(referenceDate = new Date()) {
-  const monday = startOfWeek(referenceDate, { weekStartsOn: 1 });
-  const sunday = addDays(monday, 6);
+export function getWeekLabel(referenceDate = new Date(), weekStartsOnMonday = true) {
+  const weekStart = startOfWeek(referenceDate, { weekStartsOn: getWeekStartsOn(weekStartsOnMonday) });
+  const weekEnd = addDays(weekStart, 6);
 
-  return `${format(monday, 'd MMM')} - ${format(sunday, 'd MMM yyyy')}`;
+  return `${format(weekStart, 'd MMM')} - ${format(weekEnd, 'd MMM yyyy')}`;
 }
 
 export function formatInputDate(date = new Date()) {
   return format(date, 'yyyy-MM-dd');
 }
 
-export function getDateForWeekday(dayName: string, referenceDate = new Date()) {
-  return getCurrentWeekDays(referenceDate).find((day) => day.name === dayName)?.isoDate ?? formatInputDate(referenceDate);
+export function getDateForWeekday(dayName: string, referenceDate = new Date(), weekStartsOnMonday = true) {
+  return getCurrentWeekDays(referenceDate, weekStartsOnMonday).find((day) => day.name === dayName)?.isoDate ?? formatInputDate(referenceDate);
 }
 
 export function getReadableEventDate(date: string) {

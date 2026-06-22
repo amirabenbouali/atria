@@ -28,6 +28,7 @@ export function copyCalendarItem(
       date: options.date ?? item.date,
       completed: false,
       order: options.order ?? item.order,
+      recurringCompletions: {},
       createdAt: timestamp,
       updatedAt: timestamp,
     };
@@ -39,6 +40,7 @@ export function copyCalendarItem(
     title: options.suffix ? `${item.title} ${options.suffix}` : item.title,
     date: options.date ?? item.date,
     completed: false,
+    recurringCompletions: {},
     createdAt: timestamp,
     updatedAt: timestamp,
   };

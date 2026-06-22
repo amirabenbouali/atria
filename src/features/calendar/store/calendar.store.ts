@@ -1,7 +1,9 @@
-import { addWeeks, startOfWeek } from 'date-fns';
+import { addWeeks } from 'date-fns';
 import { create } from 'zustand';
 import {
+  readStoredDailyFocus,
   readStoredCalendarEvents,
+  writeStoredDailyFocus,
   writeStoredCalendarEvents,
 } from '../services/calendarStorage.service';
 import type { CalendarEvent, CalendarEventDraft, CalendarModalPreset } from '../types/calendar.types';
@@ -14,9 +16,11 @@ import {
   reorderTaskWithinDate,
 } from '../utils/calendarItems';
 import { createDemoCalendarEvents } from '../utils/demoCalendarData';
+import { parseOccurrenceId } from '../utils/calendarRecurrence';
 
 type CalendarState = {
   events: CalendarEvent[];
+  dailyFocusByDate: Record<string, string>;
   selectedWeekDate: Date;
   isAddEventModalOpen: boolean;
   editingEventId: string | null;
@@ -34,7 +38,10 @@ type CalendarState = {
   copyEventToNextWeek: (id: string) => void;
   moveCalendarItem: (id: string, targetDate: string, targetTaskId?: string) => void;
   moveTask: (id: string, direction: 'up' | 'down') => void;
+  updateDailyFocus: (date: string, focus: string) => void;
   resetDemoData: () => void;
+  clearCalendarData: () => void;
+  clearDailyFocusData: () => void;
   deleteEvent: (id: string) => void;
   toggleEventComplete: (id: string) => void;
 };
@@ -44,17 +51,29 @@ function persistEvents(events: CalendarEvent[]) {
   return events;
 }
 
+function persistDailyFocus(dailyFocusByDate: Record<string, string>) {
+  writeStoredDailyFocus(dailyFocusByDate);
+  return dailyFocusByDate;
+}
+
+function getSourceActionTarget(id: string) {
+  const occurrence = parseOccurrenceId(id);
+  return occurrence.isOccurrence ? occurrence : { sourceId: id, occurrenceDate: undefined };
+}
+
 export const useCalendarStore = create<CalendarState>((set) => ({
   events: readStoredCalendarEvents(),
-  selectedWeekDate: startOfWeek(new Date(), { weekStartsOn: 1 }),
+  dailyFocusByDate: readStoredDailyFocus(),
+  selectedWeekDate: new Date(),
   isAddEventModalOpen: false,
   editingEventId: null,
   modalPreset: null,
   openAddEventModal: (preset) =>
     set({ isAddEventModalOpen: true, editingEventId: null, modalPreset: preset ?? null }),
-  openEditEventModal: (id) => set({ isAddEventModalOpen: true, editingEventId: id, modalPreset: null }),
+  openEditEventModal: (id) =>
+    set({ isAddEventModalOpen: true, editingEventId: getSourceActionTarget(id).sourceId, modalPreset: null }),
   closeAddEventModal: () => set({ isAddEventModalOpen: false, editingEventId: null, modalPreset: null }),
-  goToToday: () => set({ selectedWeekDate: startOfWeek(new Date(), { weekStartsOn: 1 }) }),
+  goToToday: () => set({ selectedWeekDate: new Date() }),
   goToPreviousWeek: () =>
     set((state) => ({ selectedWeekDate: addWeeks(state.selectedWeekDate, -1) })),
   goToNextWeek: () =>
@@ -78,6 +97,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
             ...eventWithOrder,
             id: createId(),
             completed: false,
+            recurringCompletions: {},
             createdAt: timestamp,
             updatedAt: timestamp,
           },
@@ -87,11 +107,13 @@ export const useCalendarStore = create<CalendarState>((set) => ({
         modalPreset: null,
       };
     }),
-  updateEvent: (id, eventDraft) =>
-    set((state) => ({
+  updateEvent: (id, eventDraft) => {
+    const target = getSourceActionTarget(id);
+    // MVP limitation: editing a recurring occurrence updates the whole source series.
+    return set((state) => ({
       events: persistEvents(
         state.events.map((event) =>
-          event.id === id
+          event.id === target.sourceId
             ? {
                 ...event,
                 ...eventDraft,
@@ -103,10 +125,12 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       isAddEventModalOpen: false,
       editingEventId: null,
       modalPreset: null,
-    })),
+    }));
+  },
   duplicateEvent: (id) =>
     set((state) => {
-      const sourceEvent = state.events.find((event) => event.id === id);
+      const target = getSourceActionTarget(id);
+      const sourceEvent = state.events.find((event) => event.id === target.sourceId);
 
       if (!sourceEvent) {
         return state;
@@ -126,13 +150,14 @@ export const useCalendarStore = create<CalendarState>((set) => ({
     }),
   copyEventToTomorrow: (id) =>
     set((state) => {
-      const sourceEvent = state.events.find((event) => event.id === id);
+      const target = getSourceActionTarget(id);
+      const sourceEvent = state.events.find((event) => event.id === target.sourceId);
 
       if (!sourceEvent) {
         return state;
       }
 
-      const date = getRelativeDate(sourceEvent.date, 'tomorrow');
+      const date = getRelativeDate(target.occurrenceDate ?? sourceEvent.date, 'tomorrow');
       const duplicate = copyCalendarItem(sourceEvent, {
         date,
         order: sourceEvent.itemType === 'task' ? getNextTaskOrder(state.events, date) : undefined,
@@ -144,13 +169,14 @@ export const useCalendarStore = create<CalendarState>((set) => ({
     }),
   copyEventToNextWeek: (id) =>
     set((state) => {
-      const sourceEvent = state.events.find((event) => event.id === id);
+      const target = getSourceActionTarget(id);
+      const sourceEvent = state.events.find((event) => event.id === target.sourceId);
 
       if (!sourceEvent) {
         return state;
       }
 
-      const date = getRelativeDate(sourceEvent.date, 'nextWeek');
+      const date = getRelativeDate(target.occurrenceDate ?? sourceEvent.date, 'nextWeek');
       const duplicate = copyCalendarItem(sourceEvent, {
         date,
         order: sourceEvent.itemType === 'task' ? getNextTaskOrder(state.events, date) : undefined,
@@ -160,13 +186,22 @@ export const useCalendarStore = create<CalendarState>((set) => ({
         events: persistEvents([...state.events, duplicate]),
       };
     }),
-  moveCalendarItem: (id, targetDate, targetTaskId) =>
-    set((state) => ({
-      events: persistEvents(moveCalendarItemInList(state.events, id, targetDate, targetTaskId)),
-    })),
+  moveCalendarItem: (id, targetDate, targetTaskId) => {
+    const target = getSourceActionTarget(id);
+    return set((state) => ({
+      events: persistEvents(moveCalendarItemInList(state.events, target.sourceId, targetDate, targetTaskId)),
+    }));
+  },
   moveTask: (id, direction) =>
     set((state) => ({
       events: persistEvents(reorderTaskWithinDate(state.events, id, direction)),
+    })),
+  updateDailyFocus: (date, focus) =>
+    set((state) => ({
+      dailyFocusByDate: persistDailyFocus({
+        ...state.dailyFocusByDate,
+        [date]: focus,
+      }),
     })),
   resetDemoData: () =>
     set({
@@ -175,20 +210,52 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       editingEventId: null,
       modalPreset: null,
     }),
-  deleteEvent: (id) =>
-    set((state) => ({
-      events: persistEvents(state.events.filter((event) => event.id !== id)),
-      editingEventId: state.editingEventId === id ? null : state.editingEventId,
-      isAddEventModalOpen: state.editingEventId === id ? false : state.isAddEventModalOpen,
-    })),
+  clearCalendarData: () =>
+    set({
+      events: persistEvents([]),
+      isAddEventModalOpen: false,
+      editingEventId: null,
+      modalPreset: null,
+    }),
+  clearDailyFocusData: () =>
+    set({
+      dailyFocusByDate: persistDailyFocus({}),
+    }),
+  deleteEvent: (id) => {
+    const target = getSourceActionTarget(id);
+    // MVP limitation: deleting a recurring occurrence deletes the whole source series.
+    return set((state) => ({
+      events: persistEvents(state.events.filter((event) => event.id !== target.sourceId)),
+      editingEventId: state.editingEventId === target.sourceId ? null : state.editingEventId,
+      isAddEventModalOpen: state.editingEventId === target.sourceId ? false : state.isAddEventModalOpen,
+    }));
+  },
   toggleEventComplete: (id) =>
-    set((state) => ({
-      events: persistEvents(
-        state.events.map((event) =>
-          event.id === id
-            ? { ...event, completed: !event.completed, updatedAt: new Date().toISOString() }
-            : event,
+    set((state) => {
+      const target = getSourceActionTarget(id);
+      const timestamp = new Date().toISOString();
+
+      return {
+        events: persistEvents(
+          state.events.map((event) => {
+            if (event.id !== target.sourceId) {
+              return event;
+            }
+
+            if (event.recurrence !== 'none' && target.occurrenceDate) {
+              return {
+                ...event,
+                recurringCompletions: {
+                  ...event.recurringCompletions,
+                  [target.occurrenceDate]: !(event.recurringCompletions[target.occurrenceDate] ?? false),
+                },
+                updatedAt: timestamp,
+              };
+            }
+
+            return { ...event, completed: !event.completed, updatedAt: timestamp };
+          }),
         ),
-      ),
-    })),
+      };
+    }),
 }));

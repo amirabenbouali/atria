@@ -32,6 +32,15 @@ export function validateCalendarEvent(values: CalendarEventFormValues) {
     errors.endTime = 'End time must be after start time.';
   }
 
+  if (
+    values.recurrence !== 'none' &&
+    values.recurrenceEndDate &&
+    values.date &&
+    values.recurrenceEndDate < values.date
+  ) {
+    errors.recurrenceEndDate = 'End date must be after the start date.';
+  }
+
   return errors;
 }
 

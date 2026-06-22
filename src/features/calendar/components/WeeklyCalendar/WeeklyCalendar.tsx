@@ -24,6 +24,7 @@ import styles from './WeeklyCalendar.module.css';
 type WeeklyCalendarProps = {
   events: CalendarEvent[];
   selectedWeekDate: Date;
+  weekStartsOnMonday: boolean;
   onCreateItem: (preset: CalendarModalPreset) => void;
   onEdit: (id: string) => void;
   onDuplicate: (id: string) => void;
@@ -38,6 +39,7 @@ type WeeklyCalendarProps = {
 export default function WeeklyCalendar({
   events,
   selectedWeekDate,
+  weekStartsOnMonday,
   onCreateItem,
   onEdit,
   onDuplicate,
@@ -48,7 +50,7 @@ export default function WeeklyCalendar({
   onDelete,
   onToggleComplete,
 }: WeeklyCalendarProps) {
-  const weekDays = getCurrentWeekDays(selectedWeekDate);
+  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday);
   const hours = getCalendarHours();
   const hasItems = events.length > 0;
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));

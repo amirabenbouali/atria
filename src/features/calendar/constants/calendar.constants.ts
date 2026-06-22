@@ -2,6 +2,8 @@ import type { EventCategory } from '../types/calendar.types';
 
 export const calendarStorageKey = 'atria-events';
 
+export const dailyFocusStorageKey = 'atria-daily-focus';
+
 export const calendarStartHour = 6;
 
 export const calendarEndHour = 23;
@@ -18,12 +20,12 @@ export const eventCategories: EventCategory[] = [
 ];
 
 export const categoryColors: Record<EventCategory, string> = {
-  Work: '#8b5cf6',
-  Personal: '#f472b6',
-  Fitness: '#34d399',
-  Learning: '#38bdf8',
-  Health: '#fb7185',
-  Finance: '#fbbf24',
+  Work: '#C89BFF',
+  Personal: '#F6A6BE',
+  Fitness: '#F2A7A0',
+  Learning: '#D6B4FF',
+  Health: '#EBC7D4',
+  Finance: '#C8A6A0',
 };
 
 export const defaultEventCategory: EventCategory = 'Work';

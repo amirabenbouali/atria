@@ -1,42 +1,59 @@
 .aurora {
   position: fixed;
   z-index: -1;
-  border-radius: var(--radius-pill);
-  filter: blur(24px);
-  opacity: 0.62;
+  border-radius: 38%;
+  filter: blur(var(--blur-atmosphere));
+  opacity: 0.5;
   pointer-events: none;
   mix-blend-mode: screen;
+  transform: translate3d(0, 0, 0);
 }
 
 .auroraOne {
-  width: 36vw;
+  width: 44vw;
   height: 36vw;
-  left: -12vw;
-  top: 10vh;
-  background: rgba(168, 85, 247, 0.34);
+  left: -16vw;
+  top: 12vh;
+  background: rgba(246, 166, 190, 0.34);
 }
 
 .auroraTwo {
-  width: 34vw;
+  width: 42vw;
   height: 34vw;
-  right: 2vw;
-  top: -8vh;
-  background: rgba(14, 165, 233, 0.28);
+  right: -6vw;
+  top: -10vh;
+  background: rgba(214, 180, 255, 0.2);
 }
 
 .auroraThree {
-  width: 30vw;
+  width: 34vw;
+  height: 28vw;
+  right: 14vw;
+  bottom: -10vh;
+  background: rgba(255, 226, 196, 0.14);
+}
+
+.auroraFour {
+  width: 32vw;
   height: 30vw;
-  right: 20vw;
-  bottom: -12vh;
-  background: rgba(236, 72, 153, 0.27);
+  left: 32vw;
+  top: 34vh;
+  background: rgba(155, 108, 143, 0.18);
+}
+
+.auroraFive {
+  width: 34vw;
+  height: 28vw;
+  right: 4vw;
+  bottom: 8vh;
+  background: rgba(242, 167, 160, 0.16);
 }
 
 .aurora::after {
   content: "";
   position: absolute;
-  inset: 14%;
+  inset: 18%;
   border-radius: inherit;
-  background: rgba(255, 255, 255, 0.09);
-  filter: blur(28px);
+  background: rgba(255, 255, 255, 0.08);
+  filter: blur(42px);
 }
