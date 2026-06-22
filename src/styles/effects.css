@@ -1,0 +1,42 @@
+.aurora {
+  position: fixed;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  filter: blur(24px);
+  opacity: 0.62;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.auroraOne {
+  width: 36vw;
+  height: 36vw;
+  left: -12vw;
+  top: 10vh;
+  background: rgba(168, 85, 247, 0.34);
+}
+
+.auroraTwo {
+  width: 34vw;
+  height: 34vw;
+  right: 2vw;
+  top: -8vh;
+  background: rgba(14, 165, 233, 0.28);
+}
+
+.auroraThree {
+  width: 30vw;
+  height: 30vw;
+  right: 20vw;
+  bottom: -12vh;
+  background: rgba(236, 72, 153, 0.27);
+}
+
+.aurora::after {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.09);
+  filter: blur(28px);
+}

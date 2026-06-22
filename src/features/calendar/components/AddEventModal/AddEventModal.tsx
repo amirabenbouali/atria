@@ -1,0 +1,194 @@
+import { AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
+import Button from '../../../../shared/components/Button/Button';
+import Modal from '../../../../shared/components/Modal/Modal';
+import {
+  eventCategories,
+} from '../../constants/calendar.constants';
+import { useEventForm } from '../../hooks/useEventForm';
+import type {
+  CalendarEvent,
+  CalendarEventDraft,
+  CalendarItemType,
+  CalendarModalPreset,
+  EventCategory,
+} from '../../types/calendar.types';
+import styles from './AddEventModal.module.css';
+
+type AddEventModalProps = {
+  isOpen: boolean;
+  selectedWeekDate: Date;
+  modalPreset?: CalendarModalPreset | null;
+  editingEvent?: CalendarEvent | null;
+  onClose: () => void;
+  onAddEvent: (event: CalendarEventDraft) => void;
+  onUpdateEvent: (id: string, event: CalendarEventDraft) => void;
+};
+
+const titleId = 'add-event-title';
+
+export default function AddEventModal({
+  isOpen,
+  selectedWeekDate,
+  modalPreset,
+  editingEvent,
+  onClose,
+  onAddEvent,
+  onUpdateEvent,
+}: AddEventModalProps) {
+  const isEditing = Boolean(editingEvent);
+  const {
+    values,
+    errors,
+    handleSubmit,
+    updateCategory,
+    updateField,
+    updateItemType,
+  } = useEventForm({
+    isOpen,
+    editingEvent,
+    modalPreset,
+    selectedWeekDate,
+    onSubmit: (eventDraft) => {
+      if (editingEvent) {
+        onUpdateEvent(editingEvent.id, eventDraft);
+        return;
+      }
+
+      onAddEvent(eventDraft);
+    },
+  });
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen ? (
+        <Modal labelledBy={titleId} onClose={onClose}>
+          <div className={styles.modalHeader}>
+            <div>
+              <p className="eyebrow">{isEditing ? 'Refine Signal' : 'New Signal'}</p>
+              <h2 id={titleId}>{isEditing ? 'Edit Event' : 'New Event'}</h2>
+            </div>
+            <Button variant="icon" onClick={onClose} aria-label="Close modal">
+              ×
+            </Button>
+          </div>
+
+          <form onSubmit={handleSubmit} className={styles.eventForm}>
+            <div className={styles.segmentedControl} aria-label="Item type">
+              {(['event', 'task'] as CalendarItemType[]).map((itemType) => (
+                <button
+                  className={values.itemType === itemType ? styles.activeSegment : styles.segment}
+                  key={itemType}
+                  type="button"
+                  onClick={() => updateItemType(itemType)}
+                >
+                  {itemType === 'event' ? 'Event' : 'Task'}
+                </button>
+              ))}
+            </div>
+
+            <label>
+              Title
+              <input
+                value={values.title}
+                onChange={(event) => updateField('title', event.target.value)}
+                placeholder="Launch planning"
+                aria-invalid={Boolean(errors.title)}
+                autoFocus
+              />
+              {errors.title ? <span className={styles.fieldError}>{errors.title}</span> : null}
+            </label>
+
+            <div className={styles.formRow}>
+              <label>
+                Date
+                <input
+                  type="date"
+                  value={values.date}
+                  onChange={(event) => updateField('date', event.target.value)}
+                  aria-invalid={Boolean(errors.date)}
+                />
+                {errors.date ? <span className={styles.fieldError}>{errors.date}</span> : null}
+              </label>
+              {values.itemType === 'event' ? (
+                <label>
+                  Start time
+                  <input
+                    type="time"
+                    value={values.startTime}
+                    onChange={(event) => updateField('startTime', event.target.value)}
+                    aria-invalid={Boolean(errors.startTime)}
+                  />
+                  {errors.startTime ? <span className={styles.fieldError}>{errors.startTime}</span> : null}
+                </label>
+              ) : null}
+            </div>
+
+            <div className={values.itemType === 'event' ? styles.formRow : styles.formRowSingle}>
+              {values.itemType === 'event' ? (
+                <label>
+                  End time
+                  <input
+                    type="time"
+                    value={values.endTime}
+                    onChange={(event) => updateField('endTime', event.target.value)}
+                    aria-invalid={Boolean(errors.endTime)}
+                  />
+                  {errors.endTime ? <span className={styles.fieldError}>{errors.endTime}</span> : null}
+                </label>
+              ) : null}
+              <label>
+                Accent
+                <input
+                  type="color"
+                  value={values.accentColor}
+                  onChange={(event) => updateField('accentColor', event.target.value)}
+                  aria-label="Event accent colour"
+                />
+              </label>
+            </div>
+
+            <label>
+              Category
+              <select value={values.category} onChange={(event) => updateCategory(event.target.value as EventCategory)}>
+                {eventCategories.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              Description
+              <textarea
+                value={values.description}
+                onChange={(event) => updateField('description', event.target.value)}
+                placeholder="Add notes, context, or a short plan..."
+                rows={4}
+              />
+            </label>
+
+            <div className={styles.modalActions}>
+              <Button variant="ghost" onClick={onClose}>Cancel</Button>
+              <Button type="submit">{isEditing ? 'Save Changes' : 'Create Event'}</Button>
+            </div>
+          </form>
+        </Modal>
+      ) : null}
+    </AnimatePresence>
+  );
+}

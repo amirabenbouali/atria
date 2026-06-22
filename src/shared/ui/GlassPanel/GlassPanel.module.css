@@ -1,0 +1,19 @@
+.panel {
+  border: 1px solid var(--color-glass-border);
+  background: var(--glass-surface);
+  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(var(--blur-glass));
+  position: relative;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 18% 0%, rgba(168, 85, 247, 0.16), transparent 32%);
+  opacity: 0.8;
+}

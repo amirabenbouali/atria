@@ -1,0 +1,33 @@
+:root {
+  --color-background: #080914;
+  --color-text: #f7f5ff;
+  --color-text-muted: rgba(247, 245, 255, 0.64);
+  --color-text-subtle: rgba(247, 245, 255, 0.44);
+  --color-glass-border: rgba(255, 255, 255, 0.16);
+  --color-glass-border-strong: rgba(255, 255, 255, 0.24);
+  --gradient-page:
+    radial-gradient(circle at 18% 18%, rgba(139, 92, 246, 0.46), transparent 32%),
+    radial-gradient(circle at 74% 12%, rgba(56, 189, 248, 0.32), transparent 30%),
+    radial-gradient(circle at 54% 82%, rgba(244, 114, 182, 0.30), transparent 34%),
+    linear-gradient(135deg, #070712 0%, #101426 48%, #060815 100%);
+  --gradient-action: linear-gradient(135deg, #a855f7, #4f46e5 48%, #ec4899);
+  --glass-surface:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.052)),
+    rgba(8, 10, 24, 0.42);
+  --shadow-glass: 0 28px 90px rgba(0, 0, 0, 0.42), 0 0 56px rgba(99, 102, 241, 0.1);
+  --shadow-neon: 0 0 28px rgba(168, 85, 247, 0.42), 0 0 54px rgba(56, 189, 248, 0.12);
+  --blur-glass: 30px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --duration-fast: 160ms;
+  --z-modal: 10;
+  --calendar-hour-height: 76px;
+}

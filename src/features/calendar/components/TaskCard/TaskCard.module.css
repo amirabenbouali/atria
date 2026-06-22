@@ -1,0 +1,159 @@
+.taskCard {
+  --task-color: #8b5cf6;
+  display: grid;
+  gap: 8px;
+  border: 1px solid color-mix(in srgb, var(--task-color) 34%, white 12%);
+  border-radius: 18px;
+  padding: 12px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--task-color) 18%, transparent), rgba(255, 255, 255, 0.065)),
+    rgba(10, 12, 28, 0.58);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.2),
+    0 0 22px color-mix(in srgb, var(--task-color) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    filter var(--duration-fast) ease;
+}
+
+.taskCard:hover {
+  border-color: color-mix(in srgb, var(--task-color) 58%, white 16%);
+}
+
+.isDropTarget {
+  border-color: color-mix(in srgb, var(--task-color) 70%, white 22%);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.24),
+    0 0 28px color-mix(in srgb, var(--task-color) 32%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.taskCard:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--task-color) 80%, white 20%);
+  outline-offset: 3px;
+}
+
+.contentButton {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+}
+
+.contentButton:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--task-color) 80%, white 20%);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+.isComplete {
+  opacity: 0.68;
+  filter: saturate(0.78);
+}
+
+.taskHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dragHandle {
+  width: 23px;
+  height: 23px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: grab;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) ease,
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
+}
+
+.taskCard:hover .dragHandle,
+.taskCard:focus-within .dragHandle {
+  opacity: 1;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.dragHandle:hover {
+  color: white;
+  border-color: rgba(168, 85, 247, 0.42);
+}
+
+.taskHeader strong {
+  border: 1px solid rgba(52, 211, 153, 0.26);
+  border-radius: var(--radius-pill);
+  padding: 3px 7px;
+  color: #bbf7d0;
+  background: rgba(52, 211, 153, 0.09);
+}
+
+.contentButton h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.isComplete h3 {
+  text-decoration: line-through;
+}
+
+.contentButton p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.taskActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.taskCard:hover .taskActions,
+.taskCard:focus-within .taskActions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.taskActions button {
+  min-height: 27px;
+  padding: 0 8px;
+  font-size: 0.68rem;
+}
+
+.deleteButton {
+  color: #fecdd3;
+}
+
+.secondaryAction {
+  color: rgba(255, 255, 255, 0.72);
+}
