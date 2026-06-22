@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Folder, Target } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
@@ -6,6 +7,7 @@ import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useProjectsStore } from '../../features/projects/store/projects.store';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
+import SelectControl from '../../shared/components/SelectControl/SelectControl';
 import Toast from '../../shared/components/Toast/Toast';
 import GlassPanel from '../../shared/ui/GlassPanel/GlassPanel';
 import TaskDateGroup from './components/TaskDateGroup';
@@ -118,24 +120,24 @@ export default function TasksPage() {
         <div className={styles.linkFilters}>
           <label className={styles.goalFilter}>
             <span>Goal link</span>
-            <select value={goalFilter} onChange={(event) => setGoalFilter(event.target.value)}>
+            <SelectControl icon={Target} value={goalFilter} onChange={(event) => setGoalFilter(event.target.value)}>
               <option value="all">All goals</option>
               <option value="none">No goal</option>
               {goals.map((goal) => (
                 <option key={goal.id} value={goal.id}>{goal.title}</option>
               ))}
-            </select>
+            </SelectControl>
           </label>
 
           <label className={styles.goalFilter}>
             <span>Project link</span>
-            <select value={projectFilter} onChange={(event) => setProjectFilter(event.target.value)}>
+            <SelectControl icon={Folder} value={projectFilter} onChange={(event) => setProjectFilter(event.target.value)}>
               <option value="all">All projects</option>
               <option value="none">No project</option>
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>{project.title}</option>
               ))}
-            </select>
+            </SelectControl>
           </label>
         </div>
 

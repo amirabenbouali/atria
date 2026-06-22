@@ -1,7 +1,10 @@
 import type { CSSProperties } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
+import { GripVertical } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
+import AtriaIcon from '../../../../shared/ui/AtriaIcon';
+import { CompletedBadge, RecurringBadge } from '../../../../shared/ui/AtriaBadge';
 import { cn } from '../../../../shared/utils/cn';
 import type { FlexibleCalendarTask } from '../../types/calendar.types';
 import { createTaskDropId } from '../../utils/calendarDrag';
@@ -73,13 +76,13 @@ export default function TaskCard({
           {...listeners}
           onClick={(clickEvent) => clickEvent.stopPropagation()}
         >
-          ⋮⋮
+          <AtriaIcon icon={GripVertical} tone="neutral" size="sm" />
         </button>
-        {task.completed ? <strong>Done</strong> : null}
+        {task.completed ? <CompletedBadge /> : null}
       </div>
       <button className={styles.contentButton} type="button" onClick={() => onEdit(task.id)}>
         <h3>{task.title}</h3>
-        {task.recurrence !== 'none' ? <span className={styles.repeatBadge}>Repeat {task.recurrence}</span> : null}
+        {task.recurrence !== 'none' ? <RecurringBadge label={`Repeat ${task.recurrence}`} /> : null}
         {task.description ? <p>{task.description}</p> : null}
       </button>
       <div className={styles.taskActions}>

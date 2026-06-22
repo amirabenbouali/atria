@@ -2,7 +2,7 @@
   display: grid;
   gap: var(--space-5);
   min-height: calc(100vh - 164px);
-  overflow: hidden;
+  overflow: clip;
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
 }
@@ -109,6 +109,7 @@
 .projectBody {
   display: grid;
   gap: 8px;
+  justify-items: start;
   align-content: start;
   min-width: 0;
   border: 0;
@@ -118,8 +119,15 @@
   background: transparent;
 }
 
-.projectBody span,
-.projectBody em,
+.projectMetaRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.projectBody > span:not(.projectMetaRow),
+.projectBody > em,
 .projectProgress span {
   font-family: var(--font-detail);
   font-size: 0.66rem;
@@ -132,8 +140,13 @@
 }
 
 .projectBody strong {
+  display: -webkit-box;
+  overflow: hidden;
   font-size: 1.18rem;
   line-height: 1.12;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
 }
 
 .projectBody p {
@@ -218,7 +231,8 @@
 .projectModal {
   display: grid;
   gap: var(--space-4);
-  min-width: min(560px, calc(100vw - 40px));
+  width: min(560px, 100%);
+  min-width: 0;
 }
 
 .projectModal header,
@@ -240,8 +254,8 @@
 }
 
 .projectModal input,
-.projectModal textarea,
-.projectModal select {
+.projectModal textarea {
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid rgba(255, 210, 225, 0.13);
   border-radius: 16px;
@@ -294,6 +308,7 @@
   width: min(480px, 100%);
   height: 100%;
   overflow: auto;
+  overscroll-behavior: contain;
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
 }
@@ -319,10 +334,10 @@
   flex-wrap: wrap;
 }
 
-.drawerMeta span,
+.drawerMeta > span,
 .drawerProgress span,
 .drawerProgress p,
-.drawerTaskRow span,
+.drawerTaskRow > span,
 .drawerEmpty span,
 .drawerSectionHeader strong {
   color: var(--color-text-muted);
@@ -330,13 +345,6 @@
   font-size: 0.66rem;
   font-weight: 900;
   text-transform: uppercase;
-}
-
-.drawerMeta span {
-  border: 1px solid rgba(255, 210, 225, 0.12);
-  border-radius: var(--radius-pill);
-  padding: 7px 10px;
-  background: rgba(18, 16, 18, 0.62);
 }
 
 .drawerDescription {
@@ -405,12 +413,20 @@
 .drawerTaskRow button:first-child {
   display: grid;
   gap: 4px;
+  justify-items: start;
   min-width: 0;
   border: 0;
   padding: 0;
   color: white;
   text-align: left;
   background: transparent;
+}
+
+.drawerTaskMeta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .drawerTaskRow strong {
@@ -432,6 +448,14 @@
   .projectGrid,
   .modalGrid {
     grid-template-columns: 1fr;
+  }
+
+  .projectModal footer {
+    justify-content: stretch;
+  }
+
+  .projectModal footer button {
+    flex: 1 1 auto;
   }
 
   .drawerLayer {

@@ -6,6 +6,8 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  scrollbar-color: rgba(246, 166, 190, 0.38) rgba(18, 16, 18, 0.72);
+  scrollbar-width: thin;
 }
 
 body {
@@ -15,6 +17,37 @@ body {
   background:
     radial-gradient(circle at 50% -20%, rgba(55, 119, 255, 0.16), transparent 38%),
     var(--color-background);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(246, 166, 190, 0.38) rgba(18, 16, 18, 0.72);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: var(--radius-pill);
+  background: rgba(18, 16, 18, 0.62);
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(18, 16, 18, 0.72);
+  border-radius: var(--radius-pill);
+  background:
+    linear-gradient(180deg, rgba(246, 166, 190, 0.54), rgba(155, 108, 143, 0.42));
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 192, 208, 0.68), rgba(181, 122, 160, 0.54));
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .eyebrow,

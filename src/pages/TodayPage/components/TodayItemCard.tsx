@@ -1,6 +1,9 @@
 import type { CSSProperties } from 'react';
+import { BriefcaseBusiness, Clock3, RefreshCw } from 'lucide-react';
 import type { CalendarEvent } from '../../../features/calendar/types/calendar.types';
 import Button from '../../../shared/components/Button/Button';
+import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
+import { CompletedBadge } from '../../../shared/ui/AtriaBadge';
 import styles from '../TodayPage.module.css';
 
 type TodayItemCardProps = {
@@ -23,10 +26,16 @@ export default function TodayItemCard({
     >
       <div className={styles.itemAccent} style={{ background: item.accentColor }} aria-hidden="true" />
       <button className={styles.itemContent} type="button" onClick={() => onEdit(item.id)}>
-        <span>{timeLabel} · {item.category}</span>
+        <span className={styles.itemMetaRow}>
+          <AtriaCapsule label={timeLabel} icon={Clock3} tone="mauve" uppercase={false} />
+          <AtriaCapsule label={item.category} icon={BriefcaseBusiness} tone="rose" />
+          {item.recurrence !== 'none' ? (
+            <AtriaCapsule label={`Repeat ${item.recurrence}`} icon={RefreshCw} tone="violet" />
+          ) : null}
+          {item.completed ? <CompletedBadge /> : null}
+        </span>
         <strong>{item.title}</strong>
         {item.description ? <p>{item.description}</p> : null}
-        {item.recurrence !== 'none' ? <em>Repeat {item.recurrence}</em> : null}
       </button>
       <Button variant="ghost" onClick={() => onToggleComplete(item.id)}>
         {item.completed ? 'Undo' : 'Done'}

@@ -1,10 +1,13 @@
 import { format, parseISO } from 'date-fns';
+import { BriefcaseBusiness, CalendarDays, FolderKanban, RefreshCw } from 'lucide-react';
 import { categoryColors } from '../../../features/calendar/constants/calendar.constants';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
 import type { Project } from '../../../features/projects/types/projects.types';
 import type { Goal, GoalStatus } from '../../../features/goals/types/goals.types';
 import type { GoalProgress } from '../../../features/goals/utils/goalProgress';
 import Button from '../../../shared/components/Button/Button';
+import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
+import AtriaBadge from '../../../shared/ui/AtriaBadge';
 import styles from '../GoalsPage.module.css';
 
 type GoalCardProps = {
@@ -40,7 +43,11 @@ export default function GoalCard({
     <article className={`${styles.goalCard} ${styles[goal.status]}`}>
       <div className={styles.goalAccent} style={{ background: categoryColors[goal.category] }} />
       <button className={styles.goalBody} type="button" onClick={() => onSelect(goal.id)}>
-        <span>{goal.category} · {targetLabel}</span>
+        <span className={styles.goalMetaRow}>
+          <AtriaCapsule label={goal.category} icon={BriefcaseBusiness} tone="rose" />
+          <AtriaCapsule label={targetLabel} icon={CalendarDays} tone="mauve" uppercase={false} />
+          <AtriaBadge label={goal.status} tone={goal.status === 'completed' ? 'success' : goal.status === 'archived' ? 'neutral' : 'rose'} />
+        </span>
         <strong>{goal.title}</strong>
         {goal.description ? <p>{goal.description}</p> : null}
       </button>
@@ -86,7 +93,10 @@ export default function GoalCard({
                 key={project.id}
               >
                 <div className={styles.linkedProjectIdentity}>
-                  <span>{project.status} · {project.category}</span>
+                  <span className={styles.goalMetaRow}>
+                    <AtriaCapsule label={project.status} icon={FolderKanban} tone={project.status === 'archived' ? 'neutral' : 'rose'} />
+                    <AtriaCapsule label={project.category} icon={BriefcaseBusiness} tone="mauve" />
+                  </span>
                   <strong>{project.title}</strong>
                 </div>
                 <em>{project.targetDate ?? 'Open'}</em>
@@ -100,7 +110,12 @@ export default function GoalCard({
             linkedTasks.map((task) => (
               <div className={styles.linkedTaskRow} key={task.id}>
                 <button type="button" onClick={() => onEditTask(task.id)}>
-                  <span>{task.date}{task.recurrence !== 'none' ? ` · Repeat ${task.recurrence}` : ''}</span>
+                  <span className={styles.goalMetaRow}>
+                    <AtriaCapsule label={task.date} icon={CalendarDays} tone="mauve" uppercase={false} />
+                    {task.recurrence !== 'none' ? (
+                      <AtriaCapsule label={`Repeat ${task.recurrence}`} icon={RefreshCw} tone="violet" />
+                    ) : null}
+                  </span>
                   <strong>{task.title}</strong>
                 </button>
                 <Button variant="ghost" onClick={() => onToggleTaskComplete(task.id)}>

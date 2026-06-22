@@ -1,0 +1,31 @@
+.badge {
+  --badge-tone: #f6a6be;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 24px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--badge-tone) 30%, white 8%);
+  border-radius: var(--radius-pill);
+  padding: 4px 8px;
+  color: rgba(255, 255, 255, 0.84);
+  font-family: var(--font-detail);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.014)),
+    rgba(20, 18, 22, 0.64);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--badge-tone) 12%, transparent);
+}
+
+.rose { --badge-tone: #f6a6be; }
+.violet { --badge-tone: #c89bff; }
+.mauve { --badge-tone: #d989a6; }
+.neutral { --badge-tone: rgba(255, 255, 255, 0.68); }
+.success { --badge-tone: #ebc7d4; }
+.warning { --badge-tone: #f2a7a0; }

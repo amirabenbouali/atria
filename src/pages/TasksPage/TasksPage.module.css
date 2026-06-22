@@ -2,7 +2,7 @@
   display: grid;
   gap: var(--space-5);
   min-height: calc(100vh - 164px);
-  overflow: hidden;
+  overflow: clip;
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
 }
@@ -143,6 +143,7 @@
 .taskContent {
   display: grid;
   gap: 5px;
+  justify-items: start;
   min-width: 0;
   border: 0;
   padding: 0;
@@ -151,7 +152,14 @@
   background: transparent;
 }
 
-.taskContent span {
+.taskMetaRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.taskContent > span:not(.taskMetaRow) {
   font-family: var(--font-detail);
   font-size: 0.64rem;
   font-weight: 900;
@@ -159,7 +167,10 @@
 }
 
 .taskContent strong {
+  overflow: hidden;
   line-height: 1.2;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .taskContent p {
@@ -189,16 +200,6 @@
   text-transform: uppercase;
 }
 
-.goalFilter select {
-  min-height: 42px;
-  border: 1px solid rgba(255, 210, 225, 0.12);
-  border-radius: 16px;
-  padding: 0 12px;
-  color: white;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.016)),
-    rgba(18, 16, 18, 0.72);
-}
 
 .completedTask {
   opacity: 0.66;

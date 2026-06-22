@@ -1,0 +1,107 @@
+.selectShell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 22px;
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 220, 230, 0.12);
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.018)),
+    rgba(20, 18, 22, 0.82);
+  box-shadow:
+    0 0 22px rgba(246, 166, 190, 0.08),
+    0 14px 32px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(20px);
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease,
+    background var(--duration-fast) ease;
+}
+
+.selectShell:hover {
+  border-color: rgba(246, 166, 190, 0.35);
+  box-shadow:
+    0 0 20px rgba(246, 166, 190, 0.12),
+    0 16px 34px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11);
+  transform: translateY(-1px);
+}
+
+.selectShell:focus-within {
+  border-color: rgba(246, 166, 190, 0.55);
+  box-shadow:
+    0 0 30px rgba(246, 166, 190, 0.2),
+    0 0 0 4px rgba(246, 166, 190, 0.08),
+    0 18px 38px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+.chevron {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.selectIcon {
+  grid-column: 1;
+  grid-row: 1;
+  margin-left: 13px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.chevron {
+  grid-column: 3;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 1.1rem;
+  transform: translateY(-2px);
+}
+
+.select {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 52px;
+  border: 0;
+  padding: 0 44px 0 54px;
+  color: rgba(255, 255, 255, 0.95);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 760;
+  background: transparent;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select option {
+  color: white;
+  background: #161016;
+}
+
+@media (max-width: 640px) {
+  .selectShell {
+    min-height: 48px;
+    grid-template-columns: 26px minmax(0, 1fr) 20px;
+  }
+
+  .select {
+    min-height: 48px;
+    padding-left: 50px;
+  }
+
+  .selectIcon {
+    margin-left: 12px;
+  }
+}

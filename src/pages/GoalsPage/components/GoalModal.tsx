@@ -1,10 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { BriefcaseBusiness } from 'lucide-react';
 import { eventCategories } from '../../../features/calendar/constants/calendar.constants';
 import type { EventCategory } from '../../../features/calendar/types/calendar.types';
 import type { Goal, GoalDraft } from '../../../features/goals/types/goals.types';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
+import SelectControl from '../../../shared/components/SelectControl/SelectControl';
 import styles from '../GoalsPage.module.css';
 
 type GoalModalProps = {
@@ -121,14 +123,15 @@ export default function GoalModal({
             <div className={styles.modalGrid}>
               <label>
                 <span>Category</span>
-                <select
+                <SelectControl
+                  icon={BriefcaseBusiness}
                   value={formState.category}
                   onChange={(event) => updateField('category', event.target.value as EventCategory)}
                 >
                   {eventCategories.map((category) => (
                     <option key={category} value={category}>{category}</option>
                   ))}
-                </select>
+                </SelectControl>
               </label>
 
               <label>

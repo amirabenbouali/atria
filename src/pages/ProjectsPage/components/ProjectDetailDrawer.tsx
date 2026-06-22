@@ -1,9 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
+import { BriefcaseBusiness, CalendarDays, RefreshCw, Target, X } from 'lucide-react';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
 import type { Project } from '../../../features/projects/types/projects.types';
 import type { ProjectProgress } from '../../../features/projects/utils/projectProgress';
 import Button from '../../../shared/components/Button/Button';
+import AtriaIcon from '../../../shared/ui/AtriaIcon';
+import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
+import AtriaBadge from '../../../shared/ui/AtriaBadge';
 import GlassPanel from '../../../shared/ui/GlassPanel/GlassPanel';
 import styles from '../ProjectsPage.module.css';
 
@@ -61,15 +65,15 @@ export default function ProjectDetailDrawer({
                 <h2 id="project-drawer-title">{project.title}</h2>
               </div>
               <Button variant="icon" onClick={onClose} aria-label="Close project detail">
-                ×
+                <AtriaIcon icon={X} tone="rose" size="sm" />
               </Button>
             </header>
 
             <div className={styles.drawerMeta}>
-              <span>{project.category}</span>
-              <span>{project.status}</span>
-              <span>{targetLabel}</span>
-              {linkedGoalTitle ? <span>Goal · {linkedGoalTitle}</span> : <span>No linked goal</span>}
+              <AtriaCapsule label={project.category} icon={BriefcaseBusiness} tone="rose" />
+              <AtriaBadge label={project.status} tone={project.status === 'completed' ? 'success' : project.status === 'archived' ? 'neutral' : 'rose'} />
+              <AtriaCapsule label={targetLabel} icon={CalendarDays} tone="mauve" uppercase={false} />
+              <AtriaCapsule label={linkedGoalTitle ?? 'No linked goal'} icon={Target} tone={linkedGoalTitle ? 'violet' : 'neutral'} uppercase={false} />
             </div>
 
             {project.description ? <p className={styles.drawerDescription}>{project.description}</p> : null}
@@ -103,7 +107,12 @@ export default function ProjectDetailDrawer({
                 linkedTasks.map((task) => (
                   <article className={styles.drawerTaskRow} key={task.id}>
                     <button type="button" onClick={() => onEditTask(task.id)}>
-                      <span>{task.date}{task.recurrence !== 'none' ? ` · Repeat ${task.recurrence}` : ''}</span>
+                      <span className={styles.drawerTaskMeta}>
+                        <AtriaCapsule label={task.date} icon={CalendarDays} tone="mauve" uppercase={false} />
+                        {task.recurrence !== 'none' ? (
+                          <AtriaCapsule label={`Repeat ${task.recurrence}`} icon={RefreshCw} tone="violet" />
+                        ) : null}
+                      </span>
                       <strong>{task.title}</strong>
                     </button>
                     <Button variant="ghost" onClick={() => onToggleTaskComplete(task.id)}>

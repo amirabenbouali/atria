@@ -1,7 +1,10 @@
 import type { CSSProperties } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
+import { GripVertical } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
+import AtriaIcon from '../../../../shared/ui/AtriaIcon';
+import { CompletedBadge, RecurringBadge } from '../../../../shared/ui/AtriaBadge';
 import { cn } from '../../../../shared/utils/cn';
 import type { ScheduledCalendarEvent } from '../../types/calendar.types';
 import { getEventDurationHeight, getEventOffset } from '../../utils/calendarTime';
@@ -72,13 +75,13 @@ export default function EventCard({
           {...listeners}
           onClick={(clickEvent) => clickEvent.stopPropagation()}
         >
-          ⋮⋮
+          <AtriaIcon icon={GripVertical} tone="neutral" size="sm" />
         </button>
         <button className={styles.contentButton} type="button" onClick={() => onEdit(event.id)}>
           <h3>{event.title}</h3>
-          {event.recurrence !== 'none' ? <span className={styles.repeatBadge}>Repeat {event.recurrence}</span> : null}
+          {event.recurrence !== 'none' ? <RecurringBadge label={`Repeat ${event.recurrence}`} /> : null}
           {event.description ? <p>{event.description}</p> : null}
-          {event.completed ? <span className={styles.completedBadge}>Completed</span> : null}
+          {event.completed ? <CompletedBadge /> : null}
         </button>
         <div className={styles.eventActions}>
           <Button

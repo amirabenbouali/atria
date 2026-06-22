@@ -1,0 +1,53 @@
+.stat {
+  display: grid;
+  gap: 8px;
+  min-height: 66px;
+  border: 1px solid rgba(255, 220, 230, 0.09);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(246, 166, 190, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
+    rgba(20, 18, 22, 0.64);
+  box-shadow:
+    0 0 24px rgba(246, 166, 190, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.topline span {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat strong {
+  font-family: var(--font-detail);
+  font-size: 1.72rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 22px rgba(246, 166, 190, 0.14);
+}
+
+.progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-action);
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.18);
+}

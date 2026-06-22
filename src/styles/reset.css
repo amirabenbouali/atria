@@ -12,6 +12,12 @@ select {
   font: inherit;
 }
 
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 button {
   cursor: pointer;
 }

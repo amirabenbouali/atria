@@ -2,7 +2,7 @@
   display: grid;
   gap: var(--space-5);
   min-height: calc(100vh - 164px);
-  overflow: hidden;
+  overflow: clip;
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
 }
@@ -108,6 +108,7 @@
 .goalBody {
   display: grid;
   gap: 8px;
+  justify-items: start;
   align-content: start;
   min-width: 0;
   border: 0;
@@ -117,7 +118,14 @@
   background: transparent;
 }
 
-.goalBody span {
+.goalMetaRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.goalBody > span:not(.goalMetaRow) {
   font-family: var(--font-detail);
   font-size: 0.66rem;
   font-weight: 900;
@@ -125,8 +133,13 @@
 }
 
 .goalBody strong {
+  display: -webkit-box;
+  overflow: hidden;
   font-size: 1.18rem;
   line-height: 1.12;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
 }
 
 .goalBody p {
@@ -157,7 +170,7 @@
 }
 
 .goalProgress span,
-.linkedTaskRow span,
+.linkedTaskRow > span,
 .linkedTaskRow em,
 .noLinkedTasks {
   color: var(--color-text-muted);
@@ -219,6 +232,7 @@
 .linkedProjectIdentity {
   display: grid;
   gap: 4px;
+  justify-items: start;
   min-width: 0;
   border: 0;
   padding: 0;
@@ -266,7 +280,8 @@
 .goalModal {
   display: grid;
   gap: var(--space-4);
-  min-width: min(560px, calc(100vw - 40px));
+  width: min(560px, 100%);
+  min-width: 0;
 }
 
 .goalModal header {
@@ -289,8 +304,8 @@
 }
 
 .goalModal input,
-.goalModal textarea,
-.goalModal select {
+.goalModal textarea {
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid rgba(255, 210, 225, 0.13);
   border-radius: 16px;
@@ -328,5 +343,13 @@
   .goalGrid,
   .modalGrid {
     grid-template-columns: 1fr;
+  }
+
+  .goalModal footer {
+    justify-content: stretch;
+  }
+
+  .goalModal footer button {
+    flex: 1 1 auto;
   }
 }

@@ -1,8 +1,11 @@
 import { format, parseISO } from 'date-fns';
+import { BriefcaseBusiness, CalendarDays, Target } from 'lucide-react';
 import { categoryColors } from '../../../features/calendar/constants/calendar.constants';
 import type { Project, ProjectStatus } from '../../../features/projects/types/projects.types';
 import type { ProjectProgress } from '../../../features/projects/utils/projectProgress';
 import Button from '../../../shared/components/Button/Button';
+import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
+import AtriaBadge from '../../../shared/ui/AtriaBadge';
 import styles from '../ProjectsPage.module.css';
 
 type ProjectCardProps = {
@@ -30,9 +33,13 @@ export default function ProjectCard({
     <article className={`${styles.projectCard} ${styles[project.status]}`}>
       <div className={styles.projectAccent} style={{ background: categoryColors[project.category] }} />
       <button className={styles.projectBody} type="button" onClick={() => onSelect(project.id)}>
-        <span>{project.category} · {targetLabel}</span>
+        <span className={styles.projectMetaRow}>
+          <AtriaCapsule label={project.category} icon={BriefcaseBusiness} tone="rose" />
+          <AtriaCapsule label={targetLabel} icon={CalendarDays} tone="mauve" uppercase={false} />
+          <AtriaBadge label={project.status} tone={project.status === 'completed' ? 'success' : project.status === 'archived' ? 'neutral' : 'rose'} />
+        </span>
         <strong>{project.title}</strong>
-        {linkedGoalTitle ? <em>Goal · {linkedGoalTitle}</em> : null}
+        {linkedGoalTitle ? <AtriaCapsule label={linkedGoalTitle} icon={Target} tone="violet" uppercase={false} /> : null}
         {project.description ? <p>{project.description}</p> : null}
       </button>
       <div className={styles.projectProgress}>

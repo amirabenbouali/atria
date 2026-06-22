@@ -2,7 +2,7 @@
   display: grid;
   gap: var(--space-5);
   min-height: calc(100vh - 164px);
-  overflow: hidden;
+  overflow: clip;
   border-radius: var(--radius-2xl);
   padding: var(--space-5);
 }
@@ -359,7 +359,10 @@
 .routineTopline strong {
   display: block;
   margin-bottom: 3px;
+  overflow: hidden;
   line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .routineTopline p,

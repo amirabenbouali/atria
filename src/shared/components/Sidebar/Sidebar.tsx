@@ -1,6 +1,17 @@
+import {
+  BarChart3,
+  CalendarDays,
+  CircleDot,
+  FolderKanban,
+  Settings,
+  SquareCheck,
+  Target,
+} from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { routes } from '../../../app/routes';
 import Button from '../Button/Button';
+import AtriaIcon from '../../ui/AtriaIcon';
+import AtriaStat from '../../ui/AtriaStat';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
 import styles from './Sidebar.module.css';
 
@@ -21,13 +32,13 @@ export default function Sidebar({
 }: SidebarProps) {
   const completionRate = totalEvents === 0 ? 0 : Math.round((completedEvents / totalEvents) * 100);
   const navItems = [
-    { label: 'Calendar', path: routes.calendar },
-    { label: 'Today', path: routes.today },
-    { label: 'Tasks', path: routes.tasks },
-    { label: 'Goals', path: routes.goals },
-    { label: 'Projects', path: routes.projects },
-    { label: 'Insights', path: routes.insights },
-    { label: 'Settings', path: routes.settings },
+    { label: 'Calendar', path: routes.calendar, icon: CalendarDays },
+    { label: 'Today', path: routes.today, icon: CircleDot },
+    { label: 'Tasks', path: routes.tasks, icon: SquareCheck },
+    { label: 'Goals', path: routes.goals, icon: Target },
+    { label: 'Projects', path: routes.projects, icon: FolderKanban },
+    { label: 'Insights', path: routes.insights, icon: BarChart3 },
+    { label: 'Settings', path: routes.settings, icon: Settings },
   ];
 
   return (
@@ -52,7 +63,7 @@ export default function Sidebar({
             key={item.label}
             to={item.path}
           >
-            <span aria-hidden="true">{item.label.slice(0, 1)}</span>
+            <AtriaIcon className={styles.navIcon} icon={item.icon} tone="rose" size="sm" shell glow />
             {item.label}
           </NavLink>
         ))}
@@ -60,17 +71,8 @@ export default function Sidebar({
 
       <section className={styles.sidebarSection}>
         <p className="sectionLabel">Week Pulse</p>
-        <div className={styles.statCard}>
-          <span>Total events</span>
-          <strong>{totalEvents}</strong>
-        </div>
-        <div className={styles.statCard}>
-          <span>Completed</span>
-          <strong>{completedEvents}</strong>
-        </div>
-        <div className={styles.completionMeter} aria-label={`${completionRate}% completed`}>
-          <div style={{ width: `${completionRate}%` }} />
-        </div>
+        <AtriaStat label="Total items" value={totalEvents} icon={CalendarDays} tone="rose" progress={completionRate} />
+        <AtriaStat label="Completed" value={completedEvents} icon={SquareCheck} tone="success" />
       </section>
 
       <section className={styles.sidebarSection}>

@@ -1,0 +1,80 @@
+.bare,
+.shell {
+  --atria-icon-tone: #f6a6be;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--atria-icon-tone);
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+}
+
+.sm {
+  font-size: 0.9rem;
+}
+
+.md {
+  font-size: 1rem;
+}
+
+.lg {
+  font-size: 1.18rem;
+}
+
+.shell {
+  width: 32px;
+  height: 32px;
+  border: 1px solid color-mix(in srgb, var(--atria-icon-tone) 28%, white 8%);
+  border-radius: 13px;
+  background:
+    radial-gradient(circle at 30% 12%, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.022)),
+    rgba(20, 18, 22, 0.72);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--atria-icon-tone) 14%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+}
+
+.shell.sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 11px;
+}
+
+.shell.lg {
+  width: 40px;
+  height: 40px;
+  border-radius: 16px;
+}
+
+.glow {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--atria-icon-tone) 42%, transparent));
+}
+
+.rose {
+  --atria-icon-tone: #f6a6be;
+}
+
+.violet {
+  --atria-icon-tone: #c89bff;
+}
+
+.mauve {
+  --atria-icon-tone: #d989a6;
+}
+
+.neutral {
+  --atria-icon-tone: rgba(255, 255, 255, 0.76);
+}
+
+.success {
+  --atria-icon-tone: #ebc7d4;
+}
+
+.warning {
+  --atria-icon-tone: #f2a7a0;
+}

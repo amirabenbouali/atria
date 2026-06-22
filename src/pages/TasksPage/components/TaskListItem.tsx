@@ -1,5 +1,8 @@
+import { Folder, RefreshCw, Target } from 'lucide-react';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
 import Button from '../../../shared/components/Button/Button';
+import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
+import { CompletedBadge } from '../../../shared/ui/AtriaBadge';
 import styles from '../TasksPage.module.css';
 
 type TaskListItemProps = {
@@ -25,14 +28,22 @@ export default function TaskListItem({
     <article className={`${styles.taskItem} ${task.completed ? styles.completedTask : ''}`}>
       <span className={styles.taskAccent} style={{ background: task.accentColor }} />
       <button className={styles.taskContent} type="button" onClick={() => onEdit(task.id)}>
-        <span>{task.category}{task.recurrence !== 'none' ? ` · Repeat ${task.recurrence}` : ''}</span>
+        <span className={styles.taskMetaRow}>
+          <AtriaCapsule label={task.category} uppercase icon={Target} tone="rose" />
+          {task.recurrence !== 'none' ? (
+            <AtriaCapsule label={`Repeat ${task.recurrence}`} uppercase icon={RefreshCw} tone="mauve" />
+          ) : null}
+          {task.completed ? <CompletedBadge /> : null}
+        </span>
         <strong>{task.title}</strong>
-        {linkedGoalTitle ? <em>Goal · {linkedGoalTitle}</em> : null}
+        {linkedGoalTitle ? <AtriaCapsule label={linkedGoalTitle} icon={Target} tone="violet" uppercase={false} /> : null}
         {linkedProjectTitle ? (
-          <em>
-            Project · {linkedProjectTitle}
-            {linkedProjectStatus === 'archived' ? ' · archived' : ''}
-          </em>
+          <AtriaCapsule
+            label={`${linkedProjectTitle}${linkedProjectStatus === 'archived' ? ' · archived' : ''}`}
+            icon={Folder}
+            tone={linkedProjectStatus === 'archived' ? 'neutral' : 'mauve'}
+            uppercase={false}
+          />
         ) : null}
         {task.description ? <p>{task.description}</p> : null}
       </button>

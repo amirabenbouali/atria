@@ -15,6 +15,7 @@
   width: min(520px, 100%);
   max-height: calc(100vh - 40px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
   background: var(--glass-surface-raised);

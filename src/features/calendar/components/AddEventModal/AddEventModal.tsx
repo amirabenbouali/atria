@@ -1,7 +1,9 @@
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
+import { BriefcaseBusiness, Folder, RefreshCw, Target } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
 import Modal from '../../../../shared/components/Modal/Modal';
+import SelectControl from '../../../../shared/components/SelectControl/SelectControl';
 import { useGoalsStore } from '../../../goals/store/goals.store';
 import { useProjectsStore } from '../../../projects/store/projects.store';
 import {
@@ -163,38 +165,52 @@ export default function AddEventModal({
               ) : null}
               <label>
                 Accent
-                <input
-                  type="color"
-                  value={values.accentColor}
-                  onChange={(event) => updateField('accentColor', event.target.value)}
-                  aria-label="Event accent colour"
-                />
+                <span className={styles.accentControl}>
+                  <span
+                    className={styles.accentSwatch}
+                    style={{ background: values.accentColor }}
+                    aria-hidden="true"
+                  />
+                  <span className={styles.accentValue}>{values.accentColor}</span>
+                  <span className={styles.accentChevron} aria-hidden="true">⌄</span>
+                  <input
+                    type="color"
+                    value={values.accentColor}
+                    onChange={(event) => updateField('accentColor', event.target.value)}
+                    aria-label="Event accent colour"
+                  />
+                </span>
               </label>
             </div>
 
             <label>
               Category
-              <select value={values.category} onChange={(event) => updateCategory(event.target.value as EventCategory)}>
+              <SelectControl
+                icon={BriefcaseBusiness}
+                value={values.category}
+                onChange={(event) => updateCategory(event.target.value as EventCategory)}
+              >
                 {eventCategories.map((option) => (
                   <option key={option} value={option}>{option}</option>
                 ))}
-              </select>
+              </SelectControl>
             </label>
 
             {values.itemType === 'task' ? (
               <div className={styles.formRow}>
                 <label>
                   Linked Goal
-                  <select value={values.goalId} onChange={(event) => updateField('goalId', event.target.value)}>
+                  <SelectControl icon={Target} value={values.goalId} onChange={(event) => updateField('goalId', event.target.value)}>
                     <option value="">No goal</option>
                     {activeGoals.map((goal) => (
                       <option key={goal.id} value={goal.id}>{goal.title}</option>
                     ))}
-                  </select>
+                  </SelectControl>
                 </label>
                 <label>
                   Linked Project
-                  <select
+                  <SelectControl
+                    icon={Folder}
                     value={values.projectId}
                     onChange={(event) => {
                       const project = activeProjects.find((item) => item.id === event.target.value);
@@ -205,7 +221,7 @@ export default function AddEventModal({
                     {activeProjects.map((project) => (
                       <option key={project.id} value={project.id}>{project.title}</option>
                     ))}
-                  </select>
+                  </SelectControl>
                 </label>
               </div>
             ) : null}
@@ -213,7 +229,8 @@ export default function AddEventModal({
             <div className={values.recurrence === 'none' ? styles.formRowSingle : styles.formRow}>
               <label>
                 Repeat
-                <select
+                <SelectControl
+                  icon={RefreshCw}
                   value={values.recurrence}
                   onChange={(event) => updateField('recurrence', event.target.value as CalendarRecurrence)}
                 >
@@ -221,7 +238,7 @@ export default function AddEventModal({
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
-                </select>
+                </SelectControl>
               </label>
 
               {values.recurrence !== 'none' ? (

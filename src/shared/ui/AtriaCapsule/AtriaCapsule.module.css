@@ -1,0 +1,52 @@
+.capsule {
+  --capsule-tone: #f6a6be;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  border: 1px solid color-mix(in srgb, var(--capsule-tone) 28%, white 8%);
+  border-radius: var(--radius-pill);
+  color: rgba(255, 255, 255, 0.82);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.016)),
+    rgba(20, 18, 22, 0.62);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--capsule-tone) 10%, transparent);
+}
+
+.capsule span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm {
+  min-height: 24px;
+  padding: 3px 8px;
+  font-size: 0.62rem;
+}
+
+.md {
+  min-height: 30px;
+  padding: 5px 10px;
+  font-size: 0.72rem;
+}
+
+.uppercase {
+  font-family: var(--font-detail);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.solid {
+  color: white;
+  background:
+    radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--capsule-tone) 18%, transparent), transparent 42%),
+    rgba(20, 18, 22, 0.82);
+}
+
+.rose { --capsule-tone: #f6a6be; }
+.violet { --capsule-tone: #c89bff; }
+.mauve { --capsule-tone: #d989a6; }
+.neutral { --capsule-tone: rgba(255, 255, 255, 0.72); }
+.success { --capsule-tone: #ebc7d4; }
+.warning { --capsule-tone: #f2a7a0; }

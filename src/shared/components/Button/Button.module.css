@@ -2,6 +2,9 @@
   min-height: 44px;
   border-radius: var(--radius-pill);
   font-weight: 800;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   transition:
     transform var(--duration-fast) ease,

@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { BriefcaseBusiness, Target } from 'lucide-react';
 import { eventCategories } from '../../../features/calendar/constants/calendar.constants';
 import type { EventCategory } from '../../../features/calendar/types/calendar.types';
 import { useGoalsStore } from '../../../features/goals/store/goals.store';
 import type { Project, ProjectDraft } from '../../../features/projects/types/projects.types';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
+import SelectControl from '../../../shared/components/SelectControl/SelectControl';
 import styles from '../ProjectsPage.module.css';
 
 type ProjectModalProps = {
@@ -127,24 +129,29 @@ export default function ProjectModal({
             <div className={styles.modalGrid}>
               <label>
                 <span>Category</span>
-                <select
+                <SelectControl
+                  icon={BriefcaseBusiness}
                   value={formState.category}
                   onChange={(event) => updateField('category', event.target.value as EventCategory)}
                 >
                   {eventCategories.map((category) => (
                     <option key={category} value={category}>{category}</option>
                   ))}
-                </select>
+                </SelectControl>
               </label>
 
               <label>
                 <span>Linked goal</span>
-                <select value={formState.goalId ?? ''} onChange={(event) => updateField('goalId', event.target.value)}>
+                <SelectControl
+                  icon={Target}
+                  value={formState.goalId ?? ''}
+                  onChange={(event) => updateField('goalId', event.target.value)}
+                >
                   <option value="">No goal</option>
                   {activeGoals.map((goal) => (
                     <option key={goal.id} value={goal.id}>{goal.title}</option>
                   ))}
-                </select>
+                </SelectControl>
               </label>
             </div>
 

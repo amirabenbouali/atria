@@ -1,5 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+  CalendarDays,
+  Command,
+  FilePlus2,
+  Navigation,
+  RotateCcw,
+  Search,
+  type LucideIcon,
+} from 'lucide-react';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import AtriaIcon from '../../../../shared/ui/AtriaIcon';
+import AtriaBadge from '../../../../shared/ui/AtriaBadge';
+import type { CommandPaletteCommandType } from '../../types/commandPalette.types';
 import { useCommandPaletteCommands } from '../../hooks/useCommandPaletteCommands';
 import styles from './CommandPalette.module.css';
 
@@ -10,6 +22,13 @@ type CommandPaletteProps = {
 };
 
 const titleId = 'command-palette-title';
+
+const commandIcons: Record<CommandPaletteCommandType, LucideIcon> = {
+  navigation: Navigation,
+  creation: FilePlus2,
+  calendarItem: CalendarDays,
+  system: RotateCcw,
+};
 
 export default function CommandPalette({
   isOpen,
@@ -99,13 +118,16 @@ export default function CommandPalette({
 
             <label className={styles.searchBox}>
               <span>Search or command</span>
-              <input
-                aria-label="Search commands and calendar items"
-                ref={inputRef}
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Jump, create, or find..."
-              />
+              <div className={styles.searchField}>
+                <AtriaIcon icon={Search} tone="rose" size="sm" glow />
+                <input
+                  aria-label="Search commands and calendar items"
+                  ref={inputRef}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Jump, create, or find..."
+                />
+              </div>
             </label>
 
             <div className={styles.resultList} role="listbox" aria-label="Command results">
@@ -120,16 +142,19 @@ export default function CommandPalette({
                     onClick={command.execute}
                     onMouseEnter={() => setActiveIndex(index)}
                   >
-                    <span
-                      className={styles.resultAccent}
-                      style={{ background: command.accentColor }}
-                      aria-hidden="true"
+                    <AtriaIcon
+                      className={styles.resultIcon}
+                      icon={commandIcons[command.type] ?? Command}
+                      tone={command.type === 'system' ? 'warning' : command.type === 'calendarItem' ? 'mauve' : 'rose'}
+                      size="sm"
+                      shell
+                      glow
                     />
                     <span className={styles.resultBody}>
                       <strong>{command.title}</strong>
                       <em>{command.subtitle}</em>
                     </span>
-                    <span className={styles.resultBadge}>{command.badge}</span>
+                    <AtriaBadge label={command.badge} tone={command.type === 'system' ? 'warning' : 'rose'} />
                   </button>
                 ))
               ) : (

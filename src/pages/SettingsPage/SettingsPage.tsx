@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { BriefcaseBusiness, CalendarDays, LayoutDashboard } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { eventCategories } from '../../features/calendar/constants/calendar.constants';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
@@ -10,6 +11,7 @@ import type { DefaultView } from '../../features/settings/types/settings.types';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Button from '../../shared/components/Button/Button';
+import SelectControl from '../../shared/components/SelectControl/SelectControl';
 import Toast from '../../shared/components/Toast/Toast';
 import GlassPanel from '../../shared/ui/GlassPanel/GlassPanel';
 import SettingsSection from './components/SettingsSection';
@@ -165,37 +167,40 @@ export default function SettingsPage() {
 
             <label className={styles.fieldRow}>
               <span>Default item type</span>
-              <select
+              <SelectControl
+                icon={CalendarDays}
                 value={preferences.defaultItemType}
                 onChange={(event) => updatePreferences({ defaultItemType: event.target.value as CalendarItemType })}
               >
                 <option value="event">Event</option>
                 <option value="task">Task</option>
-              </select>
+              </SelectControl>
             </label>
 
             <label className={styles.fieldRow}>
               <span>Default category</span>
-              <select
+              <SelectControl
+                icon={BriefcaseBusiness}
                 value={preferences.defaultCategory}
                 onChange={(event) => updatePreferences({ defaultCategory: event.target.value as EventCategory })}
               >
                 {eventCategories.map((category) => (
                   <option key={category} value={category}>{category}</option>
                 ))}
-              </select>
+              </SelectControl>
             </label>
 
             <label className={styles.fieldRow}>
               <span>Default view</span>
-              <select
+              <SelectControl
+                icon={LayoutDashboard}
                 value={preferences.defaultView}
                 onChange={(event) => updatePreferences({ defaultView: event.target.value as DefaultView })}
               >
                 <option value="calendar">Calendar</option>
                 <option value="today">Today</option>
                 <option value="insights">Insights</option>
-              </select>
+              </SelectControl>
             </label>
           </SettingsSection>
 
