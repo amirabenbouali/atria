@@ -383,6 +383,23 @@
   text-transform: none;
 }
 
+.fieldHint {
+  color: var(--color-text-subtle);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.energyNote {
+  margin: 0;
+  border: 1px solid rgba(255, 220, 230, 0.1);
+  border-radius: 18px;
+  padding: 12px 14px;
+  color: rgba(255, 255, 255, 0.74);
+  background: rgba(18, 16, 18, 0.58);
+}
+
 .modalActions {
   justify-content: flex-end;
 }

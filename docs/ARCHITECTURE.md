@@ -32,6 +32,8 @@ The user-facing intention inbox lives at `/intentions`. Quick capture uses a sma
 
 `features/timeQuality/` owns shared time-quality and energy vocabulary for future planning suggestions and reflection metadata.
 
+Energy profiles are explicit user preferences stored in settings. The current profile uses three fixed local day periods: morning `05:00-11:59`, afternoon `12:00-16:59`, and evening `17:00-23:59`, with `00:00-04:59` falling back to evening. Atria does not learn from behaviour or make scheduling suggestions from this profile yet.
+
 `shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
 
 `styles/` contains global design language: tokens, reset, aurora effects, and base typography. Component-specific styling belongs beside the component as a CSS Module.

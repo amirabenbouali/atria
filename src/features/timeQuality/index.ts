@@ -1,7 +1,10 @@
 export type {
   EnergyLevel,
   EnergyPreferenceSlot,
+  EnergyProfile,
+  EnergyProfilePeriod,
   EnergyRequirement,
+  DayPeriod,
   PreferredTimeOfDay,
   TimeQuality,
 } from './types/timeQuality.types';
@@ -15,3 +18,20 @@ export {
   preferredTimesOfDay,
   timeQualities,
 } from './utils/timeQualityGuards';
+export {
+  dayPeriods,
+  defaultEnergyProfile,
+  getDayPeriodForDate,
+  getEnergyCompatibilityNote,
+  getEnergyForDate,
+  getPreferredQualitiesForDate,
+  normalizeEnergyProfile,
+} from './utils/energyProfile';
+export {
+  dayPeriodLabels,
+  energyLabels,
+  getDayPeriodLabel,
+  getEnergyLabel,
+  getTimeQualityLabel,
+  timeQualityLabels,
+} from './utils/timeQualityPresentation';

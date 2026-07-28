@@ -14,6 +14,7 @@ import Button from '../../shared/components/Button/Button';
 import SelectControl from '../../shared/components/SelectControl/SelectControl';
 import Toast from '../../shared/components/Toast/Toast';
 import GlassPanel from '../../shared/ui/GlassPanel/GlassPanel';
+import EnergyProfileSettings from './components/EnergyProfileSettings';
 import SettingsSection from './components/SettingsSection';
 import styles from './SettingsPage.module.css';
 
@@ -37,6 +38,9 @@ export default function SettingsPage() {
   } = useCalendarEvents();
   const preferences = useSettingsStore((state) => state.preferences);
   const updatePreferences = useSettingsStore((state) => state.updatePreferences);
+  const setEnergyForPeriod = useSettingsStore((state) => state.setEnergyForPeriod);
+  const setPreferredQualitiesForPeriod = useSettingsStore((state) => state.setPreferredQualitiesForPeriod);
+  const resetEnergyProfile = useSettingsStore((state) => state.resetEnergyProfile);
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const isAddEventModalOpen = useCalendarStore((state) => state.isAddEventModalOpen);
   const editingEventId = useCalendarStore((state) => state.editingEventId);
@@ -202,6 +206,18 @@ export default function SettingsPage() {
                 <option value="insights">Insights</option>
               </SelectControl>
             </label>
+          </SettingsSection>
+
+          <SettingsSection eyebrow="Daily Energy" title="Energy profile">
+            <EnergyProfileSettings
+              profile={preferences.energyProfile}
+              onSetEnergy={setEnergyForPeriod}
+              onSetQualities={setPreferredQualitiesForPeriod}
+              onReset={() => {
+                resetEnergyProfile();
+                setToastMessage('Energy profile reset');
+              }}
+            />
           </SettingsSection>
 
           <SettingsSection eyebrow="Appearance" title="Theme">

@@ -16,10 +16,12 @@ import {
   hasIntentionValidationErrors,
   validateIntentionDraft,
 } from '../../../features/intentions';
+import { useSettingsStore } from '../../../features/settings/store/settings.store';
 import type {
   EnergyRequirement,
   PreferredTimeOfDay,
 } from '../../../features/timeQuality';
+import { getEnergyCompatibilityNote } from '../../../features/timeQuality';
 import styles from '../IntentionsPage.module.css';
 
 type IntentionFormValues = {
@@ -93,7 +95,13 @@ export default function IntentionModal({
   const [quickInput, setQuickInput] = useState('');
   const [values, setValues] = useState<IntentionFormValues>(() => getInitialValues(editingIntention));
   const [errors, setErrors] = useState<IntentionValidationErrors>({});
+  const energyProfile = useSettingsStore((state) => state.preferences.energyProfile);
   const parsedInput = useMemo(() => parseIntentionInput(quickInput, new Date()), [quickInput]);
+  const energyContextNote = getEnergyCompatibilityNote(
+    values.preferredTimeOfDay || undefined,
+    values.energyRequired || undefined,
+    energyProfile,
+  );
 
   useEffect(() => {
     if (!isOpen) {
@@ -268,6 +276,7 @@ export default function IntentionModal({
 
               <label>
                 Energy required
+                <span className={styles.fieldHint}>How much capacity does this usually need?</span>
                 <SelectControl icon={BatteryMedium} value={values.energyRequired} onChange={(event) => updateField('energyRequired', event.target.value as '' | EnergyRequirement)}>
                   <option value="">Not sure</option>
                   <option value="low">Low</option>
@@ -280,6 +289,7 @@ export default function IntentionModal({
             <div className={styles.formGrid}>
               <label>
                 Preferred time
+                <span className={styles.fieldHint}>When would you ideally work on this?</span>
                 <SelectControl icon={Sunrise} value={values.preferredTimeOfDay} onChange={(event) => updateField('preferredTimeOfDay', event.target.value as '' | PreferredTimeOfDay)}>
                   <option value="">Any time</option>
                   <option value="morning">Morning</option>
@@ -294,6 +304,10 @@ export default function IntentionModal({
                 <span>Intentions stay here until you choose when they belong.</span>
               </div>
             </div>
+
+            {energyContextNote ? (
+              <p className={styles.energyNote}>{energyContextNote}</p>
+            ) : null}
 
             <footer className={styles.modalActions}>
               <Button variant="ghost" onClick={onClose}>Cancel</Button>

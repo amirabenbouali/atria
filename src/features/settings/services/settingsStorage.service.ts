@@ -3,6 +3,10 @@ import {
   writeJsonToLocalStorage,
 } from '../../../shared/services/localStorage.service';
 import { eventCategories } from '../../calendar/constants/calendar.constants';
+import {
+  defaultEnergyProfile,
+  normalizeEnergyProfile,
+} from '../../timeQuality';
 import type { SettingsPreferences } from '../types/settings.types';
 
 const settingsStorageKey = 'atria-settings-preferences';
@@ -12,6 +16,7 @@ export const defaultSettingsPreferences: SettingsPreferences = {
   defaultItemType: 'event',
   defaultCategory: 'Work',
   defaultView: 'calendar',
+  energyProfile: defaultEnergyProfile,
 };
 
 function normalizePreferences(preferences: unknown): SettingsPreferences {
@@ -29,6 +34,7 @@ function normalizePreferences(preferences: unknown): SettingsPreferences {
     defaultView: ['calendar', 'today', 'insights'].includes(storedPreferences.defaultView ?? '')
       ? storedPreferences.defaultView as SettingsPreferences['defaultView']
       : defaultSettingsPreferences.defaultView,
+    energyProfile: normalizeEnergyProfile(storedPreferences.energyProfile),
   };
 }
 

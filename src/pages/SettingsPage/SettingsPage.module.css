@@ -163,6 +163,165 @@
   padding: var(--space-4);
 }
 
+.energyProfile {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.energyIntro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.energyIntro span {
+  max-width: 620px;
+  line-height: 1.45;
+}
+
+.energyIntro button {
+  min-height: 38px;
+}
+
+.energyStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  padding: 8px;
+  border: 1px solid rgba(255, 220, 230, 0.09);
+  border-radius: var(--radius-card);
+  background: rgba(18, 16, 18, 0.52);
+}
+
+.energySegment {
+  --energy-level: 3;
+  display: grid;
+  gap: 5px;
+  align-content: end;
+  min-height: calc(76px + (var(--energy-level) * 10px));
+  border: 1px solid rgba(255, 220, 230, 0.1);
+  border-radius: 18px;
+  padding: 12px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(246, 166, 190, calc(0.025 * var(--energy-level))) 0%,
+      rgba(246, 166, 190, calc(0.075 * var(--energy-level))) 100%
+    ),
+    rgba(10, 7, 9, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+.energySegment span,
+.energySegment em,
+.energySelectRow > span,
+.qualityChip span {
+  font-family: var(--font-detail);
+}
+
+.energySegment span {
+  color: var(--color-text-subtle);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.energySegment strong {
+  font-size: 0.95rem;
+}
+
+.energySegment em {
+  color: var(--color-text-muted);
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.periodGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.periodCard {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  border: 1px solid rgba(255, 220, 230, 0.09);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.016)),
+    rgba(18, 16, 18, 0.58);
+}
+
+.periodCard legend {
+  padding: 0 6px;
+  color: white;
+  font-weight: 900;
+}
+
+.energySelectRow {
+  display: grid;
+  gap: 8px;
+}
+
+.energySelectRow > span {
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.qualityGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.qualityChip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  border: 1px solid rgba(255, 220, 230, 0.11);
+  border-radius: var(--radius-pill);
+  padding: 0 10px;
+  color: rgba(255, 255, 255, 0.74);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.014)),
+    rgba(12, 9, 11, 0.72);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease;
+}
+
+.qualityChip:has(input:checked) {
+  border-color: rgba(246, 166, 190, 0.36);
+  color: white;
+  box-shadow: 0 0 18px rgba(246, 166, 190, 0.12);
+}
+
+.qualityChip input {
+  width: 14px;
+  height: 14px;
+  accent-color: #f6a6be;
+}
+
+.qualityChip span {
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .swatchRow {
   display: flex;
   flex-wrap: wrap;
@@ -196,7 +355,8 @@
 }
 
 @media (max-width: 1060px) {
-  .settingsGrid {
+  .settingsGrid,
+  .periodGrid {
     grid-template-columns: 1fr;
   }
 }
@@ -211,6 +371,15 @@
   .fieldRow {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .energyIntro {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .energyStrip {
+    grid-template-columns: 1fr;
   }
 
 }

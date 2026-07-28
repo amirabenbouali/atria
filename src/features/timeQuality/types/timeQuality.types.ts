@@ -4,6 +4,8 @@ export type EnergyRequirement = 'low' | 'medium' | 'high';
 
 export type PreferredTimeOfDay = 'morning' | 'afternoon' | 'evening' | 'any';
 
+export type DayPeriod = 'morning' | 'afternoon' | 'evening';
+
 export type TimeQuality =
   | 'deep-focus'
   | 'creative'
@@ -13,7 +15,14 @@ export type TimeQuality =
   | 'neutral';
 
 export type EnergyPreferenceSlot = {
-  timeOfDay: Exclude<PreferredTimeOfDay, 'any'>;
+  timeOfDay: DayPeriod;
   expectedEnergy: EnergyLevel;
   timeQuality: TimeQuality;
 };
+
+export type EnergyProfilePeriod = {
+  energy: EnergyLevel;
+  preferredQualities: TimeQuality[];
+};
+
+export type EnergyProfile = Record<DayPeriod, EnergyProfilePeriod>;
