@@ -158,6 +158,24 @@ describe('intention validation', () => {
     expect(updatedIntention?.updatedAt).toBe('2026-07-29T10:00:00.000Z');
   });
 
+  it('clears optional fields when updating with undefined', () => {
+    const intention: Intention = {
+      id: 'intention-1',
+      title: 'Original',
+      description: 'Old description',
+      deadline: '2026-08-02',
+      priority: 'medium',
+      status: 'active',
+      createdAt: '2026-07-28T09:00:00.000Z',
+      updatedAt: '2026-07-28T09:00:00.000Z',
+    };
+
+    const updatedIntention = updateIntentionFromDraft(intention, { title: 'Updated', description: undefined, deadline: undefined });
+
+    expect(updatedIntention).not.toHaveProperty('description');
+    expect(updatedIntention).not.toHaveProperty('deadline');
+  });
+
   it('handles malformed LocalStorage JSON without throwing', () => {
     installLocalStorageMock('{not valid json');
 

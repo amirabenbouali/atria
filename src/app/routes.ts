@@ -4,6 +4,7 @@ export const routes = {
   today: '/today',
   insights: '/insights',
   tasks: '/tasks',
+  intentions: '/intentions',
   goals: '/goals',
   projects: '/projects',
   settings: '/settings',

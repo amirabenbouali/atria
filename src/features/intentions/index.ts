@@ -24,3 +24,17 @@ export {
   updateIntentionFromDraft,
   validateIntentionDraft,
 } from './utils/intentionValidation';
+export { parseIntentionInput } from './utils/intentionParsing';
+export type { ParsedIntentionInput } from './utils/intentionParsing';
+export { getIntentionNextAction } from './utils/intentionNextAction';
+export {
+  getFilteredIntentions,
+  getIntentionSummary,
+} from './utils/intentionFilters';
+export type {
+  IntentionListOptions,
+  IntentionPriorityFilter,
+  IntentionSortOption,
+  IntentionStatusFilter,
+  IntentionTimeFilter,
+} from './utils/intentionFilters';

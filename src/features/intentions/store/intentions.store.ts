@@ -16,7 +16,12 @@ import {
 
 type IntentionsState = {
   intentions: Intention[];
+  isIntentionModalOpen: boolean;
+  editingIntentionId: string | null;
   hydrate: () => void;
+  openIntentionModal: () => void;
+  openEditIntentionModal: (id: string) => void;
+  closeIntentionModal: () => void;
   addIntention: (draft: IntentionDraft) => Intention | null;
   updateIntention: (id: string, draft: IntentionUpdate) => Intention | null;
   removeIntention: (id: string) => void;
@@ -30,7 +35,12 @@ function persistIntentions(intentions: Intention[]) {
 
 export const useIntentionsStore = create<IntentionsState>((set, get) => ({
   intentions: loadIntentions(),
+  isIntentionModalOpen: false,
+  editingIntentionId: null,
   hydrate: () => set({ intentions: loadIntentions() }),
+  openIntentionModal: () => set({ isIntentionModalOpen: true, editingIntentionId: null }),
+  openEditIntentionModal: (id) => set({ isIntentionModalOpen: true, editingIntentionId: id }),
+  closeIntentionModal: () => set({ isIntentionModalOpen: false, editingIntentionId: null }),
   addIntention: (draft) => {
     const intention = createIntentionFromDraft(draft, { id: createId() });
 
@@ -40,6 +50,8 @@ export const useIntentionsStore = create<IntentionsState>((set, get) => ({
 
     set((state) => ({
       intentions: persistIntentions([...state.intentions, intention]),
+      isIntentionModalOpen: false,
+      editingIntentionId: null,
     }));
 
     return intention;
@@ -61,6 +73,8 @@ export const useIntentionsStore = create<IntentionsState>((set, get) => ({
       intentions: persistIntentions(
         state.intentions.map((intention) => (intention.id === id ? updatedIntention : intention)),
       ),
+      isIntentionModalOpen: false,
+      editingIntentionId: null,
     }));
 
     return updatedIntention;

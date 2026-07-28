@@ -15,6 +15,7 @@ type AppLayoutProps = {
   topbarEyebrow?: string;
   topbarTitle?: string;
   showWeekControls?: boolean;
+  createButtonLabelOverride?: string;
   onGoToToday: () => void;
   onGoToPreviousWeek: () => void;
   onGoToNextWeek: () => void;
@@ -30,6 +31,7 @@ export default function AppLayout({
   topbarEyebrow = 'Weekly Orbit',
   topbarTitle,
   showWeekControls = true,
+  createButtonLabelOverride,
   onGoToToday,
   onGoToPreviousWeek,
   onGoToNextWeek,
@@ -38,7 +40,7 @@ export default function AppLayout({
 }: AppLayoutProps) {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const defaultItemType = useSettingsStore((state) => state.preferences.defaultItemType);
-  const createButtonLabel = defaultItemType === 'task' ? 'New Task' : 'New Event';
+  const createButtonLabel = createButtonLabelOverride ?? (defaultItemType === 'task' ? 'New Task' : 'New Event');
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

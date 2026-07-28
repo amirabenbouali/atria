@@ -26,6 +26,8 @@ src/
 
 `features/intentions/` owns the typed domain foundation for desired outcomes that may later become scheduled focus sessions. It is intentionally separate from calendar events and tasks.
 
+The user-facing intention inbox lives at `/intentions`. Quick capture uses a small deterministic parser for supported phrases such as relative deadlines, durations, time-of-day hints, and priority signals. It is not an AI service and does not place intentions onto the calendar.
+
 `features/reflections/` owns lightweight daily reflection data keyed by local calendar date. Reflection state should not be placed inside the calendar store.
 
 `features/timeQuality/` owns shared time-quality and energy vocabulary for future planning suggestions and reflection metadata.
@@ -57,7 +59,8 @@ The current product supports the portfolio MVP behavior:
 - per-occurrence recurring completion
 - drag-and-drop task and event movement with `@dnd-kit/core`
 - Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
-- domain foundations for intentions, daily reflections, and time quality
+- an Intentions inbox for capturing outcomes before scheduling
+- domain foundations for daily reflections and time quality
 
 React Big Calendar and backend storage are intentionally deferred. LocalStorage remains the current persistence layer behind feature service boundaries.
 

@@ -5,6 +5,7 @@ import { useCalendarStore } from '../../calendar/store/calendar.store';
 import { categoryColors } from '../../calendar/constants/calendar.constants';
 import { formatInputDate, getCurrentWeekDays } from '../../calendar/utils/calendarDates';
 import { useGoalsStore } from '../../goals/store/goals.store';
+import { useIntentionsStore } from '../../intentions/store/intentions.store';
 import { useProjectsStore } from '../../projects/store/projects.store';
 import { useSettingsStore } from '../../settings/store/settings.store';
 import { useDefaultCalendarModalPreset } from '../../settings/hooks/useDefaultCalendarModalPreset';
@@ -30,6 +31,7 @@ export function useCommandPaletteCommands({
   const openAddEventModal = useCalendarStore((state) => state.openAddEventModal);
   const openEditEventModal = useCalendarStore((state) => state.openEditEventModal);
   const openGoalModal = useGoalsStore((state) => state.openGoalModal);
+  const openIntentionModal = useIntentionsStore((state) => state.openIntentionModal);
   const openProjectModal = useProjectsStore((state) => state.openProjectModal);
   const todayDate = formatInputDate();
   const weekStartDate = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday)[0]?.isoDate ?? todayDate;
@@ -81,6 +83,18 @@ export function useCommandPaletteCommands({
         accentColor: categoryColors.Health,
         execute: () => {
           navigate(routes.tasks);
+          onClose();
+        },
+      },
+      {
+        id: 'navigate-intentions',
+        title: 'Go to Intentions',
+        subtitle: 'Open the outcome inbox before scheduling',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.intentions);
           onClose();
         },
       },
@@ -181,6 +195,19 @@ export function useCommandPaletteCommands({
         },
       },
       {
+        id: 'create-intention',
+        title: 'Create new intention',
+        subtitle: 'Capture an outcome without placing it on the calendar',
+        type: 'creation',
+        badge: 'Create',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.intentions);
+          openIntentionModal();
+          onClose();
+        },
+      },
+      {
         id: 'create-goal',
         title: 'New Goal',
         subtitle: 'Create a long-range objective',
@@ -250,6 +277,7 @@ export function useCommandPaletteCommands({
       onResetDemoData,
       openAddEventModal,
       openGoalModal,
+      openIntentionModal,
       openProjectModal,
       todayDate,
       weekStartDate,

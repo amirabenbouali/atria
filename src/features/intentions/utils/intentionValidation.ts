@@ -197,15 +197,17 @@ export function updateIntentionFromDraft(
   draft: IntentionUpdate,
   timestamp = new Date().toISOString(),
 ): Intention | null {
+  const hasDraftField = <Field extends keyof IntentionUpdate>(field: Field) =>
+    Object.prototype.hasOwnProperty.call(draft, field);
   const nextDraft: IntentionDraft = {
     title: draft.title ?? intention.title,
-    description: draft.description ?? intention.description,
-    desiredOutcome: draft.desiredOutcome ?? intention.desiredOutcome,
-    estimatedMinutes: draft.estimatedMinutes ?? intention.estimatedMinutes,
-    deadline: draft.deadline ?? intention.deadline,
+    description: hasDraftField('description') ? draft.description : intention.description,
+    desiredOutcome: hasDraftField('desiredOutcome') ? draft.desiredOutcome : intention.desiredOutcome,
+    estimatedMinutes: hasDraftField('estimatedMinutes') ? draft.estimatedMinutes : intention.estimatedMinutes,
+    deadline: hasDraftField('deadline') ? draft.deadline : intention.deadline,
     priority: draft.priority ?? intention.priority,
-    energyRequired: draft.energyRequired ?? intention.energyRequired,
-    preferredTimeOfDay: draft.preferredTimeOfDay ?? intention.preferredTimeOfDay,
+    energyRequired: hasDraftField('energyRequired') ? draft.energyRequired : intention.energyRequired,
+    preferredTimeOfDay: hasDraftField('preferredTimeOfDay') ? draft.preferredTimeOfDay : intention.preferredTimeOfDay,
   };
   const errors = validateIntentionDraft(nextDraft);
 

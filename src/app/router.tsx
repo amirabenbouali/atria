@@ -7,6 +7,7 @@ const CalendarPage = lazy(() => import('../pages/CalendarPage/CalendarPage'));
 const TodayPage = lazy(() => import('../pages/TodayPage/TodayPage'));
 const InsightsPage = lazy(() => import('../pages/InsightsPage/InsightsPage'));
 const TasksPage = lazy(() => import('../pages/TasksPage/TasksPage'));
+const IntentionsPage = lazy(() => import('../pages/IntentionsPage/IntentionsPage'));
 const GoalsPage = lazy(() => import('../pages/GoalsPage/GoalsPage'));
 const ProjectsPage = lazy(() => import('../pages/ProjectsPage/ProjectsPage'));
 const SettingsPage = lazy(() => import('../pages/SettingsPage/SettingsPage'));
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
   {
     path: routes.tasks,
     element: <TasksPage />,
+  },
+  {
+    path: routes.intentions,
+    element: <IntentionsPage />,
   },
   {
     path: routes.goals,
