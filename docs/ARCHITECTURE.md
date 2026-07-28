@@ -20,7 +20,15 @@ src/
 
 `pages/` compose features. Pages can connect stores to components, but they should avoid persistence, date math, and mutation logic.
 
-`features/calendar/` owns the calendar domain: event types, constants, state, storage services, date utilities, and calendar-specific components.
+`features/calendar/` owns the calendar domain: event and task types, recurrence, drag-and-drop movement rules, state, storage services, date utilities, and calendar-specific components.
+
+`features/goals/` and `features/projects/` own longer-range planning entities and their LocalStorage-backed state.
+
+`features/intentions/` owns the typed domain foundation for desired outcomes that may later become scheduled focus sessions. It is intentionally separate from calendar events and tasks.
+
+`features/reflections/` owns lightweight daily reflection data keyed by local calendar date. Reflection state should not be placed inside the calendar store.
+
+`features/timeQuality/` owns shared time-quality and energy vocabulary for future planning suggestions and reflection metadata.
 
 `shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
 
@@ -40,12 +48,19 @@ Components receive data and callbacks. Business rules live in stores, services, 
 
 ## Current Feature Scope
 
-The current calendar feature supports the MVP prototype behavior:
+The current product supports the portfolio MVP behavior:
 
-- weekly Monday-Sunday calendar
-- localStorage-backed events
+- weekly calendar with configurable week start
+- LocalStorage-backed events and flexible tasks
 - add event modal
-- delete event
-- mark complete
+- recurring events and tasks
+- per-occurrence recurring completion
+- drag-and-drop task and event movement with `@dnd-kit/core`
+- Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
+- domain foundations for intentions, daily reflections, and time quality
 
-React DnD and larger calendar libraries are intentionally deferred until the scheduling interaction model needs them.
+React Big Calendar and backend storage are intentionally deferred. LocalStorage remains the current persistence layer behind feature service boundaries.
+
+## Testing
+
+Vitest covers pure domain utilities, normalization, and persistence edge cases. Component and browser tests are not part of the current setup.
