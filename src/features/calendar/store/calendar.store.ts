@@ -24,6 +24,7 @@ import {
 } from '../utils/calendarItems';
 import { createDemoCalendarEvents } from '../utils/demoCalendarData';
 import { parseOccurrenceId } from '../utils/calendarRecurrence';
+import { getMovedEventTimeRange } from '../utils/calendarTime';
 
 type CalendarState = {
   events: CalendarEvent[];
@@ -50,6 +51,7 @@ type CalendarState = {
   copyEventToTomorrow: (id: string) => void;
   copyEventToNextWeek: (id: string) => void;
   moveCalendarItem: (id: string, targetDate: string, targetTaskId?: string) => void;
+  moveScheduledEventTime: (id: string, targetDate: string, targetHour: number) => void;
   moveTask: (id: string, direction: 'up' | 'down') => void;
   updateDailyFocus: (date: string, focus: string) => void;
   removeProjectLinks: (projectId: string) => void;
@@ -269,6 +271,73 @@ export const useCalendarStore = create<CalendarState>((set) => ({
     return set((state) => ({
       events: persistEvents(moveCalendarItemInList(state.events, target.sourceId, targetDate, targetTaskId)),
     }));
+  },
+  moveScheduledEventTime: (id, targetDate, targetHour) => {
+    const target = getSourceActionTarget(id);
+
+    return set((state) => {
+      const sourceEvent = state.events.find((event) => event.id === target.sourceId);
+
+      if (!sourceEvent || sourceEvent.itemType !== 'event') {
+        return state;
+      }
+
+      const timestamp = new Date().toISOString();
+      const { startTime, endTime } = getMovedEventTimeRange(sourceEvent.startTime, sourceEvent.endTime, targetHour);
+
+      if (target.isOccurrence && target.occurrenceDate && sourceEvent.recurrence !== 'none') {
+        const override = createSingleOccurrenceOverride(
+          sourceEvent,
+          target.occurrenceDate,
+          {
+            itemType: 'event',
+            title: sourceEvent.title,
+            date: targetDate,
+            startTime,
+            endTime,
+            category: sourceEvent.category,
+            description: sourceEvent.description,
+            accentColor: sourceEvent.accentColor,
+            recurrence: 'none',
+            recurrenceEndDate: undefined,
+          },
+        );
+
+        return {
+          events: persistEvents([
+            ...state.events.map((event) =>
+              event.id === target.sourceId
+                ? {
+                    ...event,
+                    recurringExceptions: {
+                      ...event.recurringExceptions,
+                      [target.occurrenceDate as string]: true,
+                    },
+                    updatedAt: timestamp,
+                  }
+                : event,
+            ),
+            override,
+          ]),
+        };
+      }
+
+      return {
+        events: persistEvents(
+          state.events.map((event) =>
+            event.id === target.sourceId && event.itemType === 'event'
+              ? {
+                  ...event,
+                  date: targetDate,
+                  startTime,
+                  endTime,
+                  updatedAt: timestamp,
+                }
+              : event,
+          ),
+        ),
+      };
+    });
   },
   moveTask: (id, direction) =>
     set((state) => ({

@@ -1,8 +1,8 @@
-import { useDroppable } from '@dnd-kit/core';
+import { useDndContext, useDroppable } from '@dnd-kit/core';
 import type { CalendarEvent, CalendarModalPreset } from '../../types/calendar.types';
 import type { WeekDay } from '../../utils/calendarDates';
 import { formatHour } from '../../utils/calendarTime';
-import { createDayDropId } from '../../utils/calendarDrag';
+import { createDayDropId, createHourDropId } from '../../utils/calendarDrag';
 import {
   getFlexibleTasksForDate,
   getScheduledEventsForDate,
@@ -12,6 +12,26 @@ import {
 import EventCard from '../EventCard/EventCard';
 import TaskCard from '../TaskCard/TaskCard';
 import styles from './DayColumn.module.css';
+
+function HourDropSlot({ date, hour }: { date: string; hour: number }) {
+  const { active } = useDndContext();
+  const isDraggingEvent = active?.data.current?.itemType === 'event';
+  const { isOver, setNodeRef } = useDroppable({
+    id: createHourDropId(date, hour),
+    data: { date, hour, target: 'event-time' },
+    disabled: !isDraggingEvent,
+  });
+
+  return (
+    <div
+      className={`${styles.hourLine} ${isDraggingEvent ? styles.hourDropTarget : ''} ${isOver ? styles.hourDropTargetActive : ''}`}
+      ref={setNodeRef}
+      aria-hidden="true"
+    >
+      <span>{formatHour(hour)}</span>
+    </div>
+  );
+}
 
 type DayColumnProps = {
   day: WeekDay;
@@ -72,9 +92,7 @@ export default function DayColumn({
       <div className={styles.scheduleArea}>
         <div className={styles.hourGrid} aria-hidden="true">
           {hours.map((hour) => (
-            <div className={styles.hourLine} key={hour}>
-              <span>{formatHour(hour)}</span>
-            </div>
+            <HourDropSlot date={day.isoDate} hour={hour} key={hour} />
           ))}
         </div>
 

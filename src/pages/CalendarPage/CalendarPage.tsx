@@ -53,6 +53,7 @@ export default function CalendarPage() {
   const copyEventToTomorrow = useCalendarStore((state) => state.copyEventToTomorrow);
   const copyEventToNextWeek = useCalendarStore((state) => state.copyEventToNextWeek);
   const moveCalendarItem = useCalendarStore((state) => state.moveCalendarItem);
+  const moveScheduledEventTime = useCalendarStore((state) => state.moveScheduledEventTime);
   const moveTask = useCalendarStore((state) => state.moveTask);
   const resetDemoWorkspace = useResetDemoWorkspace();
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
@@ -189,6 +190,7 @@ export default function CalendarPage() {
           onCopyToTomorrow={handleCopyToTomorrow}
           onCopyToNextWeek={handleCopyToNextWeek}
           onMoveCalendarItem={moveCalendarItem}
+          onMoveScheduledEventTime={moveScheduledEventTime}
           onMoveTask={moveTask}
           onDelete={handleDelete}
           onToggleComplete={toggleEventComplete}
@@ -208,6 +210,7 @@ export default function CalendarPage() {
           onCopyToTomorrow={handleCopyToTomorrow}
           onCopyToNextWeek={handleCopyToNextWeek}
           onMoveCalendarItem={moveCalendarItem}
+          onMoveScheduledEventTime={moveScheduledEventTime}
           onMoveTask={moveTask}
           onDelete={handleDelete}
           onToggleComplete={toggleEventComplete}

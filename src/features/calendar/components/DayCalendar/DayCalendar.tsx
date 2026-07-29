@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 import GlassPanel from '../../../../shared/ui/GlassPanel/GlassPanel';
 import type { CalendarEvent, CalendarModalPreset, CalendarView } from '../../types/calendar.types';
 import { getCalendarDay } from '../../utils/calendarDates';
-import { createDayDropId, parseDayDropId, parseTaskDropId } from '../../utils/calendarDrag';
+import { createDayDropId, parseDayDropId, parseHourDropId, parseTaskDropId } from '../../utils/calendarDrag';
 import { getCalendarHours } from '../../utils/calendarTime';
 import CalendarViewSwitcher from '../CalendarViewSwitcher/CalendarViewSwitcher';
 import DayColumn from '../DayColumn/DayColumn';
@@ -30,6 +30,7 @@ type DayCalendarProps = {
   onCopyToTomorrow: (id: string) => void;
   onCopyToNextWeek: (id: string) => void;
   onMoveCalendarItem: (id: string, targetDate: string, targetTaskId?: string) => void;
+  onMoveScheduledEventTime: (id: string, targetDate: string, targetHour: number) => void;
   onMoveTask: (id: string, direction: 'up' | 'down') => void;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string) => void;
@@ -46,6 +47,7 @@ export default function DayCalendar({
   onCopyToTomorrow,
   onCopyToNextWeek,
   onMoveCalendarItem,
+  onMoveScheduledEventTime,
   onMoveTask,
   onDelete,
   onToggleComplete,
@@ -68,6 +70,18 @@ export default function DayCalendar({
     setActiveItemId(null);
 
     if (!overId) {
+      return;
+    }
+
+    const targetHour = parseHourDropId(overId);
+
+    if (targetHour) {
+      const activeItem = events.find((item) => item.id === activeId);
+
+      if (activeItem?.itemType === 'event') {
+        onMoveScheduledEventTime(activeId, targetHour.date, targetHour.hour);
+      }
+
       return;
     }
 

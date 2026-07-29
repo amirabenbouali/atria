@@ -17,6 +17,7 @@ import { formatHour, getCalendarHours } from '../../utils/calendarTime';
 import type { CalendarEvent, CalendarModalPreset, CalendarView } from '../../types/calendar.types';
 import {
   parseDayDropId,
+  parseHourDropId,
   parseTaskDropId,
 } from '../../utils/calendarDrag';
 import DayColumn from '../DayColumn/DayColumn';
@@ -36,6 +37,7 @@ type WeeklyCalendarProps = {
   onCopyToTomorrow: (id: string) => void;
   onCopyToNextWeek: (id: string) => void;
   onMoveCalendarItem: (id: string, targetDate: string, targetTaskId?: string) => void;
+  onMoveScheduledEventTime: (id: string, targetDate: string, targetHour: number) => void;
   onMoveTask: (id: string, direction: 'up' | 'down') => void;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string) => void;
@@ -54,6 +56,7 @@ export default function WeeklyCalendar({
   onCopyToTomorrow,
   onCopyToNextWeek,
   onMoveCalendarItem,
+  onMoveScheduledEventTime,
   onMoveTask,
   onDelete,
   onToggleComplete,
@@ -77,6 +80,18 @@ export default function WeeklyCalendar({
     setActiveItemId(null);
 
     if (!overId) {
+      return;
+    }
+
+    const targetHour = parseHourDropId(overId);
+
+    if (targetHour) {
+      const activeItem = events.find((item) => item.id === activeId);
+
+      if (activeItem?.itemType === 'event') {
+        onMoveScheduledEventTime(activeId, targetHour.date, targetHour.hour);
+      }
+
       return;
     }
 
