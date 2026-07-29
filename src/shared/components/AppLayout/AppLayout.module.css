@@ -157,28 +157,32 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
-.notificationButton {
+.topbarActions .notificationButton {
   position: relative;
+  overflow: visible;
 }
 
 .notificationBadge {
   position: absolute;
-  right: -5px;
-  top: -5px;
+  right: -6px;
+  top: -6px;
   display: inline-grid;
   place-items: center;
-  min-width: 18px;
-  height: 18px;
+  min-width: 19px;
+  height: 19px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 999px;
   padding: 0 5px;
   color: #2b1420;
   font-family: var(--font-detail);
-  font-size: 0.58rem;
+  font-size: 0.6rem;
   font-weight: 900;
   line-height: 1;
   background: var(--gradient-action);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--color-neon-pink) 30%, transparent);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--color-neon-pink) 30%, transparent),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
 }
 
 @media (max-width: 960px) {
