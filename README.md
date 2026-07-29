@@ -17,6 +17,7 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 - Projects page with project cards, linked goals, progress, and a detail drawer
 - Project detail drawer with linked task actions and prelinked task creation
 - Calm Today view with current/next commitments, one primary intention, expected energy, daily load, and optional reflection
+- Memories timeline for past events, focus sessions, completed intentions, and daily reflections
 - Insights dashboard for weekly progress, focus hours, category balance, routines, and project health
 - Global command palette with search, navigation, creation commands, and demo reset
 - Settings page for app preferences, appearance notes, and local data controls
@@ -72,6 +73,8 @@ Stored data is normalized on read so older or partially invalid LocalStorage val
 
 Planning suggestions are temporary and are not stored as separate records. When accepted, they become normal timed calendar events in `atria-events` with metadata linking them to the source intention.
 
+Memories are derived at view time from calendar items, intentions, and reflections. Atria does not store duplicated history snapshots, so edits to source records can alter past memory views. Recurring calendar items are expanded only for the selected month/range.
+
 ## Demo Flow
 
 1. Reset demo data from the sidebar or command palette.
@@ -80,12 +83,13 @@ Planning suggestions are temporary and are not stored as separate records. When 
 4. Add or edit an event.
 5. Drag a flexible task to another day.
 6. Open Today to show the current moment, primary intention, daily load, and reflection entry point.
-7. Open Tasks and filter by goal or project.
-8. Open Goals and expand a goal to show linked projects and tasks.
-9. Open Projects and click a project card to reveal the detail drawer.
-10. Create a new task from the project drawer.
-11. Open Insights to show weekly analytics and project health.
-12. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
+7. Open Memories and search for a past reflected day.
+8. Open Tasks and filter by goal or project.
+9. Open Goals and expand a goal to show linked projects and tasks.
+10. Open Projects and click a project card to reveal the detail drawer.
+11. Create a new task from the project drawer.
+12. Open Insights to show weekly analytics and project health.
+13. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
 
 ## Current Limitations
 
@@ -95,10 +99,12 @@ Planning suggestions are temporary and are not stored as separate records. When 
 - Recurring item editing/deletion applies to the whole series
 - No single-occurrence recurring edits yet
 - Dragging recurring occurrences moves the source series
+- Memories are derived from current source data, not immutable historical snapshots
 - Project and goal progress use a stable MVP calculation rather than historical analytics
 - Deleting a project removes task `projectId` links but preserves task `goalId` for safety
 - Default view redirects from `/workspace`; direct app routes remain available
 - Planning suggestions are deterministic heuristics, not AI or behavioural learning
+- Memories do not use AI summaries or behavioural inference
 - Accepted focus sessions are single blocks only, not recurring sessions
 - Today load is a scheduling heuristic based on timed commitments, not a productivity score
 - Expected energy comes from explicit settings, not behavioural inference

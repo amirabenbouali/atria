@@ -13,6 +13,7 @@ import {
   isIntentionStatus,
   updateIntentionFromDraft,
 } from '../utils/intentionValidation';
+import { createDemoIntentions } from '../utils/demoIntentionsData';
 
 type IntentionsState = {
   intentions: Intention[];
@@ -26,6 +27,7 @@ type IntentionsState = {
   updateIntention: (id: string, draft: IntentionUpdate) => Intention | null;
   removeIntention: (id: string) => void;
   setIntentionStatus: (id: string, status: IntentionStatus) => void;
+  resetDemoIntentions: () => void;
 };
 
 function persistIntentions(intentions: Intention[]) {
@@ -96,4 +98,10 @@ export const useIntentionsStore = create<IntentionsState>((set, get) => ({
       ),
     }));
   },
+  resetDemoIntentions: () =>
+    set({
+      intentions: persistIntentions(createDemoIntentions()),
+      isIntentionModalOpen: false,
+      editingIntentionId: null,
+    }),
 }));

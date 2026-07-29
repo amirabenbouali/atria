@@ -99,6 +99,18 @@ export function useCommandPaletteCommands({
         },
       },
       {
+        id: 'navigate-memories',
+        title: 'Go to Memories',
+        subtitle: 'Revisit past days, reflections, and completed intentions',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.memories);
+          onClose();
+        },
+      },
+      {
         id: 'navigate-goals',
         title: 'Go to Goals',
         subtitle: 'Open long-range objectives',
@@ -254,6 +266,18 @@ export function useCommandPaletteCommands({
         accentColor: categoryColors.Learning,
         execute: () => {
           openAddEventModal(createDefaultPreset({ itemType: 'task', date: todayDate }));
+          onClose();
+        },
+      },
+      {
+        id: 'reflect-today',
+        title: 'Reflect on today',
+        subtitle: 'Open Today and add or edit your daily reflection',
+        type: 'navigation',
+        badge: 'Route',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.today);
           onClose();
         },
       },

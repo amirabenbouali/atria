@@ -1,0 +1,39 @@
+.weekGroup,
+.dayStack {
+  display: grid;
+}
+
+.weekGroup {
+  gap: var(--space-3);
+}
+
+.weekHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0 var(--space-1);
+}
+
+.weekHeader p {
+  margin: 0;
+}
+
+.weekHeader span {
+  color: var(--color-text-subtle);
+  font-family: var(--font-detail);
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.dayStack {
+  gap: var(--space-3);
+}
+
+@media (max-width: 620px) {
+  .weekHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

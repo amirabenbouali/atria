@@ -6,6 +6,7 @@ export const routes = {
   insights: '/insights',
   tasks: '/tasks',
   intentions: '/intentions',
+  memories: '/memories',
   goals: '/goals',
   projects: '/projects',
   settings: '/settings',

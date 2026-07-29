@@ -5,6 +5,7 @@ import type {
   DailyReflectionDraft,
   ReflectionsByDate,
 } from '../types/reflections.types';
+import { createDemoReflections } from '../utils/demoReflectionsData';
 import { upsertReflectionDraft } from '../utils/reflectionValidation';
 
 type ReflectionsState = {
@@ -13,6 +14,7 @@ type ReflectionsState = {
   upsertReflection: (draft: DailyReflectionDraft) => DailyReflection | null;
   removeReflection: (date: string) => void;
   getReflectionByDate: (date: string) => DailyReflection | undefined;
+  resetDemoReflections: () => void;
 };
 
 function persistReflections(reflections: ReflectionsByDate) {
@@ -48,4 +50,5 @@ export const useReflectionsStore = create<ReflectionsState>((set, get) => ({
       };
     }),
   getReflectionByDate: (date) => get().reflections[date],
+  resetDemoReflections: () => set({ reflections: persistReflections(createDemoReflections()) }),
 }));
