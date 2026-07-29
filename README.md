@@ -103,7 +103,8 @@ The planning engine does not use an external AI service.
 
 ### Your Observatory
 
-- Local-first workspace setup with profile and focus text
+- Local-first workspace setup, open-workspace flow, and browser-local logout controls
+- Profile and focus text
 - Atmosphere themes and accent customisation
 - Calm, Balanced, and Planner workspace modes
 - Calendar behaviour preferences
@@ -209,6 +210,7 @@ Implemented scoring context includes duration fit, preferred time quality, energ
 - Memories derive from past events, focus sessions, completed intentions, and reflections.
 - Insights derive from recent source data and are not stored as behavioural profiles.
 - Settings store profile, appearance, calendar preferences, onboarding state, notifications, and energy profile.
+- Account/session settings store the local workspace sign-in state for this browser.
 
 ## Local-First Data And Privacy
 
@@ -223,6 +225,8 @@ Atria stores current MVP data in browser LocalStorage:
 - Settings: `atria-settings-preferences`
 
 No account is required. No behavioural data is sent to a server. No external AI API is used. Backups are imported and exported locally as JSON files. Importing an Atria backup replaces the current local workspace after confirmation. Clearing browser storage may remove Atria data, so use the export flow before resetting or moving devices.
+
+The sign-in/logout flow is intentionally local for this MVP. Logging out returns the user to the front-page workspace options and hides direct app routes, but it does not encrypt, delete, or protect browser LocalStorage like real authentication would.
 
 ## Getting Started
 
@@ -335,7 +339,7 @@ The main product flows are implemented and tested. Cloud sync, external calendar
 
 - Browser-local storage only
 - No cross-device sync
-- No real user accounts or authentication
+- No real user accounts, authentication, password reset, or cloud session management
 - No external calendar import/export
 - No collaboration
 - No browser push notifications

@@ -77,4 +77,27 @@ describe('settings store energy profile actions', () => {
 
     expect(useSettingsStore.getState()).toBe(before);
   });
+
+  it('signs the local workspace in and out without clearing preferences', async () => {
+    installLocalStorageMock();
+    const { useSettingsStore } = await import('./settings.store');
+
+    useSettingsStore.getState().updatePreferences({
+      profile: {
+        ...useSettingsStore.getState().preferences.profile,
+        displayName: 'Amira',
+      },
+    });
+    useSettingsStore.getState().signInLocalWorkspace();
+
+    expect(useSettingsStore.getState().preferences.account.isSignedIn).toBe(true);
+    expect(useSettingsStore.getState().preferences.account.createdAt).toBeTruthy();
+    expect(useSettingsStore.getState().preferences.profile.displayName).toBe('Amira');
+
+    useSettingsStore.getState().signOutLocalWorkspace();
+
+    expect(useSettingsStore.getState().preferences.account.isSignedIn).toBe(false);
+    expect(useSettingsStore.getState().preferences.account.lastSignedOutAt).toBeTruthy();
+    expect(useSettingsStore.getState().preferences.profile.displayName).toBe('Amira');
+  });
 });

@@ -1,6 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Bell } from 'lucide-react';
+import { Navigate } from 'react-router-dom';
+import { routes } from '../../../app/routes';
 import CommandPalette from '../../../features/commandPalette/components/CommandPalette/CommandPalette';
 import NotificationCenter from '../../../features/notifications/components/NotificationCenter/NotificationCenter';
 import { useAtriaNotifications } from '../../../features/notifications/hooks/useAtriaNotifications';
@@ -116,6 +118,10 @@ export default function AppLayout({
     return () => window.clearTimeout(timeout);
   }, [storageWarning]);
 
+  if (!preferences.account.isSignedIn) {
+    return <Navigate replace to={routes.root} />;
+  }
+
   return (
     <div className={cn(styles.appShell, Boolean(contextPanel) && styles.withContext)}>
       <a className={styles.skipLink} href="#atria-main">
@@ -197,7 +203,7 @@ export default function AppLayout({
         onResetDemoData={onResetDemoData}
       />
       <OnboardingModal
-        isOpen={!preferences.onboarding.hasCompleted}
+        isOpen={preferences.account.isSignedIn && !preferences.onboarding.hasCompleted}
         onClose={completeOnboarding}
       />
       <Toast message={storageWarning} />

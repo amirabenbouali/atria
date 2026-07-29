@@ -3,12 +3,15 @@ import {
   CalendarDays,
   CircleDot,
   FolderKanban,
+  LogOut,
   Settings,
   SquareCheck,
   Target,
+  UserRound,
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { routes } from '../../../app/routes';
+import { useSettingsStore } from '../../../features/settings/store/settings.store';
 import AtriaIcon from '../../ui/AtriaIcon';
 import AtriaStat from '../../ui/AtriaStat';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
@@ -25,6 +28,9 @@ export default function Sidebar({
   completedEvents,
   onResetDemoData,
 }: SidebarProps) {
+  const navigate = useNavigate();
+  const preferences = useSettingsStore((state) => state.preferences);
+  const signOutLocalWorkspace = useSettingsStore((state) => state.signOutLocalWorkspace);
   const completionRate = totalEvents === 0 ? 0 : Math.round((completedEvents / totalEvents) * 100);
   const navItems = [
     { label: 'Calendar', path: routes.calendar, icon: CalendarDays },
@@ -35,6 +41,10 @@ export default function Sidebar({
     { label: 'Insights', path: routes.insights, icon: BarChart3 },
     { label: 'Settings', path: routes.settings, icon: Settings },
   ];
+  const handleSignOut = () => {
+    signOutLocalWorkspace();
+    navigate(routes.root);
+  };
 
   return (
     <GlassPanel as="aside" className={styles.sidebar}>
@@ -66,6 +76,20 @@ export default function Sidebar({
           <span>{completedEvents} / {totalEvents || 0}</span>
         </div>
         <AtriaStat label="Aligned" value={`${completionRate}%`} icon={CalendarDays} tone="rose" progress={completionRate} />
+      </section>
+
+      <section className={styles.accountSection} aria-label="Local workspace account">
+        <div className={styles.accountIdentity}>
+          <AtriaIcon icon={UserRound} tone="mauve" size="sm" shell glow />
+          <div>
+            <strong>{preferences.profile.displayName}</strong>
+            <span>{preferences.profile.roleOrFocus ?? 'Local workspace'}</span>
+          </div>
+        </div>
+        <button className={styles.logoutButton} type="button" onClick={handleSignOut}>
+          <LogOut size={15} aria-hidden="true" />
+          Log out
+        </button>
       </section>
 
       <section className={styles.demoSection}>

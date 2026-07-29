@@ -16,6 +16,13 @@ export type AtriaProfile = {
   avatarStyle: 'initials' | 'symbol';
 };
 
+export type LocalAccountSettings = {
+  isSignedIn: boolean;
+  createdAt?: string;
+  lastSignedInAt?: string;
+  lastSignedOutAt?: string;
+};
+
 export type AppearanceSettings = {
   atmosphere: AtmosphereTheme;
   accent: AccentColour;
@@ -47,7 +54,8 @@ export type OnboardingSettings = {
 };
 
 export type SettingsPreferences = {
-  schemaVersion: 2;
+  schemaVersion: 3;
+  account: LocalAccountSettings;
   profile: AtriaProfile;
   appearance: AppearanceSettings;
   calendar: CalendarBehaviourSettings;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Download, Upload, X } from 'lucide-react';
+import { ArrowRight, Download, LogIn, Plus, X } from 'lucide-react';
 import { routes } from '../../app/routes';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import Button from '../../shared/components/Button/Button';
@@ -77,6 +77,7 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const preferences = useSettingsStore((state) => state.preferences);
   const updatePreferences = useSettingsStore((state) => state.updatePreferences);
+  const signInLocalWorkspace = useSettingsStore((state) => state.signInLocalWorkspace);
   const completeOnboarding = useSettingsStore((state) => state.completeOnboarding);
   const defaultView = preferences.planningDefaults.defaultView;
   const [modalView, setModalView] = useState<ModalView>('workspace');
@@ -91,7 +92,13 @@ export default function LandingPage() {
   });
 
   const enterWorkspace = () => {
+    signInLocalWorkspace();
     navigate(defaultViewRoutes[defaultView] ?? routes.calendar);
+  };
+
+  const openImportSettings = () => {
+    signInLocalWorkspace();
+    navigate(routes.settings);
   };
 
   const openWorkspaceModal = () => {
@@ -328,12 +335,12 @@ export default function LandingPage() {
                     <h2 id="landing-workspace-title">
                       {modalView === 'onboarding'
                         ? 'Create your orbit.'
-                        : 'Your Atria workspace lives here.'}
+                        : 'Open or create an Atria workspace.'}
                     </h2>
                     <p>
                       {modalView === 'onboarding'
                         ? 'Start with a calm space built around your week.'
-                        : 'Atria is local-first in this MVP. No account, cloud sync, or password is required.'}
+                        : 'This MVP uses a local workspace on this browser. Signing out hides it, but does not delete your data.'}
                     </p>
                   </div>
                   <Button variant="icon" onClick={closeModal} aria-label="Close front-page modal">
@@ -345,27 +352,38 @@ export default function LandingPage() {
               {modalView === 'workspace' ? (
                 <div className={styles.localAccountPanel}>
                   <article>
-                    <Upload size={18} aria-hidden="true" />
+                    <LogIn size={18} aria-hidden="true" />
                     <div>
-                      <strong>Open this browser’s workspace</strong>
-                      <span>Your plans are stored locally on this device.</span>
+                      <strong>Open local workspace</strong>
+                      <span>Use the Atria data already stored on this device.</span>
                     </div>
+                    <button className={styles.cardAction} type="button" onClick={enterWorkspace}>
+                      Open
+                    </button>
+                  </article>
+                  <article>
+                    <Plus size={18} aria-hidden="true" />
+                    <div>
+                      <strong>Create workspace</strong>
+                      <span>Set up a calm planning space with your name, focus, and atmosphere.</span>
+                    </div>
+                    <button className={styles.cardAction} type="button" onClick={openOnboardingModal}>
+                      Create
+                    </button>
                   </article>
                   <article>
                     <Download size={18} aria-hidden="true" />
                     <div>
-                      <strong>Move by backup file</strong>
-                      <span>Use Settings to export or import an Atria JSON backup.</span>
+                      <strong>Restore from backup</strong>
+                      <span>Open Settings to import an Atria JSON file into this browser.</span>
                     </div>
+                    <button className={styles.cardAction} type="button" onClick={openImportSettings}>
+                      Import
+                    </button>
                   </article>
-                  <div className={styles.stepActions}>
-                    <button className={styles.ghostButton} type="button" onClick={openOnboardingModal}>
-                      Set up workspace
-                    </button>
-                    <button className={styles.primaryButton} type="button" onClick={enterWorkspace}>
-                      Open Atria
-                    </button>
-                  </div>
+                  <p className={styles.localAccountNote}>
+                    No cloud account yet. For privacy, use export/import when moving between devices.
+                  </p>
                 </div>
               ) : null}
 

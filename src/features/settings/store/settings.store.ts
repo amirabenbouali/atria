@@ -17,6 +17,8 @@ type SettingsState = {
   preferences: SettingsPreferences;
   hydrate: () => void;
   updatePreferences: (preferences: Partial<SettingsPreferences>) => void;
+  signInLocalWorkspace: () => void;
+  signOutLocalWorkspace: () => void;
   completeOnboarding: () => void;
   resetPreferences: () => void;
   resetAppearance: () => void;
@@ -54,16 +56,53 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         ...nextPreferences,
       }),
     })),
-  completeOnboarding: () =>
+  signInLocalWorkspace: () =>
+    set((state) => {
+      const now = new Date().toISOString();
+
+      return {
+        preferences: persistPreferences({
+          ...state.preferences,
+          account: {
+            ...state.preferences.account,
+            isSignedIn: true,
+            createdAt: state.preferences.account.createdAt ?? now,
+            lastSignedInAt: now,
+          },
+        }),
+      };
+    }),
+  signOutLocalWorkspace: () =>
     set((state) => ({
       preferences: persistPreferences({
         ...state.preferences,
-        onboarding: {
-          hasCompleted: true,
-          version: currentOnboardingVersion,
+        account: {
+          ...state.preferences.account,
+          isSignedIn: false,
+          lastSignedOutAt: new Date().toISOString(),
         },
       }),
     })),
+  completeOnboarding: () =>
+    set((state) => {
+      const now = new Date().toISOString();
+
+      return {
+        preferences: persistPreferences({
+          ...state.preferences,
+          account: {
+            ...state.preferences.account,
+            isSignedIn: true,
+            createdAt: state.preferences.account.createdAt ?? now,
+            lastSignedInAt: now,
+          },
+          onboarding: {
+            hasCompleted: true,
+            version: currentOnboardingVersion,
+          },
+        }),
+      };
+    }),
   resetPreferences: () =>
     set({
       preferences: persistPreferences(defaultSettingsPreferences),

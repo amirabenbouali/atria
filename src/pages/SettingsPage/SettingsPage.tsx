@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Bell,
   BriefcaseBusiness,
@@ -8,6 +9,7 @@ import {
   Eye,
   Gauge,
   LayoutDashboard,
+  LogOut,
   Palette,
   RotateCcw,
   Sparkles,
@@ -15,6 +17,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
+import { routes } from '../../app/routes';
 import { eventCategories } from '../../features/calendar/constants/calendar.constants';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
@@ -63,6 +66,7 @@ function getProfileInitials(displayName: string) {
 }
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const {
@@ -76,6 +80,7 @@ export default function SettingsPage() {
   const reflectionsByDate = useReflectionsStore((state) => state.reflections);
   const preferences = useSettingsStore((state) => state.preferences);
   const updatePreferences = useSettingsStore((state) => state.updatePreferences);
+  const signOutLocalWorkspace = useSettingsStore((state) => state.signOutLocalWorkspace);
   const setEnergyForPeriod = useSettingsStore((state) => state.setEnergyForPeriod);
   const setPreferredQualitiesForPeriod = useSettingsStore((state) => state.setPreferredQualitiesForPeriod);
   const resetEnergyProfile = useSettingsStore((state) => state.resetEnergyProfile);
@@ -154,6 +159,11 @@ export default function SettingsPage() {
     clearReflections,
     resetPreferences,
   ]);
+
+  const handleSignOut = useCallback(() => {
+    signOutLocalWorkspace();
+    navigate(routes.root);
+  }, [navigate, signOutLocalWorkspace]);
 
   const handleImportFile = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -273,6 +283,15 @@ export default function SettingsPage() {
                     <option value="initials">Initials</option>
                   </SelectControl>
                 </label>
+              </div>
+              <div className={styles.actionStack}>
+                <div>
+                  <strong>Local session</strong>
+                  <span>Log out of this browser workspace. Your LocalStorage data stays on this device.</span>
+                </div>
+                <Button variant="secondary" onClick={handleSignOut}>
+                  <LogOut size={16} aria-hidden="true" /> Log out
+                </Button>
               </div>
             </SettingsSection>
 

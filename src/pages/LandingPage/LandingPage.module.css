@@ -634,7 +634,7 @@
 
 .localAccountPanel article {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
+  grid-template-columns: 42px minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
   min-height: 76px;
@@ -667,6 +667,40 @@
 .localAccountPanel span {
   color: var(--landing-muted);
   line-height: 1.45;
+}
+
+.cardAction {
+  align-self: center;
+  min-height: 38px;
+  padding: 0 14px;
+  color: rgba(255, 247, 251, 0.86);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 820;
+  letter-spacing: 0;
+  border: 1px solid rgba(255, 220, 230, 0.14);
+  border-radius: 13px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
+    rgba(18, 16, 18, 0.72);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.cardAction:hover {
+  border-color: rgba(246, 166, 190, 0.34);
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px rgba(246, 166, 190, 0.12);
+}
+
+.localAccountNote {
+  margin: 2px 2px 0;
+  color: var(--landing-dim);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .onboarding {

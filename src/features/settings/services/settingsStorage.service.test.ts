@@ -35,7 +35,10 @@ describe('settings storage', () => {
     const preferences = readStoredSettingsPreferences();
 
     expect(preferences).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
+      account: {
+        isSignedIn: true,
+      },
       calendar: {
         weekStartsOn: 'sunday',
       },
@@ -109,6 +112,11 @@ describe('settings storage', () => {
   it('normalizes malformed observatory settings without crashing', async () => {
     installLocalStorageMock(JSON.stringify({
       schemaVersion: 2,
+      account: {
+        isSignedIn: false,
+        createdAt: 'not-a-date',
+        lastSignedInAt: '2026-07-30T09:00:00.000Z',
+      },
       profile: {
         displayName: '   ',
         roleOrFocus: '  Portfolio demo  ',
@@ -135,6 +143,12 @@ describe('settings storage', () => {
     const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
 
     expect(readStoredSettingsPreferences()).toMatchObject({
+      schemaVersion: 3,
+      account: {
+        isSignedIn: false,
+        createdAt: undefined,
+        lastSignedInAt: '2026-07-30T09:00:00.000Z',
+      },
       profile: {
         displayName: 'Atria user',
         roleOrFocus: 'Portfolio demo',

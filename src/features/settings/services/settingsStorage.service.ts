@@ -33,7 +33,10 @@ const settingsStorageKey = 'atria-settings-preferences';
 export const currentOnboardingVersion = 1;
 
 export const defaultSettingsPreferences: SettingsPreferences = {
-  schemaVersion: 2,
+  schemaVersion: 3,
+  account: {
+    isSignedIn: false,
+  },
   profile: {
     displayName: 'Atria user',
     roleOrFocus: 'Focused planning',
@@ -173,6 +176,28 @@ function normalizeNotifications(storedPreferences: Record<string, unknown>): Not
   };
 }
 
+function normalizeIsoDate(value: unknown) {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  return Number.isNaN(Date.parse(value)) ? undefined : value;
+}
+
+function normalizeAccount(storedPreferences: Record<string, unknown>): SettingsPreferences['account'] {
+  const hasExplicitAccount = Object.prototype.hasOwnProperty.call(storedPreferences, 'account');
+  const account = asRecord(storedPreferences.account);
+
+  return {
+    isSignedIn: hasExplicitAccount
+      ? normalizeBoolean(account.isSignedIn, defaultSettingsPreferences.account.isSignedIn)
+      : true,
+    createdAt: normalizeIsoDate(account.createdAt),
+    lastSignedInAt: normalizeIsoDate(account.lastSignedInAt),
+    lastSignedOutAt: normalizeIsoDate(account.lastSignedOutAt),
+  };
+}
+
 function normalizePreferences(preferences: unknown): SettingsPreferences {
   const storedPreferences =
     preferences && typeof preferences === 'object' && !Array.isArray(preferences)
@@ -187,7 +212,8 @@ function normalizePreferences(preferences: unknown): SettingsPreferences {
       : false;
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
+    account: normalizeAccount(storedPreferences),
     profile: {
       displayName: normalizeText(profile.displayName, defaultSettingsPreferences.profile.displayName, 36),
       roleOrFocus: normalizeOptionalText(profile.roleOrFocus, 72),
