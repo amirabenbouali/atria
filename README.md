@@ -8,12 +8,12 @@ It is designed as a calm calendar that helps you shape, understand, and remember
 
 Release candidate: `1.0.0-rc.1`
 
-This is a portfolio-ready MVP, not a cloud product. There is no authentication, backend sync, external calendar provider, payment system, collaboration, or external AI service.
+This is a portfolio-ready MVP, not a cloud product. There is no authentication, backend sync, external calendar provider, payment system, collaboration, or external AI service. The current account story is intentionally local-first: users set up a named workspace on their device and move data with JSON backups.
 
 ## Features
 
 - Public Atria front page with a quiet product story
-- First-run onboarding for the local workspace
+- Local-first workspace setup with profile, focus, and backup-oriented account story
 - Weekly calendar with configurable week start
 - Scheduled events and flexible day tasks
 - Create, edit, complete, delete, duplicate, copy, and drag calendar items

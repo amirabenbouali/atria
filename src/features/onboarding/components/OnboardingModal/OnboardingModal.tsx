@@ -1,6 +1,8 @@
 import { AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import Modal from '../../../../shared/components/Modal/Modal';
 import Button from '../../../../shared/components/Button/Button';
+import { useSettingsStore } from '../../../settings/store/settings.store';
 import styles from './OnboardingModal.module.css';
 
 type OnboardingModalProps = {
@@ -28,6 +30,22 @@ const onboardingSteps = [
 ];
 
 export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
+  const preferences = useSettingsStore((state) => state.preferences);
+  const updatePreferences = useSettingsStore((state) => state.updatePreferences);
+  const [displayName, setDisplayName] = useState(preferences.profile.displayName === 'Atria user' ? '' : preferences.profile.displayName);
+  const [roleOrFocus, setRoleOrFocus] = useState(preferences.profile.roleOrFocus ?? '');
+
+  const handleComplete = () => {
+    updatePreferences({
+      profile: {
+        ...preferences.profile,
+        displayName: displayName.trim() || 'Atria user',
+        roleOrFocus: roleOrFocus.trim() || 'Focused planning',
+      },
+    });
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {isOpen ? (
@@ -35,9 +53,30 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
           <div className={styles.onboarding}>
             <header>
               <p className="eyebrow">First orbit</p>
-              <h2 id="onboarding-title">Welcome to Atria</h2>
-              <span>A calm calendar that helps you shape, understand, and remember your time.</span>
+              <h2 id="onboarding-title">Set up your local workspace</h2>
+              <span>Atria stores this workspace on your device. You can export or import a backup from Settings.</span>
             </header>
+
+            <section className={styles.identityCard} aria-label="Workspace identity">
+              <label>
+                Name
+                <input
+                  value={displayName}
+                  maxLength={36}
+                  onChange={(event) => setDisplayName(event.target.value)}
+                  placeholder="Your name"
+                />
+              </label>
+              <label>
+                Focus
+                <input
+                  value={roleOrFocus}
+                  maxLength={72}
+                  onChange={(event) => setRoleOrFocus(event.target.value)}
+                  placeholder="What are you planning around?"
+                />
+              </label>
+            </section>
 
             <ol className={styles.stepList}>
               {onboardingSteps.map((step, index) => (
@@ -55,7 +94,7 @@ export default function OnboardingModal({ isOpen, onClose }: OnboardingModalProp
               <Button variant="secondary" onClick={onClose}>
                 Skip for now
               </Button>
-              <Button onClick={onClose}>Enter Atria</Button>
+              <Button onClick={handleComplete}>Save and enter</Button>
             </footer>
           </div>
         </Modal>

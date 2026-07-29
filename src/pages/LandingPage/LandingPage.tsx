@@ -1,15 +1,13 @@
-import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowRight, Download, Upload, X } from 'lucide-react';
 import { routes } from '../../app/routes';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import Button from '../../shared/components/Button/Button';
 import styles from './LandingPage.module.css';
 
-type AuthMode = 'login' | 'register';
-type ModalView = 'auth' | 'onboarding' | 'success';
+type ModalView = 'workspace' | 'onboarding' | 'success';
 
 const defaultViewRoutes = {
   calendar: routes.calendar,
@@ -45,13 +43,27 @@ const onboardingSteps = [
     description: 'You can change this later in Settings.',
     multi: false,
     options: [
-      ['Midnight', ''],
-      ['Rose', ''],
-      ['Aurora', ''],
-      ['Eclipse', ''],
+      ['Midnight', 'Deep black glass and quiet contrast'],
+      ['Rose', 'Soft blush light and warm focus'],
+      ['Aurora', 'Violet glow with a little more motion'],
+      ['Eclipse', 'Warm noir with low visual pressure'],
     ],
   },
 ] as const;
+
+const atmosphereByChoice = {
+  Midnight: 'midnight',
+  Rose: 'dawn',
+  Aurora: 'twilight',
+  Eclipse: 'midnight',
+} as const;
+
+const defaultViewByPlanningChoice = {
+  Personal: 'today',
+  University: 'calendar',
+  Work: 'calendar',
+  Everything: 'calendar',
+} as const;
 
 function BrandMark() {
   return (
@@ -63,29 +75,38 @@ function BrandMark() {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const defaultView = useSettingsStore((state) => state.preferences.planningDefaults.defaultView);
-  const [authMode, setAuthMode] = useState<AuthMode>('register');
-  const [modalView, setModalView] = useState<ModalView>('auth');
+  const preferences = useSettingsStore((state) => state.preferences);
+  const updatePreferences = useSettingsStore((state) => state.updatePreferences);
+  const completeOnboarding = useSettingsStore((state) => state.completeOnboarding);
+  const defaultView = preferences.planningDefaults.defaultView;
+  const [modalView, setModalView] = useState<ModalView>('workspace');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [workspaceName, setWorkspaceName] = useState(preferences.profile.displayName === 'Atria user' ? '' : preferences.profile.displayName);
+  const [workspaceFocus, setWorkspaceFocus] = useState(preferences.profile.roleOrFocus ?? '');
   const [selectedChoices, setSelectedChoices] = useState<Record<number, string[]>>({
     0: ['Everything'],
     1: ['Calendar'],
-    2: ['Midnight'],
+    2: ['Rose'],
   });
 
   const enterWorkspace = () => {
     navigate(defaultViewRoutes[defaultView] ?? routes.calendar);
   };
 
-  const openAuth = (mode: AuthMode) => {
-    setAuthMode(mode);
-    setModalView('auth');
+  const openWorkspaceModal = () => {
+    setModalView('workspace');
     setStepIndex(0);
     setIsModalOpen(true);
   };
 
-  const closeAuth = () => {
+  const openOnboardingModal = () => {
+    setModalView('onboarding');
+    setStepIndex(0);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
     setIsModalOpen(false);
   };
 
@@ -96,7 +117,7 @@ export default function LandingPage() {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        closeAuth();
+        closeModal();
       }
     };
 
@@ -122,24 +143,38 @@ export default function LandingPage() {
     });
   };
 
+  const createLocalWorkspace = () => {
+    const planningChoice = selectedChoices[0]?.[0] ?? 'Everything';
+    const atmosphereChoice = selectedChoices[2]?.[0] ?? 'Rose';
+    const displayName = workspaceName.trim() || 'Atria user';
+    const roleOrFocus = workspaceFocus.trim() || `${planningChoice} planning`;
+
+    updatePreferences({
+      profile: {
+        ...preferences.profile,
+        displayName,
+        roleOrFocus,
+      },
+      appearance: {
+        ...preferences.appearance,
+        atmosphere: atmosphereByChoice[atmosphereChoice as keyof typeof atmosphereByChoice] ?? preferences.appearance.atmosphere,
+      },
+      planningDefaults: {
+        ...preferences.planningDefaults,
+        defaultView: defaultViewByPlanningChoice[planningChoice as keyof typeof defaultViewByPlanningChoice] ?? 'calendar',
+      },
+    });
+    completeOnboarding();
+    setModalView('success');
+  };
+
   const handleNextStep = () => {
     if (stepIndex < onboardingSteps.length - 1) {
       setStepIndex((index) => index + 1);
       return;
     }
 
-    setModalView('success');
-  };
-
-  const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (authMode === 'register') {
-      setModalView('onboarding');
-      return;
-    }
-
-    setModalView('success');
+    createLocalWorkspace();
   };
 
   const activeStep = onboardingSteps[stepIndex];
@@ -153,10 +188,10 @@ export default function LandingPage() {
           <span>Atria</span>
         </button>
         <div className={styles.actions}>
-          <button className={styles.ghostButton} type="button" onClick={() => openAuth('login')}>
-            Sign in
+          <button className={styles.ghostButton} type="button" onClick={openWorkspaceModal}>
+            Open workspace
           </button>
-          <button className={styles.primaryButton} type="button" onClick={() => openAuth('register')}>
+          <button className={styles.primaryButton} type="button" onClick={openOnboardingModal}>
             Get started
           </button>
         </div>
@@ -172,11 +207,11 @@ export default function LandingPage() {
             </h1>
             <p>A calmer way to plan projects, routines and time, without turning your life into another noisy dashboard.</p>
             <div className={styles.heroActions}>
-              <button className={styles.primaryButton} type="button" onClick={() => openAuth('register')}>
+              <button className={styles.primaryButton} type="button" onClick={openOnboardingModal}>
                 Create your orbit
               </button>
-              <button className={styles.textButton} type="button" onClick={() => openAuth('login')}>
-                Already have an account? Sign in <ArrowRight size={17} aria-hidden="true" />
+              <button className={styles.textButton} type="button" onClick={openWorkspaceModal}>
+                Already using Atria? Open local workspace <ArrowRight size={17} aria-hidden="true" />
               </button>
             </div>
             <div className={styles.metaLine}>
@@ -255,7 +290,7 @@ export default function LandingPage() {
           <p className={styles.eyebrow}>A different kind of productivity</p>
           <h2>Built for people who like quiet software.</h2>
           <p>Less pressure. Less visual noise. A clear place to decide what matters and give it time.</p>
-          <button className={styles.primaryButton} type="button" onClick={() => openAuth('register')}>
+          <button className={styles.primaryButton} type="button" onClick={openOnboardingModal}>
             Enter Atria
           </button>
         </section>
@@ -274,13 +309,13 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onMouseDown={closeAuth}
+            onMouseDown={closeModal}
           >
             <motion.div
-              className={styles.authPanel}
+              className={styles.workspacePanel}
               role="dialog"
               aria-modal="true"
-              aria-labelledby="landing-auth-title"
+              aria-labelledby="landing-workspace-title"
               initial={{ opacity: 0, y: 18, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 18, scale: 0.98 }}
@@ -288,75 +323,50 @@ export default function LandingPage() {
               onMouseDown={(event) => event.stopPropagation()}
             >
               {modalView !== 'success' ? (
-                <div className={styles.authHeader}>
+                <div className={styles.workspaceHeader}>
                   <div>
-                    <h2 id="landing-auth-title">
+                    <h2 id="landing-workspace-title">
                       {modalView === 'onboarding'
                         ? 'Create your orbit.'
-                        : authMode === 'login'
-                          ? 'Welcome back.'
-                          : 'Create your orbit.'}
+                        : 'Your Atria workspace lives here.'}
                     </h2>
                     <p>
                       {modalView === 'onboarding'
                         ? 'Start with a calm space built around your week.'
-                        : authMode === 'login'
-                          ? 'Return to your workspace.'
-                          : 'Start with a calm space built around your week.'}
+                        : 'Atria is local-first in this MVP. No account, cloud sync, or password is required.'}
                     </p>
                   </div>
-                  <Button variant="icon" onClick={closeAuth} aria-label="Close front-page modal">
+                  <Button variant="icon" onClick={closeModal} aria-label="Close front-page modal">
                     <X size={17} aria-hidden="true" />
                   </Button>
                 </div>
               ) : null}
 
-              {modalView === 'auth' ? (
-                <>
-                  <div className={styles.tabs} role="tablist" aria-label="Authentication mode">
-                    <button className={authMode === 'login' ? styles.activeTab : ''} type="button" onClick={() => setAuthMode('login')}>
-                      Sign in
+              {modalView === 'workspace' ? (
+                <div className={styles.localAccountPanel}>
+                  <article>
+                    <Upload size={18} aria-hidden="true" />
+                    <div>
+                      <strong>Open this browser’s workspace</strong>
+                      <span>Your plans are stored locally on this device.</span>
+                    </div>
+                  </article>
+                  <article>
+                    <Download size={18} aria-hidden="true" />
+                    <div>
+                      <strong>Move by backup file</strong>
+                      <span>Use Settings to export or import an Atria JSON backup.</span>
+                    </div>
+                  </article>
+                  <div className={styles.stepActions}>
+                    <button className={styles.ghostButton} type="button" onClick={openOnboardingModal}>
+                      Set up workspace
                     </button>
-                    <button className={authMode === 'register' ? styles.activeTab : ''} type="button" onClick={() => setAuthMode('register')}>
-                      Register
+                    <button className={styles.primaryButton} type="button" onClick={enterWorkspace}>
+                      Open Atria
                     </button>
                   </div>
-                  <form className={styles.authForm} onSubmit={handleAuthSubmit}>
-                    {authMode === 'register' ? (
-                      <label>
-                        Name
-                        <input autoComplete="name" placeholder="Your name" required />
-                      </label>
-                    ) : null}
-                    <label>
-                      Email
-                      <input autoComplete="email" placeholder="you@example.com" required type="email" />
-                    </label>
-                    <label>
-                      Password
-                      <input
-                        autoComplete={authMode === 'login' ? 'current-password' : 'new-password'}
-                        placeholder={authMode === 'login' ? 'Password' : 'Create a password'}
-                        required
-                        type="password"
-                      />
-                    </label>
-                    {authMode === 'login' ? (
-                      <button className={styles.forgotButton} type="button">Forgot password?</button>
-                    ) : null}
-                    <button className={styles.submitButton} type="submit">
-                      {authMode === 'login' ? 'Sign in' : 'Create account'}
-                    </button>
-                    <div className={styles.divider}>or continue with</div>
-                    <div className={styles.socials}>
-                      <button type="button">Google</button>
-                      <button type="button">Apple</button>
-                    </div>
-                    {authMode === 'register' ? (
-                      <p className={styles.legal}>By creating an account, you agree to Atria's Terms and Privacy Policy.</p>
-                    ) : null}
-                  </form>
-                </>
+                </div>
               ) : null}
 
               {modalView === 'onboarding' ? (
@@ -369,6 +379,28 @@ export default function LandingPage() {
                   <section className={styles.stepPanel}>
                     <h3>{activeStep.title}</h3>
                     <p>{activeStep.description}</p>
+                    {stepIndex === 0 ? (
+                      <div className={styles.workspaceFields}>
+                        <label>
+                          Workspace name
+                          <input
+                            value={workspaceName}
+                            maxLength={36}
+                            onChange={(event) => setWorkspaceName(event.target.value)}
+                            placeholder="Your name"
+                          />
+                        </label>
+                        <label>
+                          Current focus
+                          <input
+                            value={workspaceFocus}
+                            maxLength={72}
+                            onChange={(event) => setWorkspaceFocus(event.target.value)}
+                            placeholder="Portfolio, study, health, work..."
+                          />
+                        </label>
+                      </div>
+                    ) : null}
                     <div className={styles.choices}>
                       {activeStep.options.map(([label, description]) => {
                         const selected = selectedChoices[stepIndex]?.includes(label) ?? false;
@@ -402,12 +434,8 @@ export default function LandingPage() {
               {modalView === 'success' ? (
                 <div className={styles.successPanel}>
                   <div className={styles.successOrbit} aria-hidden="true" />
-                  <h2 id="landing-auth-title">{authMode === 'login' ? 'Welcome back.' : 'Your orbit is ready.'}</h2>
-                  <p>
-                    {authMode === 'login'
-                      ? 'Your Atria workspace is ready to continue.'
-                      : 'Atria has created a calm starting space around the way you work.'}
-                  </p>
+                  <h2 id="landing-workspace-title">Your orbit is ready.</h2>
+                  <p>Atria has created a local workspace around the way you want to plan. You can tune it anytime in Settings.</p>
                   <button className={styles.primaryButton} type="button" onClick={enterWorkspace}>
                     Enter workspace
                   </button>
