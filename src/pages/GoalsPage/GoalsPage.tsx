@@ -6,6 +6,8 @@ import { getEditableCalendarItem } from '../../features/calendar/utils/calendarR
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useProjectsStore } from '../../features/projects/store/projects.store';
+import { getGoalDepthSummary } from '../../features/projects/utils/projectDepth';
+import { getLinkedTasksForProject, getProjectProgress } from '../../features/projects/utils/projectProgress';
 import type { GoalStatus } from '../../features/goals/types/goals.types';
 import { getGoalsByStatus, type GoalFilter } from '../../features/goals/utils/goalFilters';
 import { getGoalProgress, getLinkedTasksForGoal } from '../../features/goals/utils/goalProgress';
@@ -81,6 +83,44 @@ export default function GoalsPage() {
         ]),
       ),
     [goals, linkedTasksByGoalId],
+  );
+  const linkedTasksByProjectId = useMemo(
+    () =>
+      Object.fromEntries(
+        projects.map((project) => [
+          project.id,
+          getLinkedTasksForProject(sourceEvents, visibleCalendarItems, project.id),
+        ]),
+      ),
+    [projects, sourceEvents, visibleCalendarItems],
+  );
+  const projectProgressById = useMemo(
+    () =>
+      Object.fromEntries(
+        projects.map((project) => [
+          project.id,
+          getProjectProgress(linkedTasksByProjectId[project.id] ?? []),
+        ]),
+      ),
+    [linkedTasksByProjectId, projects],
+  );
+  const goalDepthById = useMemo(
+    () =>
+      Object.fromEntries(
+        goals.map((goal) => {
+          const linkedProjects = projects.filter((project) => project.goalId === goal.id);
+
+          return [
+            goal.id,
+            getGoalDepthSummary(
+              linkedProjects,
+              linkedTasksByGoalId[goal.id] ?? [],
+              projectProgressById,
+            ),
+          ];
+        }),
+      ),
+    [goals, linkedTasksByGoalId, projectProgressById, projects],
   );
   const activeGoalCount = goals.filter((goal) => goal.status === 'active').length;
   const completedGoalCount = goals.filter((goal) => goal.status === 'completed').length;
@@ -161,6 +201,14 @@ export default function GoalsPage() {
                 key={goal.id}
                 goal={goal}
                 progress={goalProgressById[goal.id] ?? { linkedTaskCount: 0, completedLinkedTaskCount: 0, percentage: 0 }}
+                depthSummary={goalDepthById[goal.id] ?? {
+                  linkedProjectCount: 0,
+                  activeProjectCount: 0,
+                  linkedTaskCount: 0,
+                  completedLinkedTaskCount: 0,
+                  averageProjectProgress: 0,
+                  label: 'Open goal',
+                }}
                 linkedTasks={linkedTasksByGoalId[goal.id] ?? []}
                 linkedProjects={projects.filter((project) => project.goalId === goal.id)}
                 isExpanded={expandedGoalId === goal.id}

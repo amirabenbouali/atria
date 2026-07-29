@@ -1,10 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import type { MouseEvent } from 'react';
 import { format, parseISO } from 'date-fns';
-import { BriefcaseBusiness, CalendarDays, RefreshCw, Target, X } from 'lucide-react';
+import { BriefcaseBusiness, CalendarDays, Gauge, Layers3, RefreshCw, Target, X } from 'lucide-react';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
 import type { Project } from '../../../features/projects/types/projects.types';
 import type { ProjectProgress } from '../../../features/projects/utils/projectProgress';
+import {
+  projectComplexityLabels,
+  projectImpactLabels,
+  projectStageLabels,
+  type ProjectDepth,
+} from '../../../features/projects/utils/projectDepth';
 import Button from '../../../shared/components/Button/Button';
 import AtriaIcon from '../../../shared/ui/AtriaIcon';
 import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
@@ -17,6 +23,7 @@ type ProjectDetailDrawerProps = {
   linkedGoalTitle?: string;
   linkedTasks: FlexibleCalendarTask[];
   progress: ProjectProgress;
+  depth: ProjectDepth;
   onClose: () => void;
   onEditProject: (id: string) => void;
   onCreateTask: (project: Project) => void;
@@ -29,6 +36,7 @@ export default function ProjectDetailDrawer({
   linkedGoalTitle,
   linkedTasks,
   progress,
+  depth,
   onClose,
   onEditProject,
   onCreateTask,
@@ -75,19 +83,23 @@ export default function ProjectDetailDrawer({
               <AtriaBadge label={project.status} tone={project.status === 'completed' ? 'success' : project.status === 'archived' ? 'neutral' : 'rose'} />
               <AtriaCapsule label={targetLabel} icon={CalendarDays} tone="mauve" uppercase={false} />
               <AtriaCapsule label={linkedGoalTitle ?? 'No linked goal'} icon={Target} tone={linkedGoalTitle ? 'violet' : 'neutral'} uppercase={false} />
+              <AtriaCapsule label={projectStageLabels[project.stage]} icon={Layers3} tone="rose" />
+              <AtriaCapsule label={projectImpactLabels[project.impact]} icon={Target} tone="mauve" uppercase={false} />
+              <AtriaCapsule label={projectComplexityLabels[project.complexity]} icon={Gauge} tone="neutral" />
             </div>
 
             {project.description ? <p className={styles.drawerDescription}>{project.description}</p> : null}
 
             <section className={styles.drawerProgress}>
               <div>
-                <span>Progress</span>
+                <span>{depth.label}</span>
                 <strong>{progress.percentage}%</strong>
               </div>
               <div className={styles.progressTrack} aria-label={`${progress.percentage}% complete`}>
                 <span style={{ width: `${progress.percentage}%` }} />
               </div>
-              <p>{progress.completedLinkedTaskCount}/{progress.linkedTaskCount} linked tasks complete</p>
+              <p>{progress.completedLinkedTaskCount}/{progress.linkedTaskCount} linked tasks complete · depth score {depth.score}</p>
+              <p>{depth.signal}</p>
             </section>
 
             <div className={styles.drawerActions}>

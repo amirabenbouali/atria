@@ -1,8 +1,14 @@
 import { format, parseISO } from 'date-fns';
-import { BriefcaseBusiness, CalendarDays, Target } from 'lucide-react';
+import { BriefcaseBusiness, CalendarDays, Gauge, Layers3, Target } from 'lucide-react';
 import { categoryColors } from '../../../features/calendar/constants/calendar.constants';
 import type { Project, ProjectStatus } from '../../../features/projects/types/projects.types';
 import type { ProjectProgress } from '../../../features/projects/utils/projectProgress';
+import {
+  projectComplexityLabels,
+  projectImpactLabels,
+  projectStageLabels,
+  type ProjectDepth,
+} from '../../../features/projects/utils/projectDepth';
 import Button from '../../../shared/components/Button/Button';
 import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
 import AtriaBadge from '../../../shared/ui/AtriaBadge';
@@ -12,6 +18,7 @@ type ProjectCardProps = {
   project: Project;
   linkedGoalTitle?: string;
   progress: ProjectProgress;
+  depth: ProjectDepth;
   onSelect: (id: string) => void;
   onEdit: (id: string) => void;
   onSetStatus: (id: string, status: ProjectStatus) => void;
@@ -22,6 +29,7 @@ export default function ProjectCard({
   project,
   linkedGoalTitle,
   progress,
+  depth,
   onSelect,
   onEdit,
   onSetStatus,
@@ -40,8 +48,17 @@ export default function ProjectCard({
         </span>
         <strong>{project.title}</strong>
         {linkedGoalTitle ? <AtriaCapsule label={linkedGoalTitle} icon={Target} tone="violet" uppercase={false} /> : null}
+        <span className={styles.projectMetaRow}>
+          <AtriaCapsule label={projectStageLabels[project.stage]} icon={Layers3} tone="mauve" />
+          <AtriaCapsule label={projectImpactLabels[project.impact]} icon={Target} tone="rose" uppercase={false} />
+          <AtriaCapsule label={projectComplexityLabels[project.complexity]} icon={Gauge} tone="neutral" />
+        </span>
         {project.description ? <p>{project.description}</p> : null}
       </button>
+      <div className={styles.depthSignal}>
+        <span>{depth.label}</span>
+        <strong>{depth.score}</strong>
+      </div>
       <div className={styles.projectProgress}>
         <div>
           <span>{progress.completedLinkedTaskCount}/{progress.linkedTaskCount} tasks</span>

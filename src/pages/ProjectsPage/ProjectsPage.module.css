@@ -158,8 +158,36 @@
 }
 
 .projectProgress,
-.projectActions {
+.projectActions,
+.depthSignal {
   grid-column: 2;
+}
+
+.depthSignal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border: 1px solid rgba(255, 210, 225, 0.1);
+  border-radius: 18px;
+  padding: 10px 12px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(246, 166, 190, 0.09), transparent 44%),
+    rgba(18, 16, 18, 0.54);
+}
+
+.depthSignal span {
+  color: var(--color-text-muted);
+  font-family: var(--font-detail);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.depthSignal strong {
+  color: white;
+  font-family: var(--font-detail);
+  font-size: 1.1rem;
 }
 
 .projectProgress {
@@ -274,6 +302,12 @@
 .modalGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.modalGridThree {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-3);
 }
 
@@ -448,7 +482,8 @@
 
 @media (max-width: 760px) {
   .projectGrid,
-  .modalGrid {
+  .modalGrid,
+  .modalGridThree {
     grid-template-columns: 1fr;
   }
 

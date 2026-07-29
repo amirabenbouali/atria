@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { BriefcaseBusiness, Target } from 'lucide-react';
+import { BriefcaseBusiness, Gauge, Layers3, Target } from 'lucide-react';
 import { eventCategories } from '../../../features/calendar/constants/calendar.constants';
 import type { EventCategory } from '../../../features/calendar/types/calendar.types';
 import { useGoalsStore } from '../../../features/goals/store/goals.store';
-import type { Project, ProjectDraft } from '../../../features/projects/types/projects.types';
+import type { Project, ProjectComplexity, ProjectDraft, ProjectImpact, ProjectStage } from '../../../features/projects/types/projects.types';
+import {
+  projectComplexityLabels,
+  projectComplexityOptions,
+  projectImpactLabels,
+  projectImpactOptions,
+  projectStageLabels,
+  projectStageOptions,
+} from '../../../features/projects/utils/projectDepth';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
 import SelectControl from '../../../shared/components/SelectControl/SelectControl';
@@ -23,6 +31,9 @@ const initialFormState: ProjectDraft = {
   description: '',
   category: 'Work',
   goalId: '',
+  stage: 'build',
+  impact: 'medium',
+  complexity: 'layered',
   targetDate: '',
 };
 
@@ -48,6 +59,9 @@ export default function ProjectModal({
       description: editingProject.description,
       category: editingProject.category,
       goalId: editingProject.goalId ?? '',
+      stage: editingProject.stage,
+      impact: editingProject.impact,
+      complexity: editingProject.complexity,
       targetDate: editingProject.targetDate ?? '',
     } : initialFormState);
     setError('');
@@ -150,6 +164,47 @@ export default function ProjectModal({
                   <option value="">No goal</option>
                   {activeGoals.map((goal) => (
                     <option key={goal.id} value={goal.id}>{goal.title}</option>
+                  ))}
+                </SelectControl>
+              </label>
+            </div>
+
+            <div className={styles.modalGridThree}>
+              <label>
+                <span>Stage</span>
+                <SelectControl
+                  icon={Layers3}
+                  value={formState.stage}
+                  onChange={(event) => updateField('stage', event.target.value as ProjectStage)}
+                >
+                  {projectStageOptions.map((stage) => (
+                    <option key={stage} value={stage}>{projectStageLabels[stage]}</option>
+                  ))}
+                </SelectControl>
+              </label>
+
+              <label>
+                <span>Impact</span>
+                <SelectControl
+                  icon={Target}
+                  value={formState.impact}
+                  onChange={(event) => updateField('impact', event.target.value as ProjectImpact)}
+                >
+                  {projectImpactOptions.map((impact) => (
+                    <option key={impact} value={impact}>{projectImpactLabels[impact]}</option>
+                  ))}
+                </SelectControl>
+              </label>
+
+              <label>
+                <span>Complexity</span>
+                <SelectControl
+                  icon={Gauge}
+                  value={formState.complexity}
+                  onChange={(event) => updateField('complexity', event.target.value as ProjectComplexity)}
+                >
+                  {projectComplexityOptions.map((complexity) => (
+                    <option key={complexity} value={complexity}>{projectComplexityLabels[complexity]}</option>
                   ))}
                 </SelectControl>
               </label>

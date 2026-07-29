@@ -9,6 +9,7 @@ import { useProjectsStore } from '../../features/projects/store/projects.store';
 import type { Project, ProjectStatus } from '../../features/projects/types/projects.types';
 import { getProjectsByStatus, type ProjectFilter } from '../../features/projects/utils/projectFilters';
 import { getLinkedTasksForProject, getProjectProgress } from '../../features/projects/utils/projectProgress';
+import { getProjectDepth } from '../../features/projects/utils/projectDepth';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Toast from '../../shared/components/Toast/Toast';
@@ -86,6 +87,19 @@ export default function ProjectsPage() {
         ]),
       ),
     [linkedTasksByProjectId, projects],
+  );
+  const projectDepthById = useMemo(
+    () =>
+      Object.fromEntries(
+        projects.map((project) => [
+          project.id,
+          getProjectDepth(
+            project,
+            projectProgressById[project.id] ?? { linkedTaskCount: 0, completedLinkedTaskCount: 0, percentage: 0 },
+          ),
+        ]),
+      ),
+    [projectProgressById, projects],
   );
   const editingProject = projects.find((project) => project.id === editingProjectId) ?? null;
   const selectedProject = projects.find((project) => project.id === selectedProjectId) ?? null;
@@ -176,6 +190,7 @@ export default function ProjectsPage() {
                 project={project}
                 linkedGoalTitle={project.goalId ? goalTitleById[project.goalId] : undefined}
                 progress={projectProgressById[project.id] ?? { linkedTaskCount: 0, completedLinkedTaskCount: 0, percentage: 0 }}
+                depth={projectDepthById[project.id] ?? { score: 0, label: 'Light project', signal: 'Small surface area, easy to steer.' }}
                 onSelect={setSelectedProjectId}
                 onEdit={openEditProjectModal}
                 onSetStatus={handleSetProjectStatus}
@@ -200,6 +215,11 @@ export default function ProjectsPage() {
           selectedProject
             ? projectProgressById[selectedProject.id] ?? { linkedTaskCount: 0, completedLinkedTaskCount: 0, percentage: 0 }
             : { linkedTaskCount: 0, completedLinkedTaskCount: 0, percentage: 0 }
+        }
+        depth={
+          selectedProject
+            ? projectDepthById[selectedProject.id] ?? { score: 0, label: 'Light project', signal: 'Small surface area, easy to steer.' }
+            : { score: 0, label: 'Light project', signal: 'Small surface area, easy to steer.' }
         }
         onClose={() => setSelectedProjectId(null)}
         onEditProject={openEditProjectModal}

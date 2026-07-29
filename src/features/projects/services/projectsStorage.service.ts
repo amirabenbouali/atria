@@ -4,7 +4,18 @@ import {
   readJsonFromLocalStorage,
   writeJsonToLocalStorage,
 } from '../../../shared/services/localStorage.service';
-import type { Project, ProjectStatus } from '../types/projects.types';
+import type {
+  Project,
+  ProjectComplexity,
+  ProjectImpact,
+  ProjectStage,
+  ProjectStatus,
+} from '../types/projects.types';
+import {
+  projectComplexityOptions,
+  projectImpactOptions,
+  projectStageOptions,
+} from '../utils/projectDepth';
 
 const projectsStorageKey = 'atria-projects';
 const projectStatuses: ProjectStatus[] = ['active', 'completed', 'archived'];
@@ -19,6 +30,18 @@ function normalizeStatus(status: unknown): ProjectStatus {
   return projectStatuses.includes(status as ProjectStatus) ? status as ProjectStatus : 'active';
 }
 
+function normalizeStage(stage: unknown): ProjectStage {
+  return projectStageOptions.includes(stage as ProjectStage) ? stage as ProjectStage : 'build';
+}
+
+function normalizeImpact(impact: unknown): ProjectImpact {
+  return projectImpactOptions.includes(impact as ProjectImpact) ? impact as ProjectImpact : 'medium';
+}
+
+function normalizeComplexity(complexity: unknown): ProjectComplexity {
+  return projectComplexityOptions.includes(complexity as ProjectComplexity) ? complexity as ProjectComplexity : 'layered';
+}
+
 function normalizeProject(project: StoredProject): Project {
   const timestamp = new Date().toISOString();
 
@@ -28,6 +51,9 @@ function normalizeProject(project: StoredProject): Project {
     description: typeof project.description === 'string' ? project.description : '',
     category: normalizeCategory(project.category),
     goalId: typeof project.goalId === 'string' && project.goalId ? project.goalId : undefined,
+    stage: normalizeStage(project.stage),
+    impact: normalizeImpact(project.impact),
+    complexity: normalizeComplexity(project.complexity),
     status: normalizeStatus(project.status),
     targetDate: typeof project.targetDate === 'string' && project.targetDate ? project.targetDate : undefined,
     createdAt: project.createdAt ?? timestamp,
