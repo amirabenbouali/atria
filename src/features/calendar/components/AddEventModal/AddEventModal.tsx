@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BriefcaseBusiness, Folder, RefreshCw, Target } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
 import Modal from '../../../../shared/components/Modal/Modal';
@@ -13,6 +13,7 @@ import { useEventForm } from '../../hooks/useEventForm';
 import type {
   CalendarEvent,
   CalendarEventDraft,
+  CalendarEditScope,
   CalendarItemType,
   CalendarModalPreset,
   CalendarRecurrence,
@@ -27,7 +28,7 @@ type AddEventModalProps = {
   editingEvent?: CalendarEvent | null;
   onClose: () => void;
   onAddEvent: (event: CalendarEventDraft) => void;
-  onUpdateEvent: (id: string, event: CalendarEventDraft) => void;
+  onUpdateEvent: (id: string, event: CalendarEventDraft, scope?: CalendarEditScope) => void;
 };
 
 const titleId = 'add-event-title';
@@ -42,6 +43,8 @@ export default function AddEventModal({
   onUpdateEvent,
 }: AddEventModalProps) {
   const isEditing = Boolean(editingEvent);
+  const isEditingRecurringOccurrence = Boolean(editingEvent?.isRecurringOccurrence && editingEvent.recurrence !== 'none');
+  const [editScope, setEditScope] = useState<CalendarEditScope>('series');
   const {
     values,
     errors,
@@ -57,7 +60,7 @@ export default function AddEventModal({
     selectedWeekDate,
     onSubmit: (eventDraft) => {
       if (editingEvent) {
-        onUpdateEvent(editingEvent.id, eventDraft);
+        onUpdateEvent(editingEvent.id, eventDraft, isEditingRecurringOccurrence ? editScope : 'series');
         return;
       }
 
@@ -69,6 +72,7 @@ export default function AddEventModal({
   const projects = useProjectsStore((state) => state.projects);
   const activeProjects = useMemo(() => projects.filter((project) => project.status === 'active'), [projects]);
   const itemLabel = values.itemType === 'task' ? 'Task' : 'Event';
+  const canEditRecurrence = !isEditingRecurringOccurrence || editScope === 'series';
 
   useEffect(() => {
     if (!isOpen) {
@@ -84,6 +88,12 @@ export default function AddEventModal({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setEditScope(isEditingRecurringOccurrence ? 'occurrence' : 'series');
+    }
+  }, [isEditingRecurringOccurrence, isOpen]);
 
   return (
     <AnimatePresence>
@@ -112,6 +122,24 @@ export default function AddEventModal({
                 </button>
               ))}
             </div>
+
+            {isEditingRecurringOccurrence ? (
+              <div className={styles.scopeControl} aria-label="Recurring edit scope">
+                {([
+                  ['occurrence', 'This occurrence'],
+                  ['series', 'Entire series'],
+                ] as Array<[CalendarEditScope, string]>).map(([scope, label]) => (
+                  <button
+                    className={editScope === scope ? styles.activeScope : styles.scopeOption}
+                    key={scope}
+                    type="button"
+                    onClick={() => setEditScope(scope)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
 
             <label>
               Title
@@ -226,40 +254,48 @@ export default function AddEventModal({
               </div>
             ) : null}
 
-            <div className={values.recurrence === 'none' ? styles.formRowSingle : styles.formRow}>
-              <label>
-                Repeat
-                <SelectControl
-                  icon={RefreshCw}
-                  value={values.recurrence}
-                  onChange={(event) => updateField('recurrence', event.target.value as CalendarRecurrence)}
-                >
-                  <option value="none">Does not repeat</option>
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="monthly">Monthly</option>
-                </SelectControl>
-              </label>
-
-              {values.recurrence !== 'none' ? (
+            {canEditRecurrence ? (
+              <div className={values.recurrence === 'none' ? styles.formRowSingle : styles.formRow}>
                 <label>
-                  Repeat until
-                  <input
-                    type="date"
-                    value={values.recurrenceEndDate}
-                    onChange={(event) => updateField('recurrenceEndDate', event.target.value)}
-                    aria-invalid={Boolean(errors.recurrenceEndDate)}
-                  />
-                  {errors.recurrenceEndDate ? (
-                    <span className={styles.fieldError}>{errors.recurrenceEndDate}</span>
-                  ) : null}
+                  Repeat
+                  <SelectControl
+                    icon={RefreshCw}
+                    value={values.recurrence}
+                    onChange={(event) => updateField('recurrence', event.target.value as CalendarRecurrence)}
+                  >
+                    <option value="none">Does not repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </SelectControl>
                 </label>
-              ) : null}
-            </div>
 
-            {values.recurrence !== 'none' ? (
+                {values.recurrence !== 'none' ? (
+                  <label>
+                    Repeat until
+                    <input
+                      type="date"
+                      value={values.recurrenceEndDate}
+                      onChange={(event) => updateField('recurrenceEndDate', event.target.value)}
+                      aria-invalid={Boolean(errors.recurrenceEndDate)}
+                    />
+                    {errors.recurrenceEndDate ? (
+                      <span className={styles.fieldError}>{errors.recurrenceEndDate}</span>
+                    ) : null}
+                  </label>
+                ) : null}
+              </div>
+            ) : null}
+
+            {isEditingRecurringOccurrence && editScope === 'occurrence' ? (
               <p className={styles.formHint}>
-                Recurring items appear automatically in matching weeks. Editing or deleting updates the whole series.
+                This edit creates a one-off version for this date only. The rest of the series stays unchanged.
+              </p>
+            ) : null}
+
+            {canEditRecurrence && values.recurrence !== 'none' ? (
+              <p className={styles.formHint}>
+                Recurring items appear automatically in matching weeks. Series edits update every future matching occurrence.
               </p>
             ) : null}
 

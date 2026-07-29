@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BatteryMedium, CalendarClock, CalendarDays, CheckCircle2, Clock3, Compass, Moon, Target } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useIntentionsStore } from '../../features/intentions';
 import {
@@ -125,7 +126,7 @@ export default function TodayPage() {
   const setIntentionStatus = useIntentionsStore((state) => state.setIntentionStatus);
   const upsertReflection = useReflectionsStore((state) => state.upsertReflection);
   const preferences = useSettingsStore((state) => state.preferences);
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const planningIntention = intentions.find((intention) => intention.id === planningIntentionId) ?? null;
   const currentOrNext = viewModel.currentItem ?? viewModel.nextItem;
 

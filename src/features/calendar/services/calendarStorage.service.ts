@@ -75,6 +75,16 @@ function normalizeCompletionMap(completions: unknown): Record<string, boolean> {
   );
 }
 
+function normalizeExceptionMap(exceptions: unknown): Record<string, boolean> {
+  if (!exceptions || typeof exceptions !== 'object' || Array.isArray(exceptions)) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(exceptions).filter(([, excluded]) => typeof excluded === 'boolean'),
+  );
+}
+
 function normalizeSource(source: unknown): CalendarItemSource {
   return source === 'planning-suggestion' ? 'planning-suggestion' : 'manual';
 }
@@ -115,6 +125,9 @@ function normalizeStoredEvent(event: StoredCalendarEvent): CalendarEvent {
     recurrence: normalizeRecurrence(event.recurrence),
     recurrenceEndDate: event.recurrenceEndDate,
     recurringCompletions: normalizeCompletionMap(event.recurringCompletions),
+    recurringExceptions: normalizeExceptionMap(event.recurringExceptions),
+    recurrenceOverrideSourceId: typeof event.recurrenceOverrideSourceId === 'string' && event.recurrenceOverrideSourceId ? event.recurrenceOverrideSourceId : undefined,
+    recurrenceOverrideDate: typeof event.recurrenceOverrideDate === 'string' && event.recurrenceOverrideDate ? event.recurrenceOverrideDate : undefined,
     source: normalizeSource(event.source),
     ...(normalizeFocusSession(event.focusSession) ? { focusSession: normalizeFocusSession(event.focusSession) } : {}),
     createdAt: event.createdAt ?? event.updatedAt ?? timestamp,

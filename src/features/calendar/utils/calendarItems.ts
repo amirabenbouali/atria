@@ -1,5 +1,5 @@
 import { addDays, addWeeks, parseISO, format } from 'date-fns';
-import type { CalendarEvent, FlexibleCalendarTask } from '../types/calendar.types';
+import type { CalendarEvent, CalendarEventDraft, FlexibleCalendarTask } from '../types/calendar.types';
 import { createId } from '../../../shared/utils/id';
 
 export function getNextTaskOrder(events: CalendarEvent[], date: string) {
@@ -29,6 +29,7 @@ export function copyCalendarItem(
       completed: false,
       order: options.order ?? item.order,
       recurringCompletions: {},
+      recurringExceptions: {},
       createdAt: timestamp,
       updatedAt: timestamp,
     };
@@ -41,6 +42,51 @@ export function copyCalendarItem(
     date: options.date ?? item.date,
     completed: false,
     recurringCompletions: {},
+    recurringExceptions: {},
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+}
+
+export function createSingleOccurrenceOverride(
+  sourceItem: CalendarEvent,
+  occurrenceDate: string,
+  draft: CalendarEventDraft,
+  options: {
+    order?: number;
+  } = {},
+): CalendarEvent {
+  const timestamp = new Date().toISOString();
+
+  if (draft.itemType === 'task') {
+    return {
+      ...draft,
+      id: createId(),
+      recurrence: 'none',
+      recurrenceEndDate: undefined,
+      completed: sourceItem.recurringCompletions[occurrenceDate] ?? false,
+      order: options.order ?? 0,
+      recurringCompletions: {},
+      recurringExceptions: {},
+      recurrenceOverrideSourceId: sourceItem.id,
+      recurrenceOverrideDate: occurrenceDate,
+      source: 'manual',
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+  }
+
+  return {
+    ...draft,
+    id: createId(),
+    recurrence: 'none',
+    recurrenceEndDate: undefined,
+    completed: sourceItem.recurringCompletions[occurrenceDate] ?? false,
+    recurringCompletions: {},
+    recurringExceptions: {},
+    recurrenceOverrideSourceId: sourceItem.id,
+    recurrenceOverrideDate: occurrenceDate,
+    source: 'manual',
     createdAt: timestamp,
     updatedAt: timestamp,
   };

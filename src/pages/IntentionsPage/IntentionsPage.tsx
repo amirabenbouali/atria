@@ -3,6 +3,7 @@ import { BatteryMedium, CalendarDays, Flag, Search, Sunrise } from 'lucide-react
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import {
   getFilteredIntentions,
@@ -126,7 +127,7 @@ export default function IntentionsPage() {
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
   const editingIntention = intentions.find((intention) => intention.id === editingIntentionId) ?? null;
   const planningIntention = intentions.find((intention) => intention.id === planningIntentionId) ?? null;
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const energyProfile = useSettingsStore((state) => state.preferences.energyProfile);
   const focusSessionCountByIntention = useMemo(
     () => getFocusSessionCountByIntention(sourceEvents),

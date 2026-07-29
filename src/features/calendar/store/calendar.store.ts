@@ -9,12 +9,14 @@ import {
 import type {
   CalendarEvent,
   CalendarEventDraft,
+  CalendarEditScope,
   CalendarFocusSessionDraft,
   CalendarModalPreset,
 } from '../types/calendar.types';
 import { createId } from '../../../shared/utils/id';
 import {
   copyCalendarItem,
+  createSingleOccurrenceOverride,
   getNextTaskOrder,
   getRelativeDate,
   moveCalendarItem as moveCalendarItemInList,
@@ -43,7 +45,7 @@ type CalendarState = {
   goToNextMonth: () => void;
   addEvent: (event: CalendarEventDraft) => void;
   addFocusSessionFromSuggestion: (event: CalendarFocusSessionDraft) => CalendarEvent;
-  updateEvent: (id: string, event: CalendarEventDraft) => void;
+  updateEvent: (id: string, event: CalendarEventDraft, scope?: CalendarEditScope) => void;
   duplicateEvent: (id: string) => void;
   copyEventToTomorrow: (id: string) => void;
   copyEventToNextWeek: (id: string) => void;
@@ -70,7 +72,9 @@ function persistDailyFocus(dailyFocusByDate: Record<string, string>) {
 
 function getSourceActionTarget(id: string) {
   const occurrence = parseOccurrenceId(id);
-  return occurrence.isOccurrence ? occurrence : { sourceId: id, occurrenceDate: undefined };
+  return occurrence.isOccurrence
+    ? occurrence
+    : { sourceId: id, occurrenceDate: undefined, isOccurrence: false };
 }
 
 export const useCalendarStore = create<CalendarState>((set) => ({
@@ -83,7 +87,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
   openAddEventModal: (preset) =>
     set({ isAddEventModalOpen: true, editingEventId: null, modalPreset: preset ?? null }),
   openEditEventModal: (id) =>
-    set({ isAddEventModalOpen: true, editingEventId: getSourceActionTarget(id).sourceId, modalPreset: null }),
+    set({ isAddEventModalOpen: true, editingEventId: id, modalPreset: null }),
   closeAddEventModal: () => set({ isAddEventModalOpen: false, editingEventId: null, modalPreset: null }),
   setSelectedDate: (date) => set({ selectedWeekDate: date }),
   goToToday: () => set({ selectedWeekDate: new Date() }),
@@ -119,6 +123,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
             id: createId(),
             completed: false,
             recurringCompletions: {},
+            recurringExceptions: {},
             source: 'manual',
             createdAt: timestamp,
             updatedAt: timestamp,
@@ -136,6 +141,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
       id: createId(),
       completed: false,
       recurringCompletions: {},
+      recurringExceptions: {},
       createdAt: timestamp,
       updatedAt: timestamp,
     } satisfies CalendarEvent;
@@ -149,21 +155,51 @@ export const useCalendarStore = create<CalendarState>((set) => ({
 
     return event;
   },
-  updateEvent: (id, eventDraft) => {
+  updateEvent: (id, eventDraft, scope = 'series') => {
     const target = getSourceActionTarget(id);
-    // MVP limitation: editing a recurring occurrence updates the whole source series.
     return set((state) => ({
-      events: persistEvents(
-        state.events.map((event) =>
+      events: persistEvents((() => {
+        const timestamp = new Date().toISOString();
+        const sourceEvent = state.events.find((event) => event.id === target.sourceId);
+
+        if (
+          target.isOccurrence &&
+          target.occurrenceDate &&
+          scope === 'occurrence' &&
+          sourceEvent &&
+          sourceEvent.recurrence !== 'none'
+        ) {
+          const override = createSingleOccurrenceOverride(sourceEvent, target.occurrenceDate, eventDraft, {
+            order: eventDraft.itemType === 'task' ? getNextTaskOrder(state.events, eventDraft.date) : undefined,
+          });
+
+          return [
+            ...state.events.map((event) =>
+              event.id === target.sourceId
+                ? {
+                    ...event,
+                    recurringExceptions: {
+                      ...event.recurringExceptions,
+                      [target.occurrenceDate as string]: true,
+                    },
+                    updatedAt: timestamp,
+                  }
+                : event,
+            ),
+            override,
+          ];
+        }
+
+        return state.events.map((event) =>
           event.id === target.sourceId
             ? {
                 ...event,
                 ...eventDraft,
-                updatedAt: new Date().toISOString(),
+                updatedAt: timestamp,
               } as CalendarEvent
             : event,
-        ),
-      ),
+        );
+      })()),
       isAddEventModalOpen: false,
       editingEventId: null,
       modalPreset: null,

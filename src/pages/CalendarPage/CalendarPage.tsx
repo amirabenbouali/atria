@@ -14,7 +14,7 @@ import {
   getMonthGridDays,
   getMonthLabel,
 } from '../../features/calendar/utils/calendarDates';
-import { getVisibleCalendarOccurrencesForDays } from '../../features/calendar/utils/calendarRecurrence';
+import { getEditableCalendarItem, getVisibleCalendarOccurrencesForDays } from '../../features/calendar/utils/calendarRecurrence';
 import { getWeekOrbitDescription } from '../../features/calendar/utils/weekOrbitSummary';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
@@ -58,7 +58,7 @@ export default function CalendarPage() {
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
   const confirmBeforeDeleting = useSettingsStore((state) => state.preferences.calendar.confirmBeforeDeleting);
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const dayEvents = useMemo(
     () => getVisibleCalendarOccurrencesForDays(sourceEvents, [getCalendarDay(selectedWeekDate)]),
     [selectedWeekDate, sourceEvents],

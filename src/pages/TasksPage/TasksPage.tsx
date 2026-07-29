@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Folder, Target } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useProjectsStore } from '../../features/projects/store/projects.store';
@@ -57,7 +58,7 @@ export default function TasksPage() {
   const goToToday = useCalendarStore((state) => state.goToToday);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
 
   useEffect(() => {
     if (!toastMessage) {

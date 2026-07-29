@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useProjectsStore } from '../../features/projects/store/projects.store';
@@ -84,7 +85,7 @@ export default function GoalsPage() {
   const activeGoalCount = goals.filter((goal) => goal.status === 'active').length;
   const completedGoalCount = goals.filter((goal) => goal.status === 'completed').length;
   const editingGoal = goals.find((goal) => goal.id === editingGoalId) ?? null;
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
 
   useEffect(() => {
     if (!toastMessage) {

@@ -5,6 +5,7 @@ import { BookOpen, CalendarDays, Search } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import { formatInputDate, getWeekLabel } from '../../features/calendar/utils/calendarDates';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { buildMemoryTimeline, getMemoryMonthRange } from '../../features/memories';
 import type { MemoryFilter } from '../../features/memories';
@@ -80,7 +81,7 @@ export default function MemoriesPage() {
   );
   const totalEvents = sourceEvents.length;
   const completedEvents = sourceEvents.filter((event) => event.completed).length;
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const canGoNextMonth = isAfter(currentMonth, startOfMonth(addMonths(selectedMonth, 1))) ||
     format(currentMonth, 'yyyy-MM') === format(addMonths(selectedMonth, 1), 'yyyy-MM');
 

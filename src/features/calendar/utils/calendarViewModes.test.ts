@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { CalendarEvent } from '../types/calendar.types';
 import { getAdjacentVisibleDate, getCurrentWeekDays, getMonthGridDays } from './calendarDates';
-import { getVisibleCalendarOccurrencesForDays } from './calendarRecurrence';
+import { createOccurrenceId, getEditableCalendarItem, getVisibleCalendarOccurrencesForDays } from './calendarRecurrence';
 
 function event(overrides: Partial<CalendarEvent>): CalendarEvent {
   return {
@@ -72,5 +72,47 @@ describe('calendar view mode utilities', () => {
     expect(occurrences.filter((item) => item.sourceId === 'weekly-series')).toHaveLength(4);
     expect(occurrences.find((item) => item.id === 'weekly-series__occurs__2026-07-20')?.completed).toBe(true);
     expect(occurrences.filter((item) => item.id === 'one-off')).toHaveLength(1);
+  });
+
+  it('suppresses only recurring dates marked as occurrence exceptions', () => {
+    const days = getMonthGridDays(new Date('2026-07-15T12:00:00'), true);
+    const occurrences = getVisibleCalendarOccurrencesForDays(
+      [
+        event({
+          id: 'weekly-series',
+          recurrence: 'weekly',
+          recurringExceptions: {
+            '2026-07-20': true,
+          },
+        }),
+        event({
+          id: 'edited-occurrence',
+          title: 'Edited planning',
+          date: '2026-07-20',
+          recurrence: 'none',
+          recurrenceOverrideSourceId: 'weekly-series',
+          recurrenceOverrideDate: '2026-07-20',
+        }),
+      ],
+      days,
+    );
+
+    expect(occurrences.filter((item) => item.sourceId === 'weekly-series')).toHaveLength(3);
+    expect(occurrences.some((item) => item.id === 'weekly-series__occurs__2026-07-20')).toBe(false);
+    expect(occurrences.some((item) => item.id === 'edited-occurrence')).toBe(true);
+  });
+
+  it('returns an editable occurrence with the selected occurrence date', () => {
+    const source = event({
+      id: 'daily-series',
+      recurrence: 'daily',
+      date: '2026-07-01',
+    });
+    const editableItem = getEditableCalendarItem([source], createOccurrenceId(source.id, '2026-07-29'));
+
+    expect(editableItem?.id).toBe('daily-series__occurs__2026-07-29');
+    expect(editableItem?.sourceId).toBe('daily-series');
+    expect(editableItem?.date).toBe('2026-07-29');
+    expect(editableItem?.isRecurringOccurrence).toBe(true);
   });
 });

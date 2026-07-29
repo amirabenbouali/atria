@@ -18,6 +18,7 @@ import { eventCategories } from '../../features/calendar/constants/calendar.cons
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import type { CalendarItemType, EventCategory } from '../../features/calendar/types/calendar.types';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { downloadAtriaExport } from '../../features/dataExport/services/dataExport.service';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
@@ -98,7 +99,7 @@ export default function SettingsPage() {
   const goToToday = useCalendarStore((state) => state.goToToday);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const activeAtmosphere = getAtmosphereDefinition(preferences.appearance.atmosphere);
   const activeAccent = getAccentDefinition(preferences.appearance.accent);
   const activeMode = getWorkspaceModeDefinition(preferences.appearance.workspaceMode);

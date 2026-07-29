@@ -39,6 +39,33 @@ export function parseOccurrenceId(id: string) {
   };
 }
 
+export function getEditableCalendarItem(items: CalendarEvent[], id: string | null) {
+  if (!id) {
+    return null;
+  }
+
+  const target = parseOccurrenceId(id);
+  const sourceItem = items.find((item) => item.id === target.sourceId);
+
+  if (!sourceItem) {
+    return null;
+  }
+
+  if (!target.isOccurrence || !target.occurrenceDate) {
+    return sourceItem;
+  }
+
+  return {
+    ...sourceItem,
+    id,
+    date: target.occurrenceDate,
+    occurrenceDate: target.occurrenceDate,
+    sourceId: sourceItem.id,
+    isRecurringOccurrence: true,
+    completed: sourceItem.recurringCompletions[target.occurrenceDate] ?? false,
+  };
+}
+
 function getNextOccurrenceDate(date: Date, recurrence: CalendarEvent['recurrence']) {
   if (recurrence === 'daily') {
     return addDays(date, 1);
@@ -101,6 +128,10 @@ export function getVisibleCalendarOccurrencesForDays(
       const date = parseISO(day.isoDate);
 
       if (!shouldIncludeDate(item, date)) {
+        return [];
+      }
+
+      if (item.recurringExceptions?.[day.isoDate]) {
         return [];
       }
 

@@ -4,6 +4,7 @@ export type CalendarItemType = 'event' | 'task';
 export type CalendarView = 'day' | 'week' | 'month';
 export type CalendarRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
 export type CalendarItemSource = 'manual' | 'planning-suggestion';
+export type CalendarEditScope = 'series' | 'occurrence';
 
 export type FocusSessionMetadata = {
   intentionId: string;
@@ -25,6 +26,9 @@ type CalendarItemBase = {
   recurrence: CalendarRecurrence;
   recurrenceEndDate?: string;
   recurringCompletions: Record<string, boolean>;
+  recurringExceptions?: Record<string, boolean>;
+  recurrenceOverrideSourceId?: string;
+  recurrenceOverrideDate?: string;
   source?: CalendarItemSource;
   focusSession?: FocusSessionMetadata;
   createdAt: string;
@@ -57,6 +61,9 @@ export type CalendarEventDraft =
       | 'isRecurringOccurrence'
       | 'completed'
       | 'recurringCompletions'
+      | 'recurringExceptions'
+      | 'recurrenceOverrideSourceId'
+      | 'recurrenceOverrideDate'
       | 'source'
       | 'focusSession'
       | 'createdAt'
@@ -70,6 +77,9 @@ export type CalendarEventDraft =
       | 'isRecurringOccurrence'
       | 'completed'
       | 'recurringCompletions'
+      | 'recurringExceptions'
+      | 'recurrenceOverrideSourceId'
+      | 'recurrenceOverrideDate'
       | 'source'
       | 'focusSession'
       | 'createdAt'
@@ -85,6 +95,9 @@ export type CalendarFocusSessionDraft = Omit<
   | 'isRecurringOccurrence'
   | 'completed'
   | 'recurringCompletions'
+  | 'recurringExceptions'
+  | 'recurrenceOverrideSourceId'
+  | 'recurrenceOverrideDate'
   | 'createdAt'
   | 'updatedAt'
 >;

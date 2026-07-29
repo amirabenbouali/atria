@@ -4,6 +4,7 @@ import { BookOpen, CalendarDays, EyeOff, Lightbulb, RotateCcw } from 'lucide-rea
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import { getWeekLabel } from '../../features/calendar/utils/calendarDates';
+import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import {
   generateGentleInsights,
@@ -173,7 +174,7 @@ export default function InsightsPage() {
     [intentions, now, preferences.energyProfile, range.rangeEnd, range.rangeStart, reflections, sourceEvents, weekStartsOnMonday],
   );
   const visibleInsights = insights.filter((insight) => !dismissedInsightIds.includes(insight.id));
-  const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const editingEvent = useMemo(() => getEditableCalendarItem(sourceEvents, editingEventId), [editingEventId, sourceEvents]);
   const completedEvents = sourceEvents.filter((event) => event.completed).length;
 
   const handleResetDemoData = () => {
