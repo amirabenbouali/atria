@@ -1,4 +1,4 @@
-import { addWeeks } from 'date-fns';
+import { addDays, addMonths, addWeeks } from 'date-fns';
 import { create } from 'zustand';
 import {
   readStoredDailyFocus,
@@ -34,8 +34,12 @@ type CalendarState = {
   openEditEventModal: (id: string) => void;
   closeAddEventModal: () => void;
   goToToday: () => void;
+  goToPreviousDay: () => void;
+  goToNextDay: () => void;
   goToPreviousWeek: () => void;
   goToNextWeek: () => void;
+  goToPreviousMonth: () => void;
+  goToNextMonth: () => void;
   addEvent: (event: CalendarEventDraft) => void;
   addFocusSessionFromSuggestion: (event: CalendarFocusSessionDraft) => CalendarEvent;
   updateEvent: (id: string, event: CalendarEventDraft) => void;
@@ -81,10 +85,18 @@ export const useCalendarStore = create<CalendarState>((set) => ({
     set({ isAddEventModalOpen: true, editingEventId: getSourceActionTarget(id).sourceId, modalPreset: null }),
   closeAddEventModal: () => set({ isAddEventModalOpen: false, editingEventId: null, modalPreset: null }),
   goToToday: () => set({ selectedWeekDate: new Date() }),
+  goToPreviousDay: () =>
+    set((state) => ({ selectedWeekDate: addDays(state.selectedWeekDate, -1) })),
+  goToNextDay: () =>
+    set((state) => ({ selectedWeekDate: addDays(state.selectedWeekDate, 1) })),
   goToPreviousWeek: () =>
     set((state) => ({ selectedWeekDate: addWeeks(state.selectedWeekDate, -1) })),
   goToNextWeek: () =>
     set((state) => ({ selectedWeekDate: addWeeks(state.selectedWeekDate, 1) })),
+  goToPreviousMonth: () =>
+    set((state) => ({ selectedWeekDate: addMonths(state.selectedWeekDate, -1) })),
+  goToNextMonth: () =>
+    set((state) => ({ selectedWeekDate: addMonths(state.selectedWeekDate, 1) })),
   addEvent: (eventDraft) =>
     set((state) => {
       const timestamp = new Date().toISOString();

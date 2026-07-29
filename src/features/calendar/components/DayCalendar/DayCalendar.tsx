@@ -11,21 +11,17 @@ import {
 } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import GlassPanel from '../../../../shared/ui/GlassPanel/GlassPanel';
-import { getCurrentWeekDays } from '../../utils/calendarDates';
-import { formatHour, getCalendarHours } from '../../utils/calendarTime';
 import type { CalendarEvent, CalendarModalPreset, CalendarView } from '../../types/calendar.types';
-import {
-  parseDayDropId,
-  parseTaskDropId,
-} from '../../utils/calendarDrag';
-import DayColumn from '../DayColumn/DayColumn';
+import { getCalendarDay } from '../../utils/calendarDates';
+import { createDayDropId, parseDayDropId, parseTaskDropId } from '../../utils/calendarDrag';
+import { getCalendarHours } from '../../utils/calendarTime';
 import CalendarViewSwitcher from '../CalendarViewSwitcher/CalendarViewSwitcher';
-import styles from './WeeklyCalendar.module.css';
+import DayColumn from '../DayColumn/DayColumn';
+import styles from './DayCalendar.module.css';
 
-type WeeklyCalendarProps = {
+type DayCalendarProps = {
   events: CalendarEvent[];
-  selectedWeekDate: Date;
-  weekStartsOnMonday: boolean;
+  selectedDate: Date;
   calendarView: CalendarView;
   onChangeView: (view: CalendarView) => void;
   onCreateItem: (preset: CalendarModalPreset) => void;
@@ -39,10 +35,9 @@ type WeeklyCalendarProps = {
   onToggleComplete: (id: string) => void;
 };
 
-export default function WeeklyCalendar({
+export default function DayCalendar({
   events,
-  selectedWeekDate,
-  weekStartsOnMonday,
+  selectedDate,
   calendarView,
   onChangeView,
   onCreateItem,
@@ -54,10 +49,10 @@ export default function WeeklyCalendar({
   onMoveTask,
   onDelete,
   onToggleComplete,
-}: WeeklyCalendarProps) {
-  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday);
+}: DayCalendarProps) {
+  const day = getCalendarDay(selectedDate);
   const hours = getCalendarHours();
-  const hasItems = events.length > 0;
+  const dayEvents = events.filter((event) => event.date === day.isoDate);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
   const activeItem = events.find((event) => event.id === activeItemId) ?? null;
@@ -76,21 +71,15 @@ export default function WeeklyCalendar({
       return;
     }
 
-    const targetDayDate = parseDayDropId(overId);
-
-    if (targetDayDate) {
-      onMoveCalendarItem(activeId, targetDayDate);
+    if (parseDayDropId(overId) === day.isoDate || overId === createDayDropId(day.isoDate)) {
+      onMoveCalendarItem(activeId, day.isoDate);
       return;
     }
 
     const targetTaskId = parseTaskDropId(overId);
     const targetTask = targetTaskId ? events.find((item) => item.id === targetTaskId) : null;
 
-    if (targetTask?.itemType === 'task') {
-      if (activeId === targetTask.id) {
-        return;
-      }
-
+    if (targetTask?.itemType === 'task' && activeId !== targetTask.id) {
       onMoveCalendarItem(activeId, targetTask.date, targetTask.id);
     }
   };
@@ -105,66 +94,39 @@ export default function WeeklyCalendar({
     >
       <GlassPanel
         as={motion.section}
-        className={styles.calendarShell}
-        aria-label="Weekly calendar Monday to Sunday"
+        className={styles.dayShell}
+        aria-label={`Daily calendar for ${day.name}`}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
       >
         <header className={styles.viewHeader}>
           <div>
-            <h2>Week view</h2>
-            <p>Designed around time, not boxes.</p>
+            <h2>Day view</h2>
+            <p>{day.dateLabel} · One focused orbit.</p>
           </div>
           <CalendarViewSwitcher activeView={calendarView} onChangeView={onChangeView} />
         </header>
 
-        <div className={styles.calendarHeader}>
-          <div className={styles.timeHeader}>GMT</div>
-          {weekDays.map((day) => (
-            <div className={day.isToday ? styles.todayHeaderCell : styles.headerCell} key={day.key}>
-              <span>{day.shortName}</span>
-              <strong>{day.dateLabel}</strong>
-            </div>
-          ))}
+        <div className={styles.dayFrame}>
+          <div className={styles.dayHeader}>
+            <span>{day.shortName}</span>
+            <strong>{day.dateLabel}</strong>
+          </div>
+          <DayColumn
+            day={day}
+            events={dayEvents}
+            hours={hours}
+            onCreateItem={onCreateItem}
+            onEdit={onEdit}
+            onDuplicate={onDuplicate}
+            onCopyToTomorrow={onCopyToTomorrow}
+            onCopyToNextWeek={onCopyToNextWeek}
+            onMoveTask={onMoveTask}
+            onDelete={onDelete}
+            onToggleComplete={onToggleComplete}
+          />
         </div>
-
-        <div className={styles.calendarBody}>
-          <div className={styles.timeRail} aria-hidden="true">
-            {hours.map((hour) => (
-              <div className={styles.timeSlot} key={hour}>
-                {formatHour(hour)}
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.calendarGrid}>
-            {weekDays.map((day) => (
-              <DayColumn
-                key={day.key}
-                day={day}
-                events={events.filter((event) => event.date === day.isoDate)}
-                hours={hours}
-                onCreateItem={onCreateItem}
-                onEdit={onEdit}
-                onDuplicate={onDuplicate}
-                onCopyToTomorrow={onCopyToTomorrow}
-                onCopyToNextWeek={onCopyToNextWeek}
-                onMoveTask={onMoveTask}
-                onDelete={onDelete}
-                onToggleComplete={onToggleComplete}
-              />
-            ))}
-          </div>
-        </div>
-
-        {!hasItems ? (
-          <div className={styles.emptyState}>
-            <p className="eyebrow">A Clear Week</p>
-            <h2>Start with one anchor.</h2>
-            <span>Add a timed event or a flexible task to shape the week.</span>
-          </div>
-        ) : null}
       </GlassPanel>
 
       <DragOverlay>

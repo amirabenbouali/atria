@@ -1,4 +1,4 @@
-import type { CalendarItemType, EventCategory } from '../../calendar/types/calendar.types';
+import type { CalendarItemType, CalendarView, EventCategory } from '../../calendar/types/calendar.types';
 import type { DayPeriod, EnergyLevel, EnergyProfile, TimeQuality } from '../../timeQuality';
 
 export type DefaultView = 'calendar' | 'today' | 'insights';
@@ -7,7 +7,7 @@ export type AtmosphereTheme = 'dawn' | 'daylight' | 'twilight' | 'midnight';
 export type AccentColour = 'rose' | 'lavender' | 'sage' | 'amber' | 'sky' | 'neutral';
 export type WorkspaceMode = 'calm' | 'balanced' | 'planner';
 export type TimeFormat = '12-hour' | '24-hour';
-export type DefaultCalendarView = 'day' | 'week' | 'month';
+export type DefaultCalendarView = CalendarView;
 export type DefaultEventDurationMinutes = 30 | 45 | 60 | 90;
 
 export type AtriaProfile = {

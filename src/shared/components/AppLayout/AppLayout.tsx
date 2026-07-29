@@ -22,6 +22,8 @@ type AppLayoutProps = {
   showWeekControls?: boolean;
   contextPanel?: ReactNode;
   createButtonLabelOverride?: string;
+  previousLabel?: string;
+  nextLabel?: string;
   onGoToToday: () => void;
   onGoToPreviousWeek: () => void;
   onGoToNextWeek: () => void;
@@ -40,6 +42,8 @@ export default function AppLayout({
   showWeekControls = true,
   contextPanel,
   createButtonLabelOverride,
+  previousLabel = 'Previous week',
+  nextLabel = 'Next week',
   onGoToToday,
   onGoToPreviousWeek,
   onGoToNextWeek,
@@ -137,13 +141,13 @@ export default function AppLayout({
             </Button>
             {showWeekControls ? (
               <>
-                <Button variant="icon" onClick={onGoToPreviousWeek} aria-label="Previous week">
+                <Button variant="icon" onClick={onGoToPreviousWeek} aria-label={previousLabel}>
                   ‹
                 </Button>
                 <Button variant="secondary" onClick={onGoToToday}>
                   Today
                 </Button>
-                <Button variant="icon" onClick={onGoToNextWeek} aria-label="Next week">
+                <Button variant="icon" onClick={onGoToNextWeek} aria-label={nextLabel}>
                   ›
                 </Button>
               </>

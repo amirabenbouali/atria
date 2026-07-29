@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
 import CalendarContextPanel from '../../features/calendar/components/CalendarContextPanel/CalendarContextPanel';
+import DayCalendar from '../../features/calendar/components/DayCalendar/DayCalendar';
+import MonthCalendar from '../../features/calendar/components/MonthCalendar/MonthCalendar';
 import WeeklyCalendar from '../../features/calendar/components/WeeklyCalendar/WeeklyCalendar';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import type { CalendarView } from '../../features/calendar/types/calendar.types';
+import { getCalendarDay, getDayLabel, getMonthGridDays, getMonthLabel } from '../../features/calendar/utils/calendarDates';
+import { getVisibleCalendarOccurrencesForDays } from '../../features/calendar/utils/calendarRecurrence';
 import { getWeekOrbitDescription } from '../../features/calendar/utils/weekOrbitSummary';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
@@ -19,9 +24,9 @@ export default function CalendarPage() {
     selectedWeekDate,
     weekStartsOnMonday,
     weekLabel,
-    totalEventCount,
-    completedEventCount,
   } = useCalendarEvents();
+  const defaultCalendarView = useSettingsStore((state) => state.preferences.calendar.defaultCalendarView);
+  const [calendarView, setCalendarView] = useState<CalendarView>(defaultCalendarView);
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const isAddEventModalOpen = useCalendarStore((state) => state.isAddEventModalOpen);
   const editingEventId = useCalendarStore((state) => state.editingEventId);
@@ -30,8 +35,12 @@ export default function CalendarPage() {
   const openEditEventModal = useCalendarStore((state) => state.openEditEventModal);
   const closeAddEventModal = useCalendarStore((state) => state.closeAddEventModal);
   const goToToday = useCalendarStore((state) => state.goToToday);
+  const goToPreviousDay = useCalendarStore((state) => state.goToPreviousDay);
+  const goToNextDay = useCalendarStore((state) => state.goToNextDay);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
+  const goToPreviousMonth = useCalendarStore((state) => state.goToPreviousMonth);
+  const goToNextMonth = useCalendarStore((state) => state.goToNextMonth);
   const addEvent = useCalendarStore((state) => state.addEvent);
   const updateEvent = useCalendarStore((state) => state.updateEvent);
   const duplicateEvent = useCalendarStore((state) => state.duplicateEvent);
@@ -44,6 +53,36 @@ export default function CalendarPage() {
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
   const confirmBeforeDeleting = useSettingsStore((state) => state.preferences.calendar.confirmBeforeDeleting);
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const dayEvents = useMemo(
+    () => getVisibleCalendarOccurrencesForDays(sourceEvents, [getCalendarDay(selectedWeekDate)]),
+    [selectedWeekDate, sourceEvents],
+  );
+  const monthDays = useMemo(
+    () => getMonthGridDays(selectedWeekDate, weekStartsOnMonday),
+    [selectedWeekDate, weekStartsOnMonday],
+  );
+  const monthEvents = useMemo(
+    () => getVisibleCalendarOccurrencesForDays(sourceEvents, monthDays),
+    [monthDays, sourceEvents],
+  );
+  const visibleCalendarEvents =
+    calendarView === 'day' ? dayEvents : calendarView === 'month' ? monthEvents : events;
+  const visibleCompletedEventCount = visibleCalendarEvents.filter((event) => event.completed).length;
+  const calendarLabel =
+    calendarView === 'day'
+      ? getDayLabel(selectedWeekDate)
+      : calendarView === 'month'
+        ? getMonthLabel(selectedWeekDate)
+        : weekLabel;
+  const navigationLabels = {
+    day: ['Previous day', 'Next day'],
+    week: ['Previous week', 'Next week'],
+    month: ['Previous month', 'Next month'],
+  } satisfies Record<CalendarView, [string, string]>;
+
+  useEffect(() => {
+    setCalendarView(defaultCalendarView);
+  }, [defaultCalendarView]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -74,6 +113,34 @@ export default function CalendarPage() {
     setToastMessage('Demo week restored');
   }, [resetDemoWorkspace]);
 
+  const handlePrevious = useCallback(() => {
+    if (calendarView === 'day') {
+      goToPreviousDay();
+      return;
+    }
+
+    if (calendarView === 'month') {
+      goToPreviousMonth();
+      return;
+    }
+
+    goToPreviousWeek();
+  }, [calendarView, goToPreviousDay, goToPreviousMonth, goToPreviousWeek]);
+
+  const handleNext = useCallback(() => {
+    if (calendarView === 'day') {
+      goToNextDay();
+      return;
+    }
+
+    if (calendarView === 'month') {
+      goToNextMonth();
+      return;
+    }
+
+    goToNextWeek();
+  }, [calendarView, goToNextDay, goToNextMonth, goToNextWeek]);
+
   const handleDelete = useCallback((id: string) => {
     if (confirmBeforeDeleting && !window.confirm('Delete this calendar item?')) {
       return;
@@ -84,13 +151,15 @@ export default function CalendarPage() {
 
   return (
     <AppLayout
-      totalEvents={totalEventCount}
-      completedEvents={completedEventCount}
-      weekLabel={weekLabel}
-      topbarDescription={getWeekOrbitDescription(events)}
+      totalEvents={visibleCalendarEvents.length}
+      completedEvents={visibleCompletedEventCount}
+      weekLabel={calendarLabel}
+      topbarDescription={getWeekOrbitDescription(visibleCalendarEvents)}
+      previousLabel={navigationLabels[calendarView][0]}
+      nextLabel={navigationLabels[calendarView][1]}
       onGoToToday={goToToday}
-      onGoToPreviousWeek={goToPreviousWeek}
-      onGoToNextWeek={goToNextWeek}
+      onGoToPreviousWeek={handlePrevious}
+      onGoToNextWeek={handleNext}
       onCreateEvent={() => openAddEventModal(createDefaultPreset())}
       onResetDemoData={handleResetDemoData}
       contextPanel={(
@@ -102,20 +171,54 @@ export default function CalendarPage() {
         />
       )}
     >
-      <WeeklyCalendar
-        events={events}
-        selectedWeekDate={selectedWeekDate}
-        weekStartsOnMonday={weekStartsOnMonday}
-        onCreateItem={openAddEventModal}
-        onEdit={openEditEventModal}
-        onDuplicate={handleDuplicate}
-        onCopyToTomorrow={handleCopyToTomorrow}
-        onCopyToNextWeek={handleCopyToNextWeek}
-        onMoveCalendarItem={moveCalendarItem}
-        onMoveTask={moveTask}
-        onDelete={handleDelete}
-        onToggleComplete={toggleEventComplete}
-      />
+      {calendarView === 'day' ? (
+        <DayCalendar
+          events={dayEvents}
+          selectedDate={selectedWeekDate}
+          calendarView={calendarView}
+          onChangeView={setCalendarView}
+          onCreateItem={openAddEventModal}
+          onEdit={openEditEventModal}
+          onDuplicate={handleDuplicate}
+          onCopyToTomorrow={handleCopyToTomorrow}
+          onCopyToNextWeek={handleCopyToNextWeek}
+          onMoveCalendarItem={moveCalendarItem}
+          onMoveTask={moveTask}
+          onDelete={handleDelete}
+          onToggleComplete={toggleEventComplete}
+        />
+      ) : null}
+      {calendarView === 'week' ? (
+        <WeeklyCalendar
+          events={events}
+          selectedWeekDate={selectedWeekDate}
+          weekStartsOnMonday={weekStartsOnMonday}
+          calendarView={calendarView}
+          onChangeView={setCalendarView}
+          onCreateItem={openAddEventModal}
+          onEdit={openEditEventModal}
+          onDuplicate={handleDuplicate}
+          onCopyToTomorrow={handleCopyToTomorrow}
+          onCopyToNextWeek={handleCopyToNextWeek}
+          onMoveCalendarItem={moveCalendarItem}
+          onMoveTask={moveTask}
+          onDelete={handleDelete}
+          onToggleComplete={toggleEventComplete}
+        />
+      ) : null}
+      {calendarView === 'month' ? (
+        <MonthCalendar
+          events={monthEvents}
+          selectedDate={selectedWeekDate}
+          weekStartsOnMonday={weekStartsOnMonday}
+          calendarView={calendarView}
+          onChangeView={setCalendarView}
+          onCreateItem={openAddEventModal}
+          onEdit={openEditEventModal}
+          onDelete={handleDelete}
+          onToggleComplete={toggleEventComplete}
+        />
+      ) : null}
       <AddEventModal
         isOpen={isAddEventModalOpen}
         selectedWeekDate={selectedWeekDate}

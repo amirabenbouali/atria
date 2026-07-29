@@ -1,6 +1,7 @@
 export type EventCategory = 'Work' | 'Personal' | 'Fitness' | 'Learning' | 'Health' | 'Finance';
 
 export type CalendarItemType = 'event' | 'task';
+export type CalendarView = 'day' | 'week' | 'month';
 export type CalendarRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
 export type CalendarItemSource = 'manual' | 'planning-suggestion';
 

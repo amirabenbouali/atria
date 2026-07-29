@@ -401,8 +401,8 @@ export default function SettingsPage() {
                     })}
                   >
                     <option value="week">Week</option>
-                    <option value="day">Day preview</option>
-                    <option value="month">Month preview</option>
+                    <option value="day">Day</option>
+                    <option value="month">Month</option>
                   </SelectControl>
                 </label>
               </div>

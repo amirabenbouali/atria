@@ -9,6 +9,7 @@ import {
   parseISO,
 } from 'date-fns';
 import type { CalendarEvent } from '../types/calendar.types';
+import type { CalendarDay } from './calendarDates';
 import { getCurrentWeekDays } from './calendarDates';
 
 const occurrenceSeparator = '__occurs__';
@@ -85,8 +86,17 @@ export function getVisibleCalendarOccurrences(
 ): CalendarEvent[] {
   const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday);
 
+  return getVisibleCalendarOccurrencesForDays(items, weekDays);
+}
+
+export function getVisibleCalendarOccurrencesForDays(
+  items: CalendarEvent[],
+  days: Pick<CalendarDay, 'isoDate'>[],
+): CalendarEvent[] {
+  const seenIds = new Set<string>();
+
   return items.flatMap((item) =>
-    weekDays.flatMap((day) => {
+    days.flatMap((day) => {
       const date = parseISO(day.isoDate);
 
       if (!shouldIncludeDate(item, date)) {
@@ -94,6 +104,11 @@ export function getVisibleCalendarOccurrences(
       }
 
       if (item.recurrence === 'none') {
+        if (seenIds.has(item.id)) {
+          return [];
+        }
+
+        seenIds.add(item.id);
         return [{ ...item, date: day.isoDate, occurrenceDate: day.isoDate, sourceId: item.id }];
       }
 
