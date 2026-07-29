@@ -621,10 +621,41 @@
 
 .workspaceHeader h2 {
   font-size: 1.65rem;
+  line-height: 1.15;
 }
 
 .workspaceHeader p {
   margin: 8px 0 0;
+}
+
+.modalCloseButton {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  border-radius: 16px;
+  color: rgba(255, 245, 250, 0.86);
+  background:
+    radial-gradient(circle at 48% 18%, rgba(255, 255, 255, 0.08), transparent 34%),
+    rgba(20, 18, 22, 0.76);
+  border-color: rgba(255, 220, 230, 0.16);
+  box-shadow:
+    0 0 22px rgba(246, 166, 190, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.modalCloseButton svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.35;
+}
+
+.modalCloseButton:hover {
+  color: white;
+  border-color: rgba(246, 166, 190, 0.34);
+  box-shadow:
+    0 0 26px rgba(246, 166, 190, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .localAccountPanel {
@@ -661,7 +692,9 @@
 }
 
 .localAccountPanel strong {
+  overflow-wrap: anywhere;
   color: #fff9fc;
+  line-height: 1.18;
 }
 
 .localAccountPanel span {
@@ -672,6 +705,7 @@
 .cardAction {
   align-self: center;
   min-height: 38px;
+  min-width: 78px;
   padding: 0 14px;
   color: rgba(255, 247, 251, 0.86);
   font: inherit;
@@ -770,29 +804,44 @@
   gap: 10px;
 }
 
-.choices button {
+.choiceButton {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 5px 12px;
-  min-height: 58px;
-  padding: 13px 15px;
+  grid-template-columns: 1fr;
+  gap: 7px;
+  min-height: 72px;
+  padding: 15px 18px;
   color: rgba(255, 247, 251, 0.84);
   text-align: left;
   border: 1px solid rgba(255, 220, 230, 0.12);
-  border-radius: 18px;
+  border-radius: 20px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent),
     rgba(20, 18, 22, 0.78);
 }
 
-.choices button strong {
+.choiceButton strong {
   align-self: end;
+  min-width: 0;
+  color: rgba(255, 249, 252, 0.92);
+  font-size: 1rem;
+  line-height: 1.1;
 }
 
-.choices button span:not(.themeDot) {
-  grid-column: 2;
+.choiceButton span:not(.themeDot) {
+  min-width: 0;
   color: var(--landing-muted);
   font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.choiceWithDot {
+  grid-template-columns: auto 1fr;
+  gap: 5px 12px;
+  min-height: 62px;
+}
+
+.choiceWithDot span:not(.themeDot) {
+  grid-column: 2;
 }
 
 .choices .selectedChoice {
@@ -995,6 +1044,36 @@
   .workspacePanel {
     padding: 20px;
     border-radius: 24px;
+  }
+
+  .workspaceHeader {
+    gap: 14px;
+  }
+
+  .workspaceHeader h2 {
+    font-size: 1.45rem;
+  }
+
+  .localAccountPanel article {
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: start;
+    padding: 14px;
+  }
+
+  .localAccountPanel svg {
+    margin-top: 3px;
+  }
+
+  .cardAction {
+    grid-column: 2;
+    justify-self: start;
+    min-width: 96px;
+    margin-top: 4px;
+  }
+
+  .choiceButton {
+    min-height: 66px;
+    padding: 14px 16px;
   }
 
   .stepActions {

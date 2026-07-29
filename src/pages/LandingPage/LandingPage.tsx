@@ -5,6 +5,7 @@ import { ArrowRight, Download, LogIn, Plus, X } from 'lucide-react';
 import { routes } from '../../app/routes';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import Button from '../../shared/components/Button/Button';
+import { cn } from '../../shared/utils/cn';
 import styles from './LandingPage.module.css';
 
 type ModalView = 'workspace' | 'onboarding' | 'success';
@@ -343,7 +344,12 @@ export default function LandingPage() {
                         : 'This MVP uses a local workspace on this browser. Signing out hides it, but does not delete your data.'}
                     </p>
                   </div>
-                  <Button variant="icon" onClick={closeModal} aria-label="Close front-page modal">
+                  <Button
+                    className={styles.modalCloseButton}
+                    variant="icon"
+                    onClick={closeModal}
+                    aria-label="Close front-page modal"
+                  >
                     <X size={17} aria-hidden="true" />
                   </Button>
                 </div>
@@ -425,7 +431,11 @@ export default function LandingPage() {
 
                         return (
                           <button
-                            className={selected ? styles.selectedChoice : ''}
+                            className={cn(
+                              styles.choiceButton,
+                              stepIndex === 2 && styles.choiceWithDot,
+                              selected && styles.selectedChoice,
+                            )}
                             key={label}
                             type="button"
                             onClick={() => toggleChoice(label)}
