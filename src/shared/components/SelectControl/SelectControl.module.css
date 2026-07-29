@@ -7,9 +7,9 @@
   min-height: 52px;
   overflow: hidden;
   border: 1px solid rgba(255, 220, 230, 0.12);
-  border-radius: 20px;
+  border-radius: 13px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.018)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
     rgba(20, 18, 22, 0.82);
   box-shadow:
     0 0 22px rgba(246, 166, 190, 0.08),
@@ -87,7 +87,7 @@
 
 .select option {
   color: white;
-  background: #161016;
+  background: #17161b;
 }
 
 @media (max-width: 640px) {

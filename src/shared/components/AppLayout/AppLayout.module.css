@@ -1,10 +1,10 @@
 .appShell {
   position: relative;
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: var(--space-6);
+  grid-template-columns: 238px minmax(0, 1fr);
+  gap: 14px;
   min-height: 100vh;
-  padding: var(--space-6);
+  padding: var(--space-4);
   background: var(--gradient-page);
   isolation: isolate;
 }
@@ -19,12 +19,10 @@
 }
 
 .appShell::before {
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at 50% 26%, black, transparent 68%);
-  opacity: 0.18;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.75px, transparent 0.75px);
+  background-size: 13px 13px;
+  mask-image: radial-gradient(circle at 50% 18%, black 0%, transparent 64%);
+  opacity: 0.2;
 }
 
 .appShell::after {
@@ -36,19 +34,30 @@
 .mainPanel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: var(--space-5);
+  gap: 14px;
   min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-2xl);
+  background: rgba(13, 13, 16, 0.72);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(var(--blur-glass));
 }
 
 .topbar {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: var(--space-4);
-  min-height: 88px;
-  padding: 18px var(--space-6);
-  border-radius: var(--radius-2xl);
+  gap: var(--space-6);
+  min-height: 128px;
+  padding: 28px 30px 24px;
+  border-radius: 0;
   overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid var(--color-glass-border);
+  background:
+    radial-gradient(circle at 30% 0%, rgba(241, 141, 181, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent);
 }
 
 .weekIdentity {
@@ -56,9 +65,10 @@
 }
 
 .weekIdentity h1 {
-  margin: 2px 0 0;
+  margin: 0;
   overflow: hidden;
-  font-size: clamp(1.65rem, 2.8vw, 3.1rem);
+  font-size: clamp(1.9rem, 3.35vw, 3rem);
+  font-weight: 800;
   line-height: 1;
   letter-spacing: 0;
   text-overflow: ellipsis;
@@ -70,21 +80,22 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-2);
+  gap: 8px;
   flex-wrap: wrap;
   min-width: 0;
+  align-self: center;
 }
 
 .shortcutHint {
   margin-left: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 6px;
   padding: 3px 6px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--color-text-muted);
   font-family: var(--font-detail);
   font-size: 0.68rem;
   font-weight: 900;
-  background: rgba(2, 4, 12, 0.42);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 960px) {

@@ -1,10 +1,10 @@
 .intentionsShell {
   display: grid;
-  gap: var(--space-5);
-  min-height: calc(100vh - 164px);
+  gap: 14px;
+  min-height: calc(100vh - 176px);
   overflow: clip;
-  border-radius: var(--radius-2xl);
-  padding: var(--space-5);
+  border-radius: 0;
+  padding: 16px;
 }
 
 .heroPanel,
@@ -14,11 +14,11 @@
 .quickCapture,
 .formNote {
   border: 1px solid rgba(255, 220, 230, 0.11);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-xl);
   background:
-    radial-gradient(circle at 12% 0%, rgba(246, 166, 190, 0.1), transparent 38%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.078), rgba(255, 255, 255, 0.018)),
-    rgba(10, 7, 9, 0.72);
+    radial-gradient(circle at 12% 0%, rgba(241, 141, 181, 0.08), transparent 38%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(20, 19, 24, 0.76);
   box-shadow:
     0 22px 58px rgba(0, 0, 0, 0.36),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);

@@ -1,38 +1,43 @@
 .sidebar {
   position: sticky;
-  top: var(--space-6);
+  top: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  height: calc(100vh - 48px);
-  padding: 22px;
+  gap: var(--space-4);
+  height: calc(100vh - 32px);
+  padding: 20px 16px;
   border-radius: var(--radius-2xl);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
+.sidebar::before {
+  opacity: 0.28;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 0.75px, transparent 0.75px);
+  background-size: 13px 13px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 55%);
+}
+
 .brandLockup {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  padding: 4px 4px 10px;
 }
 
 .brandMark {
   display: grid;
   place-items: center;
-  width: 46px;
-  height: 46px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 17px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 14px;
   color: white;
   font-weight: 800;
   background:
-    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.34), transparent 26%),
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.24), transparent 26%),
     var(--gradient-action);
-  box-shadow:
-    0 0 28px rgba(246, 166, 190, 0.28),
-    0 0 44px rgba(155, 108, 143, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+  box-shadow: 0 10px 30px rgba(241, 141, 181, 0.25);
 }
 
 .brandLockup p,
@@ -42,14 +47,15 @@
 
 .brandLockup p {
   overflow: hidden;
-  font-size: 1.42rem;
+  font-size: 1.2rem;
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .brandLockup span {
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
+  font-size: 0.76rem;
 }
 
 .sidebarAction {
@@ -58,7 +64,7 @@
 
 .nav {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 .navItem,
@@ -66,18 +72,16 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 46px;
+  min-height: 44px;
   min-width: 0;
   border: 1px solid transparent;
-  border-radius: 19px;
+  border-radius: 13px;
   padding: 0 12px;
-  color: rgba(247, 245, 255, 0.72);
+  color: #b7b3bc;
   font-weight: 800;
   text-decoration: none;
   text-align: left;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
-    rgba(2, 4, 12, 0.24);
+  background: transparent;
   transition:
     background var(--duration-fast) ease,
     border-color var(--duration-fast) ease,
@@ -92,11 +96,10 @@
 .navItem:hover,
 .activeNavItem {
   color: white;
-  border-color: rgba(255, 210, 225, 0.18);
+  border-color: rgba(241, 141, 181, 0.16);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.024)),
-    rgba(2, 4, 12, 0.58);
-  box-shadow: 0 0 24px rgba(246, 166, 190, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    linear-gradient(90deg, rgba(241, 141, 181, 0.16), rgba(255, 255, 255, 0.035));
+  box-shadow: inset 0 0 0 1px rgba(241, 141, 181, 0.16);
   transform: translateX(2px);
 }
 
@@ -105,14 +108,13 @@
 }
 
 .activeNavItem .navIcon {
-  border-color: rgba(255, 210, 225, 0.26);
+  border-color: rgba(241, 141, 181, 0.22);
   background:
-    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.22), transparent 28%),
-    var(--gradient-action);
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.12), transparent 28%),
+    rgba(241, 141, 181, 0.1);
   box-shadow:
-    0 0 22px rgba(246, 166, 190, 0.24),
-    0 0 34px rgba(155, 108, 143, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 0 18px rgba(241, 141, 181, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .sidebarSection {
@@ -156,13 +158,13 @@
 
 .demoButton {
   min-height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 18px;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 13px;
   color: rgba(255, 255, 255, 0.78);
   font-weight: 900;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.022)),
-    rgba(2, 4, 12, 0.54);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(20, 19, 24, 0.72);
   transition:
     border-color var(--duration-fast) ease,
     color var(--duration-fast) ease,

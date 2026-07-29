@@ -2,18 +2,18 @@
   display: grid;
   grid-template-rows: auto auto auto;
   min-width: 166px;
-  border-left: 1px solid rgba(255, 255, 255, 0.052);
+  border-left: 1px solid rgba(255, 255, 255, 0.045);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.008)),
-    rgba(2, 4, 12, 0.28);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.006)),
+    rgba(16, 15, 19, 0.76);
 }
 
 .todayColumn {
   composes: dayColumn;
   background:
-    radial-gradient(circle at 50% 0%, rgba(246, 166, 190, 0.1), transparent 34%),
-    linear-gradient(180deg, rgba(246, 166, 190, 0.06), rgba(255, 255, 255, 0.01)),
-    rgba(2, 4, 12, 0.32);
+    radial-gradient(circle at 50% 0%, rgba(241, 141, 181, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(241, 141, 181, 0.035), rgba(255, 255, 255, 0.008)),
+    rgba(18, 17, 21, 0.8);
 }
 
 .isDropTarget {
@@ -31,12 +31,12 @@
 
 .dayPlannerHeader {
   display: grid;
-  gap: 10px;
+  gap: 9px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   padding: 10px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.014)),
-    rgba(2, 4, 12, 0.46);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)),
+    rgba(20, 19, 24, 0.72);
   backdrop-filter: blur(22px);
 }
 
@@ -47,14 +47,14 @@
 }
 
 .daySummary span {
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-pill);
   padding: 5px 7px;
-  color: rgba(247, 245, 255, 0.72);
+  color: rgba(183, 179, 188, 0.9);
   font-family: var(--font-detail);
   font-size: 0.62rem;
   font-weight: 900;
-  background: rgba(2, 4, 12, 0.5);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .quickActions {
@@ -65,14 +65,14 @@
 
 .quickActions button {
   min-height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 13px;
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.74rem;
   font-weight: 900;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-    rgba(2, 4, 12, 0.52);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(20, 19, 24, 0.72);
   transition:
     border-color var(--duration-fast) ease,
     color var(--duration-fast) ease,
@@ -95,7 +95,7 @@
 
 .hourLine {
   position: relative;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.042);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.038);
 }
 
 .hourLine::after {
@@ -104,7 +104,7 @@
   left: 12px;
   right: 12px;
   top: 50%;
-  border-top: 1px dashed rgba(255, 255, 255, 0.03);
+  border-top: 1px dashed rgba(255, 255, 255, 0.024);
 }
 
 .hourLine span {
@@ -120,13 +120,13 @@
   gap: 4px;
   min-height: 92px;
   place-content: center;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-card);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
   text-align: center;
   background:
-    radial-gradient(circle at 50% 0%, rgba(246, 166, 190, 0.08), transparent 46%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.014)),
-    rgba(2, 4, 12, 0.5);
+    radial-gradient(circle at 50% 0%, rgba(241, 141, 181, 0.055), transparent 46%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)),
+    rgba(20, 19, 24, 0.62);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
 }
@@ -146,14 +146,14 @@
 
 .tasksSection {
   display: grid;
-  gap: 10px;
+  gap: 9px;
   min-height: 176px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 12px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(246, 166, 190, 0.05), transparent 38%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
-    rgba(1, 3, 10, 0.35);
+    radial-gradient(circle at 50% 0%, rgba(241, 141, 181, 0.04), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.008)),
+    rgba(16, 15, 19, 0.82);
 }
 
 .tasksHeader {
@@ -189,11 +189,11 @@
   min-height: 72px;
   place-items: center;
   border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   color: rgba(247, 245, 255, 0.52);
   font-size: 0.76rem;
   font-weight: 800;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.036), rgba(255, 255, 255, 0.01)),
-    rgba(2, 4, 12, 0.42);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.008)),
+    rgba(20, 19, 24, 0.56);
 }

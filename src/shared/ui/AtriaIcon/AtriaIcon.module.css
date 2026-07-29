@@ -28,10 +28,10 @@
   width: 32px;
   height: 32px;
   border: 1px solid color-mix(in srgb, var(--atria-icon-tone) 28%, white 8%);
-  border-radius: 13px;
+  border-radius: 8px;
   background:
-    radial-gradient(circle at 30% 12%, rgba(255, 255, 255, 0.16), transparent 28%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.022)),
+    radial-gradient(circle at 30% 12%, rgba(255, 255, 255, 0.11), transparent 28%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018)),
     rgba(20, 18, 22, 0.72);
   box-shadow:
     0 0 18px color-mix(in srgb, var(--atria-icon-tone) 14%, transparent),
@@ -42,13 +42,13 @@
 .shell.sm {
   width: 28px;
   height: 28px;
-  border-radius: 11px;
+  border-radius: 8px;
 }
 
 .shell.lg {
   width: 40px;
   height: 40px;
-  border-radius: 16px;
+  border-radius: 14px;
 }
 
 .glow {
@@ -56,7 +56,7 @@
 }
 
 .rose {
-  --atria-icon-tone: #f6a6be;
+  --atria-icon-tone: #f18db5;
 }
 
 .violet {
