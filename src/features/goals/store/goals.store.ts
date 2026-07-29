@@ -8,6 +8,7 @@ type GoalsState = {
   goals: Goal[];
   isGoalModalOpen: boolean;
   editingGoalId: string | null;
+  hydrate: () => void;
   openGoalModal: () => void;
   openEditGoalModal: (id: string) => void;
   closeGoalModal: () => void;
@@ -28,6 +29,7 @@ export const useGoalsStore = create<GoalsState>((set) => ({
   goals: readStoredGoals(),
   isGoalModalOpen: false,
   editingGoalId: null,
+  hydrate: () => set({ goals: readStoredGoals(), isGoalModalOpen: false, editingGoalId: null }),
   openGoalModal: () => set({ isGoalModalOpen: true, editingGoalId: null }),
   openEditGoalModal: (id) => set({ isGoalModalOpen: true, editingGoalId: id }),
   closeGoalModal: () => set({ isGoalModalOpen: false, editingGoalId: null }),

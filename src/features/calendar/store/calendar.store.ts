@@ -33,6 +33,7 @@ type CalendarState = {
   isAddEventModalOpen: boolean;
   editingEventId: string | null;
   modalPreset: CalendarModalPreset | null;
+  hydrate: () => void;
   openAddEventModal: (preset?: CalendarModalPreset) => void;
   openEditEventModal: (id: string) => void;
   closeAddEventModal: () => void;
@@ -86,6 +87,14 @@ export const useCalendarStore = create<CalendarState>((set) => ({
   isAddEventModalOpen: false,
   editingEventId: null,
   modalPreset: null,
+  hydrate: () =>
+    set({
+      events: readStoredCalendarEvents(),
+      dailyFocusByDate: readStoredDailyFocus(),
+      isAddEventModalOpen: false,
+      editingEventId: null,
+      modalPreset: null,
+    }),
   openAddEventModal: (preset) =>
     set({ isAddEventModalOpen: true, editingEventId: null, modalPreset: preset ?? null }),
   openEditEventModal: (id) =>

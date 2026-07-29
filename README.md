@@ -27,9 +27,9 @@ This is a portfolio-ready MVP, not a cloud product. There is no authentication, 
 - Memories timeline derived from calendar items, completed intentions, and reflections
 - Gentle Insights with evidence thresholds and confidence labels
 - Command palette with navigation and creation commands
-- Settings for planning defaults, energy profile, appearance themes, onboarding, export, demo data, and clear-data controls
+- Settings for planning defaults, energy profile, appearance themes, onboarding, import/export, demo data, and clear-data controls
 - Selectable themes: Soft Rose Glass, Violet Dusk, Blue Hour, and Ember Noir
-- Local JSON export for backups
+- Local JSON import/export for backups
 
 ## Tech Stack
 
@@ -82,7 +82,7 @@ Atria is local-first in the current version. Data is stored in the browser throu
 - Projects: `atria-projects`
 - Settings: `atria-settings-preferences`
 
-No behavioural data is sent to a server. No external AI API is used. Exports are created locally as JSON files. Clearing browser storage may remove Atria data, so export a backup if portability matters.
+No behavioural data is sent to a server. No external AI API is used. Backups are imported and exported locally as JSON files. Importing an Atria backup replaces the current local workspace after confirmation. Clearing browser storage may remove Atria data, so export a backup if portability matters.
 
 ## Demo Flow
 
@@ -98,7 +98,7 @@ No behavioural data is sent to a server. No external AI API is used. Exports are
 10. Open Goals and Projects to inspect linked progress.
 11. Open Insights to show gentle evidence-backed observations.
 12. Open the command palette with Cmd/Ctrl + K.
-13. Export local data from Settings.
+13. Export local data from Settings, then import the JSON backup to restore the workspace.
 
 ## Architecture
 
@@ -112,7 +112,7 @@ Important boundaries:
 - Reflections own daily reflection records.
 - Memories and Insights are derived at view time and are not stored as duplicated data.
 - Settings owns preferences, onboarding state, theme selection, and energy profile.
-- Data export reads normalized source stores and does not export derived Memories or Insights.
+- Data import/export reads and restores normalized source stores and does not persist derived Memories or Insights.
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for more detail.
 
@@ -120,7 +120,6 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for more detail.
 
 - Browser-local storage only
 - No cross-device sync
-- No import flow yet
 - No external calendar import/export
 - No collaborative calendars
 - No notifications

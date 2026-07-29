@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import {
   Bell,
   BriefcaseBusiness,
@@ -11,6 +11,7 @@ import {
   Palette,
   RotateCcw,
   Sparkles,
+  Upload,
   UserRound,
 } from 'lucide-react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
@@ -20,6 +21,7 @@ import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import type { CalendarItemType, EventCategory } from '../../features/calendar/types/calendar.types';
 import { getEditableCalendarItem } from '../../features/calendar/utils/calendarRecurrence';
 import { downloadAtriaExport } from '../../features/dataExport/services/dataExport.service';
+import { AtriaImportError, importAtriaDataFromJson } from '../../features/dataImport/services/dataImport.service';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useIntentionsStore } from '../../features/intentions/store/intentions.store';
@@ -62,6 +64,7 @@ function getProfileInitials(displayName: string) {
 
 export default function SettingsPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
   const {
     sourceEvents,
     selectedWeekDate,
@@ -151,6 +154,27 @@ export default function SettingsPage() {
     clearReflections,
     resetPreferences,
   ]);
+
+  const handleImportFile = useCallback(async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) {
+      return;
+    }
+
+    if (!window.confirm('Import this Atria backup? This replaces your current local workspace.')) {
+      return;
+    }
+
+    try {
+      const result = importAtriaDataFromJson(await file.text());
+      const { events, intentions: importedIntentions, goals, projects } = result.summary;
+      setToastMessage(`Imported ${events} items, ${importedIntentions} intentions, ${goals} goals, and ${projects} projects`);
+    } catch (error) {
+      setToastMessage(error instanceof AtriaImportError ? error.message : 'Import failed');
+    }
+  }, []);
 
   return (
     <AppLayout
@@ -553,6 +577,18 @@ export default function SettingsPage() {
               <div className={styles.actionStack}>
                 <div><strong>Export Atria data</strong><span>Download a local JSON backup. Nothing leaves your device.</span></div>
                 <Button variant="secondary" onClick={() => { downloadAtriaExport(); setToastMessage('Data exported'); }}><Download size={16} /> Export</Button>
+              </div>
+              <div className={styles.actionStack}>
+                <div><strong>Import Atria backup</strong><span>Restore a JSON export and replace this local workspace.</span></div>
+                <input
+                  ref={importInputRef}
+                  className={styles.hiddenFileInput}
+                  type="file"
+                  accept="application/json,.json"
+                  onChange={handleImportFile}
+                  aria-label="Choose Atria backup JSON file"
+                />
+                <Button variant="secondary" onClick={() => importInputRef.current?.click()}><Upload size={16} /> Import</Button>
               </div>
               <div className={styles.actionStack}>
                 <div><strong>Reopen onboarding</strong><span>Show the introduction again on your next view.</span></div>

@@ -8,6 +8,7 @@ type ProjectsState = {
   projects: Project[];
   isProjectModalOpen: boolean;
   editingProjectId: string | null;
+  hydrate: () => void;
   openProjectModal: () => void;
   openEditProjectModal: (id: string) => void;
   closeProjectModal: () => void;
@@ -28,6 +29,7 @@ export const useProjectsStore = create<ProjectsState>((set) => ({
   projects: readStoredProjects(),
   isProjectModalOpen: false,
   editingProjectId: null,
+  hydrate: () => set({ projects: readStoredProjects(), isProjectModalOpen: false, editingProjectId: null }),
   openProjectModal: () => set({ isProjectModalOpen: true, editingProjectId: null }),
   openEditProjectModal: (id) => set({ isProjectModalOpen: true, editingProjectId: id }),
   closeProjectModal: () => set({ isProjectModalOpen: false, editingProjectId: null }),

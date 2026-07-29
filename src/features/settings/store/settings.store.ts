@@ -15,6 +15,7 @@ import {
 
 type SettingsState = {
   preferences: SettingsPreferences;
+  hydrate: () => void;
   updatePreferences: (preferences: Partial<SettingsPreferences>) => void;
   completeOnboarding: () => void;
   resetPreferences: () => void;
@@ -45,6 +46,7 @@ function areEnergyProfilesEqual(first: SettingsPreferences['energyProfile'], sec
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   preferences: readStoredSettingsPreferences(),
+  hydrate: () => set({ preferences: readStoredSettingsPreferences() }),
   updatePreferences: (nextPreferences) =>
     set((state) => ({
       preferences: persistPreferences({
