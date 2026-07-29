@@ -14,6 +14,7 @@ type MonthCalendarProps = {
   events: CalendarEvent[];
   selectedDate: Date;
   weekStartsOnMonday: boolean;
+  showWeekends: boolean;
   calendarView: CalendarView;
   onChangeView: (view: CalendarView) => void;
   onCreateItem: (preset: CalendarModalPreset) => void;
@@ -26,6 +27,7 @@ export default function MonthCalendar({
   events,
   selectedDate,
   weekStartsOnMonday,
+  showWeekends,
   calendarView,
   onChangeView,
   onCreateItem,
@@ -33,14 +35,18 @@ export default function MonthCalendar({
   onDelete,
   onToggleComplete,
 }: MonthCalendarProps) {
-  const monthDays = getMonthGridDays(selectedDate, weekStartsOnMonday);
-  const weekDayLabels = monthDays.slice(0, 7).map((day) => day.shortName);
+  const monthDays = getMonthGridDays(selectedDate, weekStartsOnMonday, showWeekends);
+  const weekDayLabels = monthDays.slice(0, showWeekends ? 7 : 5).map((day) => day.shortName);
   const hasItems = events.length > 0;
 
   return (
     <GlassPanel
       as={motion.section}
       className={styles.monthShell}
+      style={{
+        '--month-day-count': weekDayLabels.length,
+        '--month-grid-min-width': `${weekDayLabels.length * 138}px`,
+      } as CSSProperties}
       aria-label="Monthly calendar"
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}

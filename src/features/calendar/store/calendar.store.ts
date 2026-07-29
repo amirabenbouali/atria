@@ -33,6 +33,7 @@ type CalendarState = {
   openAddEventModal: (preset?: CalendarModalPreset) => void;
   openEditEventModal: (id: string) => void;
   closeAddEventModal: () => void;
+  setSelectedDate: (date: Date) => void;
   goToToday: () => void;
   goToPreviousDay: () => void;
   goToNextDay: () => void;
@@ -84,6 +85,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
   openEditEventModal: (id) =>
     set({ isAddEventModalOpen: true, editingEventId: getSourceActionTarget(id).sourceId, modalPreset: null }),
   closeAddEventModal: () => set({ isAddEventModalOpen: false, editingEventId: null, modalPreset: null }),
+  setSelectedDate: (date) => set({ selectedWeekDate: date }),
   goToToday: () => set({ selectedWeekDate: new Date() }),
   goToPreviousDay: () =>
     set((state) => ({ selectedWeekDate: addDays(state.selectedWeekDate, -1) })),

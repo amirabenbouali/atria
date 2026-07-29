@@ -1,4 +1,9 @@
 .calendarShell {
+  --calendar-day-count: 7;
+  --calendar-day-min-width: 166px;
+  --calendar-time-rail-width: 78px;
+  --calendar-grid-min-width: 1162px;
+  --calendar-total-min-width: 1240px;
   position: relative;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
@@ -25,7 +30,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  min-width: min(100%, 1240px);
+  min-width: min(100%, var(--calendar-total-min-width));
   padding: 24px 28px;
   border-bottom: 1px solid var(--color-glass-border);
   background:
@@ -51,8 +56,8 @@
   top: 0;
   z-index: 3;
   display: grid;
-  grid-template-columns: 78px repeat(7, minmax(166px, 1fr));
-  min-width: 1240px;
+  grid-template-columns: var(--calendar-time-rail-width) repeat(var(--calendar-day-count), minmax(var(--calendar-day-min-width), 1fr));
+  min-width: var(--calendar-total-min-width);
   border-bottom: 1px solid var(--color-glass-border);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent),
@@ -114,8 +119,8 @@
 
 .calendarBody {
   display: grid;
-  grid-template-columns: 78px minmax(1162px, 1fr);
-  min-width: 1240px;
+  grid-template-columns: var(--calendar-time-rail-width) minmax(var(--calendar-grid-min-width), 1fr);
+  min-width: var(--calendar-total-min-width);
 }
 
 .timeRail {
@@ -143,7 +148,7 @@
 
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(166px, 1fr));
+  grid-template-columns: repeat(var(--calendar-day-count), minmax(var(--calendar-day-min-width), 1fr));
 }
 
 .emptyState {
@@ -208,6 +213,8 @@
 @media (max-width: 640px) {
   .calendarShell {
     margin: 12px;
+    --calendar-day-min-width: 156px;
+    --calendar-time-rail-width: 64px;
   }
 
   .viewHeader {
@@ -216,13 +223,8 @@
     padding: 18px;
   }
 
-  .calendarHeader {
-    grid-template-columns: 64px repeat(7, minmax(156px, 1fr));
-    min-width: 1156px;
-  }
-
+  .calendarHeader,
   .calendarBody {
-    grid-template-columns: 64px minmax(1092px, 1fr);
-    min-width: 1156px;
+    min-width: var(--calendar-total-min-width);
   }
 }

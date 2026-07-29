@@ -83,8 +83,9 @@ export function getVisibleCalendarOccurrences(
   items: CalendarEvent[],
   selectedWeekDate: Date,
   weekStartsOnMonday = true,
+  showWeekends = true,
 ): CalendarEvent[] {
-  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday);
+  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday, showWeekends);
 
   return getVisibleCalendarOccurrencesForDays(items, weekDays);
 }

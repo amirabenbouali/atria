@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -26,6 +27,7 @@ type WeeklyCalendarProps = {
   events: CalendarEvent[];
   selectedWeekDate: Date;
   weekStartsOnMonday: boolean;
+  showWeekends: boolean;
   calendarView: CalendarView;
   onChangeView: (view: CalendarView) => void;
   onCreateItem: (preset: CalendarModalPreset) => void;
@@ -43,6 +45,7 @@ export default function WeeklyCalendar({
   events,
   selectedWeekDate,
   weekStartsOnMonday,
+  showWeekends,
   calendarView,
   onChangeView,
   onCreateItem,
@@ -55,9 +58,10 @@ export default function WeeklyCalendar({
   onDelete,
   onToggleComplete,
 }: WeeklyCalendarProps) {
-  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday);
+  const weekDays = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday, showWeekends);
   const hours = getCalendarHours();
   const hasItems = events.length > 0;
+  const calendarGridMinWidth = weekDays.length * 166;
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
   const activeItem = events.find((event) => event.id === activeItemId) ?? null;
@@ -106,7 +110,12 @@ export default function WeeklyCalendar({
       <GlassPanel
         as={motion.section}
         className={styles.calendarShell}
-        aria-label="Weekly calendar Monday to Sunday"
+        style={{
+          '--calendar-day-count': weekDays.length,
+          '--calendar-grid-min-width': `${calendarGridMinWidth}px`,
+          '--calendar-total-min-width': `${78 + calendarGridMinWidth}px`,
+        } as CSSProperties}
+        aria-label={showWeekends ? 'Weekly calendar' : 'Weekday calendar'}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}

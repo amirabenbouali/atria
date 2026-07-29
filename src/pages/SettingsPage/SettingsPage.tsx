@@ -408,7 +408,7 @@ export default function SettingsPage() {
               </div>
               <div className={styles.toggleGrid}>
                 <label className={styles.toggleRow}>
-                  <span><strong>Show weekends</strong><em>Prepared for alternate calendar density.</em></span>
+                  <span><strong>Show weekends</strong><em>Display Saturday and Sunday in week and month calendars.</em></span>
                   <input type="checkbox" checked={preferences.calendar.showWeekends} onChange={(event) => updatePreferences({ calendar: { ...preferences.calendar, showWeekends: event.target.checked } })} />
                 </label>
                 <label className={styles.toggleRow}>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CalendarEvent } from '../types/calendar.types';
-import { getMonthGridDays } from './calendarDates';
+import { getAdjacentVisibleDate, getCurrentWeekDays, getMonthGridDays } from './calendarDates';
 import { getVisibleCalendarOccurrencesForDays } from './calendarRecurrence';
 
 function event(overrides: Partial<CalendarEvent>): CalendarEvent {
@@ -32,6 +32,20 @@ describe('calendar view mode utilities', () => {
     expect(sundayGrid[0]?.isoDate).toBe('2026-06-28');
     expect(mondayGrid).toHaveLength(35);
     expect(sundayGrid).toHaveLength(35);
+  });
+
+  it('filters weekend columns from week and month grids when weekends are hidden', () => {
+    const weekDays = getCurrentWeekDays(new Date('2026-07-29T12:00:00'), true, false);
+    const monthDays = getMonthGridDays(new Date('2026-07-15T12:00:00'), true, false);
+
+    expect(weekDays.map((day) => day.shortName)).toEqual(['Mon', 'Tue', 'Wed', 'Thu', 'Fri']);
+    expect(monthDays).toHaveLength(25);
+    expect(monthDays.every((day) => !['Sat', 'Sun'].includes(day.shortName))).toBe(true);
+  });
+
+  it('skips weekends for adjacent day navigation when weekends are hidden', () => {
+    expect(getAdjacentVisibleDate(new Date('2026-07-31T12:00:00'), 1, false).toISOString().slice(0, 10)).toBe('2026-08-03');
+    expect(getAdjacentVisibleDate(new Date('2026-08-03T12:00:00'), -1, false).toISOString().slice(0, 10)).toBe('2026-07-31');
   });
 
   it('expands recurring items across arbitrary day ranges without duplicating source items', () => {
