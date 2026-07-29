@@ -106,6 +106,24 @@ export default function WeeklyCalendar({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
       >
+        <header className={styles.viewHeader}>
+          <div>
+            <h2>Week view</h2>
+            <p>Designed around time, not boxes.</p>
+          </div>
+          <div className={styles.viewSwitcher} aria-label="Calendar view">
+            <button className={styles.activeView} type="button">
+              Week
+            </button>
+            <button type="button" disabled>
+              Month
+            </button>
+            <button type="button" disabled>
+              Agenda
+            </button>
+          </div>
+        </header>
+
         <div className={styles.calendarHeader}>
           <div className={styles.timeHeader}>GMT</div>
           {weekDays.map((day) => (

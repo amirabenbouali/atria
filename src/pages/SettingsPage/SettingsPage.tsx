@@ -6,8 +6,9 @@ import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEven
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import type { CalendarItemType, EventCategory } from '../../features/calendar/types/calendar.types';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
+import { getThemeDefinition, themeDefinitions } from '../../features/settings/constants/theme.constants';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
-import type { DefaultView } from '../../features/settings/types/settings.types';
+import type { DefaultView, ThemeId } from '../../features/settings/types/settings.types';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Button from '../../shared/components/Button/Button';
@@ -17,15 +18,6 @@ import GlassPanel from '../../shared/ui/GlassPanel/GlassPanel';
 import EnergyProfileSettings from './components/EnergyProfileSettings';
 import SettingsSection from './components/SettingsSection';
 import styles from './SettingsPage.module.css';
-
-const paletteSwatches = [
-  '#F6A6BE',
-  '#D989A6',
-  '#9B6C8F',
-  '#EBC7D4',
-  '#C89BFF',
-  '#C8A6A0',
-];
 
 export default function SettingsPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -56,6 +48,7 @@ export default function SettingsPage() {
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const activeTheme = getThemeDefinition(preferences.themeId);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -221,16 +214,38 @@ export default function SettingsPage() {
           </SettingsSection>
 
           <SettingsSection eyebrow="Appearance" title="Theme">
-            <div className={styles.themeCard}>
-              <div>
-                <strong>Soft Rose Glass</strong>
-                <span>Warm black glass, blush gradients, muted mauve accents.</span>
-              </div>
-              <div className={styles.swatchRow} aria-label="Soft Rose Glass palette">
-                {paletteSwatches.map((swatch) => (
-                  <span key={swatch} style={{ background: swatch }} />
-                ))}
-              </div>
+            <div className={styles.themeIntro}>
+              <strong>{activeTheme.name}</strong>
+              <span>{activeTheme.description}</span>
+            </div>
+
+            <div className={styles.themeGrid} aria-label="Theme options">
+              {themeDefinitions.map((theme) => {
+                const isActive = preferences.themeId === theme.id;
+
+                return (
+                  <button
+                    className={isActive ? styles.activeThemeOption : styles.themeOption}
+                    key={theme.id}
+                    type="button"
+                    aria-pressed={isActive}
+                    onClick={() => {
+                      updatePreferences({ themeId: theme.id as ThemeId });
+                      setToastMessage(`${theme.name} applied`);
+                    }}
+                  >
+                    <span className={styles.themePreview}>
+                      {theme.swatches.slice(0, 4).map((swatch) => (
+                        <i key={swatch} style={{ background: swatch }} />
+                      ))}
+                    </span>
+                    <span className={styles.themeOptionCopy}>
+                      <strong>{theme.name}</strong>
+                      <em>{theme.description}</em>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </SettingsSection>
 

@@ -1,12 +1,16 @@
 .appShell {
   position: relative;
   display: grid;
-  grid-template-columns: 238px minmax(0, 1fr);
-  gap: 14px;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 12px;
   min-height: 100vh;
-  padding: var(--space-4);
+  padding: 10px;
   background: var(--gradient-page);
   isolation: isolate;
+}
+
+.appShell.withContext {
+  grid-template-columns: 208px minmax(0, 1fr) 300px;
 }
 
 .appShell::before,
@@ -20,9 +24,9 @@
 
 .appShell::before {
   background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.75px, transparent 0.75px);
-  background-size: 13px 13px;
-  mask-image: radial-gradient(circle at 50% 18%, black 0%, transparent 64%);
-  opacity: 0.2;
+  background-size: 18px 18px;
+  mask-image: radial-gradient(circle at 50% 14%, black 0%, transparent 72%);
+  opacity: 0.16;
 }
 
 .appShell::after {
@@ -34,30 +38,32 @@
 .mainPanel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 14px;
+  gap: 0;
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-2xl);
-  background: rgba(13, 13, 16, 0.72);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 24% 0%, rgba(243, 155, 188, 0.055), transparent 34%),
+    rgba(9, 9, 12, 0.78);
   box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(14px);
 }
 
 .topbar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: end;
   gap: var(--space-6);
-  min-height: 128px;
-  padding: 28px 30px 24px;
+  min-height: 132px;
+  padding: 30px 36px 24px;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
   border: 0;
   border-bottom: 1px solid var(--color-glass-border);
   background:
-    radial-gradient(circle at 30% 0%, rgba(241, 141, 181, 0.12), transparent 38%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent);
+    radial-gradient(circle at 26% 0%, rgba(243, 155, 188, 0.08), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent);
 }
 
 .weekIdentity {
@@ -65,15 +71,23 @@
 }
 
 .weekIdentity h1 {
-  margin: 0;
+  margin: 0 0 -4px;
   overflow: hidden;
-  font-size: clamp(1.9rem, 3.35vw, 3rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0;
+  padding: 0.03em 0.08em 0.08em 0;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 850;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-shadow: 0 0 28px rgba(246, 166, 190, 0.16);
+}
+
+.weekIdentity span {
+  display: block;
+  margin-top: 9px;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
 }
 
 .topbarActions {
@@ -82,8 +96,15 @@
   justify-content: flex-end;
   gap: 8px;
   flex-wrap: wrap;
+  max-width: min(100%, 520px);
   min-width: 0;
-  align-self: center;
+}
+
+.contextRail {
+  position: sticky;
+  top: 10px;
+  height: calc(100vh - 20px);
+  min-width: 0;
 }
 
 .shortcutHint {
@@ -104,11 +125,21 @@
     padding: var(--space-4);
     gap: var(--space-4);
   }
+
+  .appShell.withContext {
+    grid-template-columns: 1fr;
+  }
+
+  .contextRail {
+    position: static;
+    height: auto;
+  }
 }
 
 @media (max-width: 640px) {
   .topbar {
     align-items: flex-start;
+    grid-template-columns: 1fr;
     flex-direction: column;
     padding: var(--space-4);
   }

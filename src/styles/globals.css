@@ -6,7 +6,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  scrollbar-color: rgba(246, 166, 190, 0.38) rgba(18, 16, 18, 0.72);
+  scrollbar-color: color-mix(in srgb, var(--color-neon-pink) 38%, transparent) rgba(18, 16, 18, 0.72);
   scrollbar-width: thin;
 }
 
@@ -15,14 +15,14 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 72% 10%, rgba(241, 141, 181, 0.12), transparent 26%),
-    radial-gradient(circle at 18% 88%, rgba(123, 102, 255, 0.08), transparent 28%),
+    radial-gradient(circle at 72% 10%, color-mix(in srgb, var(--color-neon-pink) 12%, transparent), transparent 26%),
+    radial-gradient(circle at 18% 88%, color-mix(in srgb, var(--color-neon-violet) 8%, transparent), transparent 28%),
     var(--color-background);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(246, 166, 190, 0.38) rgba(18, 16, 18, 0.72);
+  scrollbar-color: color-mix(in srgb, var(--color-neon-pink) 38%, transparent) rgba(18, 16, 18, 0.72);
 }
 
 *::-webkit-scrollbar {
@@ -39,12 +39,20 @@ body {
   border: 2px solid rgba(18, 16, 18, 0.72);
   border-radius: var(--radius-pill);
   background:
-    linear-gradient(180deg, rgba(246, 166, 190, 0.54), rgba(155, 108, 143, 0.42));
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-neon-pink) 54%, transparent),
+      color-mix(in srgb, var(--color-neon-violet) 42%, transparent)
+    );
 }
 
 *::-webkit-scrollbar-thumb:hover {
   background:
-    linear-gradient(180deg, rgba(255, 192, 208, 0.68), rgba(181, 122, 160, 0.54));
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-neon-pink) 68%, white 8%),
+      color-mix(in srgb, var(--color-neon-violet) 54%, transparent)
+    );
 }
 
 *::-webkit-scrollbar-corner {

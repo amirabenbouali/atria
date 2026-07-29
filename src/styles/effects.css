@@ -14,7 +14,7 @@
   height: 34vw;
   left: -18vw;
   top: 8vh;
-  background: rgba(241, 141, 181, 0.22);
+  background: color-mix(in srgb, var(--color-neon-pink) 22%, transparent);
 }
 
 .auroraTwo {
@@ -22,7 +22,7 @@
   height: 30vw;
   right: -6vw;
   top: -10vh;
-  background: rgba(157, 140, 255, 0.12);
+  background: color-mix(in srgb, var(--color-neon-violet) 12%, transparent);
 }
 
 .auroraThree {
@@ -30,7 +30,7 @@
   height: 24vw;
   right: 14vw;
   bottom: -10vh;
-  background: rgba(247, 179, 109, 0.08);
+  background: color-mix(in srgb, var(--color-neon-orange) 8%, transparent);
 }
 
 .auroraFour {
@@ -38,7 +38,7 @@
   height: 28vw;
   left: 32vw;
   top: 34vh;
-  background: rgba(211, 108, 157, 0.11);
+  background: color-mix(in srgb, var(--color-neon-blue) 11%, transparent);
 }
 
 .auroraFive {
@@ -46,7 +46,7 @@
   height: 26vw;
   right: 4vw;
   bottom: 8vh;
-  background: rgba(255, 176, 207, 0.1);
+  background: color-mix(in srgb, var(--color-neon-cyan) 10%, transparent);
 }
 
 .aurora::after {

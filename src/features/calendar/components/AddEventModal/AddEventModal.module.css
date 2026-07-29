@@ -8,14 +8,15 @@
 
 .modalHeader h2 {
   margin: 2px 0 0;
-  font-size: 1.55rem;
+  font-size: 1.9rem;
   line-height: 1.1;
-  text-shadow: 0 0 22px rgba(241, 141, 181, 0.12);
+  letter-spacing: -0.045em;
+  text-shadow: none;
 }
 
 .eventForm {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
 .segmentedControl {
@@ -23,7 +24,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 6px;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012)),
@@ -34,7 +35,7 @@
 .activeSegment {
   min-height: 40px;
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: 16px;
   color: rgba(247, 245, 255, 0.68);
   font-weight: 900;
   background: transparent;
@@ -65,7 +66,7 @@
   width: 100%;
   min-height: 48px;
   border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 13px;
+  border-radius: 18px;
   padding: 0 14px;
   color: white;
   background:
@@ -109,7 +110,7 @@
   min-height: 52px;
   overflow: hidden;
   border: 1px solid rgba(255, 220, 230, 0.12);
-  border-radius: 13px;
+  border-radius: 20px;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
     rgba(20, 18, 22, 0.82);
@@ -192,7 +193,7 @@
 .formHint {
   margin: -6px 0 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 13px;
+  border-radius: 18px;
   padding: 10px 12px;
   color: rgba(247, 245, 255, 0.58);
   font-size: 0.78rem;

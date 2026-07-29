@@ -5,6 +5,7 @@ import { useSettingsStore } from '../../../features/settings/store/settings.stor
 import Button from '../Button/Button';
 import Sidebar from '../Sidebar/Sidebar';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
+import { cn } from '../../utils/cn';
 import styles from './AppLayout.module.css';
 
 type AppLayoutProps = {
@@ -14,7 +15,9 @@ type AppLayoutProps = {
   weekLabel: string;
   topbarEyebrow?: string;
   topbarTitle?: string;
+  topbarDescription?: string;
   showWeekControls?: boolean;
+  contextPanel?: ReactNode;
   createButtonLabelOverride?: string;
   onGoToToday: () => void;
   onGoToPreviousWeek: () => void;
@@ -30,7 +33,9 @@ export default function AppLayout({
   weekLabel,
   topbarEyebrow = 'Weekly Orbit',
   topbarTitle,
+  topbarDescription,
   showWeekControls = true,
+  contextPanel,
   createButtonLabelOverride,
   onGoToToday,
   onGoToPreviousWeek,
@@ -55,7 +60,7 @@ export default function AppLayout({
   }, []);
 
   return (
-    <div className={styles.appShell}>
+    <div className={cn(styles.appShell, Boolean(contextPanel) && styles.withContext)}>
       <div className="aurora auroraOne" />
       <div className="aurora auroraTwo" />
       <div className="aurora auroraThree" />
@@ -65,8 +70,6 @@ export default function AppLayout({
       <Sidebar
         totalEvents={totalEvents}
         completedEvents={completedEvents}
-        createButtonLabel={createButtonLabel}
-        onCreateEvent={onCreateEvent}
         onResetDemoData={onResetDemoData}
       />
 
@@ -81,6 +84,7 @@ export default function AppLayout({
           <div className={styles.weekIdentity}>
             <p className="eyebrow">{topbarEyebrow}</p>
             <h1>{topbarTitle ?? weekLabel}</h1>
+            {topbarDescription ? <span>{topbarDescription}</span> : null}
           </div>
           <div className={styles.topbarActions}>
             <Button
@@ -88,7 +92,7 @@ export default function AppLayout({
               onClick={() => setIsCommandPaletteOpen(true)}
               aria-label="Open command palette"
             >
-              Search <span className={styles.shortcutHint}>⌘K</span>
+              Search Atria <span className={styles.shortcutHint}>⌘K</span>
             </Button>
             {showWeekControls ? (
               <>
@@ -108,6 +112,7 @@ export default function AppLayout({
         </GlassPanel>
         {children}
       </main>
+      {contextPanel ? <aside className={styles.contextRail}>{contextPanel}</aside> : null}
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}

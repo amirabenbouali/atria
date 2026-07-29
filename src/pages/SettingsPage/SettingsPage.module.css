@@ -45,14 +45,17 @@
 }
 
 .heroPanel h1 {
-  margin: 0;
+  margin: 0 0 -4px;
+  padding: 0.03em 0.08em 0.08em 0;
   font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 1;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
 }
 
 .heroPanel span,
 .actionStack span,
-.themeCard span,
+.themeIntro span,
+.themeOptionCopy em,
 .aboutCard span,
 .aboutCard em,
 .toggleRow em {
@@ -83,7 +86,9 @@
 }
 
 .actionStack,
-.themeCard,
+.themeIntro,
+.themeOption,
+.activeThemeOption,
 .aboutCard,
 .toggleRow,
 .fieldRow {
@@ -109,7 +114,7 @@
 }
 
 .actionStack div,
-.themeCard div,
+.themeIntro,
 .aboutCard {
   display: grid;
   gap: 5px;
@@ -117,7 +122,8 @@
 }
 
 .actionStack strong,
-.themeCard strong,
+.themeIntro strong,
+.themeOptionCopy strong,
 .aboutCard strong,
 .toggleRow strong {
   font-size: 0.98rem;
@@ -145,7 +151,7 @@
 .toggleRow input {
   width: 48px;
   height: 26px;
-  accent-color: #f6a6be;
+  accent-color: var(--color-neon-pink);
 }
 
 .fieldRow span {
@@ -157,10 +163,94 @@
 }
 
 
-.themeCard {
+.themeIntro {
   display: grid;
   gap: var(--space-4);
   padding: var(--space-4);
+}
+
+.themeGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.themeOption,
+.activeThemeOption {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  min-width: 0;
+  padding: 12px;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.themeOption:hover,
+.activeThemeOption {
+  border-color: color-mix(in srgb, var(--color-neon-pink) 34%, white 8%);
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--color-neon-pink) 12%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.activeThemeOption {
+  background:
+    radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--color-neon-pink) 12%, transparent), transparent 42%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.078), rgba(255, 255, 255, 0.018)),
+    rgba(18, 16, 18, 0.68);
+}
+
+.themePreview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.themePreview i {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.themeOptionCopy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.themeOptionCopy strong,
+.themeOptionCopy em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.themeOptionCopy strong {
+  white-space: nowrap;
+}
+
+.themeOptionCopy em {
+  display: -webkit-box;
+  font-size: 0.76rem;
+  font-style: normal;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .energyProfile {
@@ -313,7 +403,7 @@
 .qualityChip input {
   width: 14px;
   height: 14px;
-  accent-color: #f6a6be;
+  accent-color: var(--color-neon-pink);
 }
 
 .qualityChip span {
@@ -356,7 +446,8 @@
 
 @media (max-width: 1060px) {
   .settingsGrid,
-  .periodGrid {
+  .periodGrid,
+  .themeGrid {
     grid-template-columns: 1fr;
   }
 }

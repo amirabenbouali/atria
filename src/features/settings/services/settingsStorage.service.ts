@@ -7,6 +7,7 @@ import {
   defaultEnergyProfile,
   normalizeEnergyProfile,
 } from '../../timeQuality';
+import { defaultThemeId, isThemeId } from '../constants/theme.constants';
 import type { SettingsPreferences } from '../types/settings.types';
 
 const settingsStorageKey = 'atria-settings-preferences';
@@ -16,6 +17,7 @@ export const defaultSettingsPreferences: SettingsPreferences = {
   defaultItemType: 'event',
   defaultCategory: 'Work',
   defaultView: 'calendar',
+  themeId: defaultThemeId,
   energyProfile: defaultEnergyProfile,
 };
 
@@ -34,6 +36,9 @@ function normalizePreferences(preferences: unknown): SettingsPreferences {
     defaultView: ['calendar', 'today', 'insights'].includes(storedPreferences.defaultView ?? '')
       ? storedPreferences.defaultView as SettingsPreferences['defaultView']
       : defaultSettingsPreferences.defaultView,
+    themeId: isThemeId(storedPreferences.themeId)
+      ? storedPreferences.themeId
+      : defaultSettingsPreferences.themeId,
     energyProfile: normalizeEnergyProfile(storedPreferences.energyProfile),
   };
 }

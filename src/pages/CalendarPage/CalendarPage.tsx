@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import AddEventModal from '../../features/calendar/components/AddEventModal/AddEventModal';
+import CalendarContextPanel from '../../features/calendar/components/CalendarContextPanel/CalendarContextPanel';
 import WeeklyCalendar from '../../features/calendar/components/WeeklyCalendar/WeeklyCalendar';
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
+import { getWeekOrbitDescription } from '../../features/calendar/utils/weekOrbitSummary';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
@@ -75,11 +77,20 @@ export default function CalendarPage() {
       totalEvents={totalEventCount}
       completedEvents={completedEventCount}
       weekLabel={weekLabel}
+      topbarDescription={getWeekOrbitDescription(events)}
       onGoToToday={goToToday}
       onGoToPreviousWeek={goToPreviousWeek}
       onGoToNextWeek={goToNextWeek}
       onCreateEvent={() => openAddEventModal(createDefaultPreset())}
       onResetDemoData={handleResetDemoData}
+      contextPanel={(
+        <CalendarContextPanel
+          sourceEvents={sourceEvents}
+          weekEvents={events}
+          weekStartsOnMonday={weekStartsOnMonday}
+          onToggleComplete={toggleEventComplete}
+        />
+      )}
     >
       <WeeklyCalendar
         events={events}

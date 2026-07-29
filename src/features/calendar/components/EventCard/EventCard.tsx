@@ -31,6 +31,7 @@ export default function EventCard({
   onDelete,
   onToggleComplete,
 }: EventCardProps) {
+  const eventHeight = getEventDurationHeight(event.startTime, event.endTime);
   const {
     attributes,
     listeners,
@@ -45,12 +46,17 @@ export default function EventCard({
 
   return (
     <motion.div
-      className={cn(styles.eventCard, event.completed && styles.isComplete)}
+      className={cn(
+        styles.eventCard,
+        eventHeight < 112 && styles.compactEvent,
+        eventHeight < 84 && styles.tinyEvent,
+        event.completed && styles.isComplete,
+      )}
       ref={setNodeRef}
       style={{
         '--event-color': event.accentColor,
-        top: `${getEventOffset(event.startTime) + (stackIndex % 2) * 8}px`,
-        minHeight: `${getEventDurationHeight(event.startTime, event.endTime)}px`,
+        top: `${getEventOffset(event.startTime) + (stackIndex % 2) * 6}px`,
+        height: `${eventHeight}px`,
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         opacity: isDragging ? 0.42 : undefined,
       } as CSSProperties}

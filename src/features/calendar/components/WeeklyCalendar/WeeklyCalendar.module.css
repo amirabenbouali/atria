@@ -1,17 +1,84 @@
 .calendarShell {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
   min-height: calc(100vh - 176px);
   overflow-x: auto;
   overflow-y: hidden;
-  margin: 0 16px 16px;
+  margin: 20px;
   border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.015);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 28% 0%, rgba(243, 155, 188, 0.04), transparent 34%),
+    rgba(8, 8, 11, 0.64);
+  box-shadow: none;
   scroll-behavior: smooth;
   overscroll-behavior-x: contain;
   scrollbar-color: rgba(246, 166, 190, 0.38) rgba(255, 255, 255, 0.035);
+}
+
+.viewHeader {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-width: min(100%, 1240px);
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--color-glass-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+    rgba(10, 10, 13, 0.86);
+  backdrop-filter: blur(14px);
+}
+
+.viewHeader h2 {
+  margin: 0;
+  font-size: 1.18rem;
+  letter-spacing: -0.04em;
+}
+
+.viewHeader p {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.viewSwitcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  padding: 4px;
+  background: rgba(18, 17, 21, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.viewSwitcher button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 14px;
+  color: var(--color-text-muted);
+  font-weight: 760;
+  background: transparent;
+}
+
+.viewSwitcher button:not(:disabled) {
+  cursor: pointer;
+}
+
+.viewSwitcher button:disabled {
+  opacity: 0.48;
+}
+
+.viewSwitcher .activeView {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .calendarHeader {
@@ -23,8 +90,8 @@
   min-width: 1240px;
   border-bottom: 1px solid var(--color-glass-border);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
-    rgba(19, 18, 23, 0.96);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent),
+    rgba(14, 13, 17, 0.94);
   backdrop-filter: blur(12px);
 }
 
@@ -87,10 +154,15 @@
 }
 
 .timeRail {
+  position: sticky;
+  left: 0;
+  z-index: 2;
   display: grid;
   grid-template-rows: repeat(18, var(--calendar-hour-height));
   border-right: 1px solid var(--color-glass-border);
-  background: rgba(16, 15, 19, 0.98);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(243, 155, 188, 0.035), transparent 40%),
+    rgba(13, 12, 16, 0.96);
 }
 
 .timeSlot {
@@ -169,6 +241,16 @@
 }
 
 @media (max-width: 640px) {
+  .calendarShell {
+    margin: 12px;
+  }
+
+  .viewHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 18px;
+  }
+
   .calendarHeader {
     grid-template-columns: 64px repeat(7, minmax(156px, 1fr));
     min-width: 1156px;
