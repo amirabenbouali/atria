@@ -24,13 +24,13 @@ There is no lint script in the current repository.
 - Memories timeline derivation
 - gentle Insights evidence thresholds
 - data export payload shape and filename
+- data import validation, restore, and store hydration
 
 ## Not Yet Covered
 
 - browser E2E smoke tests
 - visual regression tests
 - keyboard-only interaction tests
-- import/restore flow
 - deployed-environment route checks
 
 Manual release verification is tracked in [release-checklist.md](release-checklist.md).

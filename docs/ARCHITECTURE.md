@@ -41,6 +41,7 @@ Unknown routes render a restrained Not Found page. Workspace routes use `AppLayo
 - `features/goals` and `features/projects` own long-term planning entities.
 - `features/settings` owns preferences, theme selection, onboarding state, and energy profile.
 - `features/dataExport` creates typed local JSON backups from normalized source stores.
+- `features/dataImport` restores supported Atria JSON backups through the same storage boundaries and hydrates stores after import.
 
 Pages compose feature state and UI, but business rules should remain in stores, services, and utilities.
 
@@ -88,7 +89,7 @@ Memories and Insights are derived at view time. They are not persisted as separa
 
 Recurring calendar items are stored as source series and expanded only for visible ranges. Export includes recurrence sources, not generated occurrences.
 
-## Export
+## Import And Export
 
 The export service creates:
 
@@ -106,7 +107,7 @@ type AtriaExport = {
 };
 ```
 
-Import is intentionally future work for this release candidate.
+The import service currently supports schema version `1` and uses a replace-only restore flow. Imported sections are written through feature storage services, then Zustand stores hydrate from normalized storage so the workspace updates immediately.
 
 ## Error Handling
 

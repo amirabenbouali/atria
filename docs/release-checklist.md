@@ -19,7 +19,7 @@ Status: release candidate `1.0.0-rc.1`
 - [x] Clear-data controls require confirmation.
 - [x] Storage read/write failures do not crash the app.
 - [x] Demo loading replaces current sample-relevant data rather than duplicating records.
-- [ ] Import flow implemented.
+- [x] Import flow implemented.
 - [ ] Malformed LocalStorage manually tested in browser.
 
 ## Quality

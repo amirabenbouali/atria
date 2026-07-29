@@ -6,8 +6,8 @@
 
 - First-run onboarding for the app workspace.
 - Selectable themes: Soft Rose Glass, Violet Dusk, Blue Hour, and Ember Noir.
-- Local JSON export for calendar, intentions, reflections, goals, projects, and settings.
-- Settings controls for sample data, export, onboarding reopen, and destructive data clearing.
+- Local JSON import/export for calendar, intentions, reflections, goals, projects, and settings.
+- Settings controls for sample data, import/export, onboarding reopen, and destructive data clearing.
 - Not Found page for unknown routes.
 - Global render error boundary with calm recovery copy.
 - Release checklist and refreshed architecture documentation.
@@ -31,7 +31,7 @@
 
 ### Known Limitations
 
-- Import from backup is not implemented yet.
+- Backup import is replace-only and does not merge with existing data yet.
 - Data is browser-local only with no cross-device sync.
 - Recurring item editing and deletion apply to the whole series.
 - Memories are derived from current source records rather than immutable snapshots.
