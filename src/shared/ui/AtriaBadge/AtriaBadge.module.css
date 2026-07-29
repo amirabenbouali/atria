@@ -1,5 +1,5 @@
 .badge {
-  --badge-tone: #f6a6be;
+  --badge-tone: var(--color-neon-pink);
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -23,8 +23,8 @@
   box-shadow: 0 0 16px color-mix(in srgb, var(--badge-tone) 12%, transparent);
 }
 
-.rose { --badge-tone: #f6a6be; }
-.violet { --badge-tone: #c89bff; }
+.rose { --badge-tone: var(--color-neon-pink); }
+.violet { --badge-tone: var(--color-neon-violet); }
 .mauve { --badge-tone: #d989a6; }
 .neutral { --badge-tone: rgba(255, 255, 255, 0.68); }
 .success { --badge-tone: #ebc7d4; }

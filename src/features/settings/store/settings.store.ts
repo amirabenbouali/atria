@@ -18,6 +18,9 @@ type SettingsState = {
   updatePreferences: (preferences: Partial<SettingsPreferences>) => void;
   completeOnboarding: () => void;
   resetPreferences: () => void;
+  resetAppearance: () => void;
+  resetCalendarBehaviour: () => void;
+  resetNotifications: () => void;
   setEnergyForPeriod: (period: DayPeriod, energy: EnergyLevel) => void;
   setPreferredQualitiesForPeriod: (period: DayPeriod, qualities: TimeQuality[]) => void;
   resetEnergyProfile: () => void;
@@ -53,14 +56,37 @@ export const useSettingsStore = create<SettingsState>((set) => ({
     set((state) => ({
       preferences: persistPreferences({
         ...state.preferences,
-        hasCompletedOnboarding: true,
-        onboardingVersion: currentOnboardingVersion,
+        onboarding: {
+          hasCompleted: true,
+          version: currentOnboardingVersion,
+        },
       }),
     })),
   resetPreferences: () =>
     set({
       preferences: persistPreferences(defaultSettingsPreferences),
     }),
+  resetAppearance: () =>
+    set((state) => ({
+      preferences: persistPreferences({
+        ...state.preferences,
+        appearance: defaultSettingsPreferences.appearance,
+      }),
+    })),
+  resetCalendarBehaviour: () =>
+    set((state) => ({
+      preferences: persistPreferences({
+        ...state.preferences,
+        calendar: defaultSettingsPreferences.calendar,
+      }),
+    })),
+  resetNotifications: () =>
+    set((state) => ({
+      preferences: persistPreferences({
+        ...state.preferences,
+        notifications: defaultSettingsPreferences.notifications,
+      }),
+    })),
   setEnergyForPeriod: (period, energy) => {
     if (!isEnergyLevel(energy)) {
       return;

@@ -1,11 +1,12 @@
 import { AnimatePresence } from 'framer-motion';
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { BatteryMedium, Smile, X } from 'lucide-react';
 import type { DailyReflection, DailyReflectionDraft } from '../../../features/reflections';
 import type { EnergyLevel } from '../../../features/timeQuality';
 import Button from '../../../shared/components/Button/Button';
 import Modal from '../../../shared/components/Modal/Modal';
+import SelectControl from '../../../shared/components/SelectControl/SelectControl';
 import styles from '../TodayPage.module.css';
 
 type TodayReflectionModalProps = {
@@ -91,23 +92,25 @@ export default function TodayReflectionModal({
             <div className={styles.reflectionGrid}>
               <label>
                 Energy
-                <select
+                <SelectControl
+                  icon={BatteryMedium}
                   value={values.energy}
                   onChange={(event) => setValues((state) => ({ ...state, energy: event.target.value }))}
                 >
                   <option value="">Not set</option>
                   {energyLevels.map((level) => <option key={level} value={level}>{level}</option>)}
-                </select>
+                </SelectControl>
               </label>
               <label>
                 Mood
-                <select
+                <SelectControl
+                  icon={Smile}
                   value={values.mood}
                   onChange={(event) => setValues((state) => ({ ...state, mood: event.target.value }))}
                 >
                   <option value="">Not set</option>
                   {energyLevels.map((level) => <option key={level} value={level}>{level}</option>)}
-                </select>
+                </SelectControl>
               </label>
             </div>
 

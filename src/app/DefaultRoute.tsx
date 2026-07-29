@@ -9,7 +9,7 @@ const defaultViewRoutes = {
 } as const;
 
 export default function DefaultRoute() {
-  const defaultView = useSettingsStore((state) => state.preferences.defaultView);
+  const defaultView = useSettingsStore((state) => state.preferences.planningDefaults.defaultView);
 
   return <Navigate replace to={defaultViewRoutes[defaultView] ?? routes.calendar} />;
 }

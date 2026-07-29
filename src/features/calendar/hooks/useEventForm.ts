@@ -19,20 +19,31 @@ import {
   validateCalendarEvent,
 } from '../utils/eventValidation';
 
+function addMinutesToTime(time: string, minutesToAdd: number) {
+  const [hours, minutes] = time.split(':').map(Number);
+  const totalMinutes = (hours * 60) + minutes + minutesToAdd;
+  const nextHours = Math.floor(totalMinutes / 60) % 24;
+  const nextMinutes = totalMinutes % 60;
+
+  return `${String(nextHours).padStart(2, '0')}:${String(nextMinutes).padStart(2, '0')}`;
+}
+
 function createInitialFormValues(
   selectedWeekDate: Date,
   preset?: CalendarModalPreset | null,
   defaultCategory: EventCategory = defaultEventCategory,
   defaultItemType: CalendarItemType = 'event',
+  defaultEventDurationMinutes = 60,
 ): CalendarEventFormValues {
   const category = preset?.category ?? defaultCategory;
+  const startTime = '09:00';
 
   return {
     itemType: preset?.itemType ?? defaultItemType,
     title: '',
     date: preset?.date ?? formatInputDate(selectedWeekDate),
-    startTime: '09:00',
-    endTime: '10:00',
+    startTime,
+    endTime: addMinutesToTime(startTime, defaultEventDurationMinutes),
     category,
     description: '',
     accentColor: categoryColors[category],
@@ -75,10 +86,19 @@ export function useEventForm({
   selectedWeekDate,
   onSubmit,
 }: UseEventFormOptions) {
-  const defaultCategory = useSettingsStore((state) => state.preferences.defaultCategory);
-  const defaultItemType = useSettingsStore((state) => state.preferences.defaultItemType);
+  const defaultCategory = useSettingsStore((state) => state.preferences.planningDefaults.defaultCategory);
+  const defaultItemType = useSettingsStore((state) => state.preferences.planningDefaults.defaultItemType);
+  const defaultEventDurationMinutes = useSettingsStore(
+    (state) => state.preferences.calendar.defaultEventDurationMinutes,
+  );
   const [values, setValues] = useState<CalendarEventFormValues>(() =>
-    createInitialFormValues(selectedWeekDate, modalPreset, defaultCategory, defaultItemType),
+    createInitialFormValues(
+      selectedWeekDate,
+      modalPreset,
+      defaultCategory,
+      defaultItemType,
+      defaultEventDurationMinutes,
+    ),
   );
   const [errors, setErrors] = useState<CalendarEventValidationErrors>({});
 
@@ -87,11 +107,17 @@ export function useEventForm({
       setValues(
         editingEvent
           ? getFormValuesFromEvent(editingEvent)
-          : createInitialFormValues(selectedWeekDate, modalPreset, defaultCategory, defaultItemType),
+          : createInitialFormValues(
+            selectedWeekDate,
+            modalPreset,
+            defaultCategory,
+            defaultItemType,
+            defaultEventDurationMinutes,
+          ),
       );
       setErrors({});
     }
-  }, [defaultCategory, defaultItemType, editingEvent, isOpen, modalPreset, selectedWeekDate]);
+  }, [defaultCategory, defaultEventDurationMinutes, defaultItemType, editingEvent, isOpen, modalPreset, selectedWeekDate]);
 
   const updateField = <Field extends keyof CalendarEventFormValues>(
     field: Field,

@@ -6,7 +6,7 @@
   place-items: center;
   padding: var(--space-5);
   background:
-    radial-gradient(circle at 52% 12%, rgba(241, 141, 181, 0.1), transparent 34%),
+    radial-gradient(circle at 52% 12%, color-mix(in srgb, var(--color-neon-pink) 10%, transparent), transparent 34%),
     rgba(5, 5, 8, 0.64);
   backdrop-filter: blur(10px);
 }

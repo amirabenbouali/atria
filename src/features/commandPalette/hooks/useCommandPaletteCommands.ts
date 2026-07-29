@@ -7,8 +7,8 @@ import { formatInputDate, getCurrentWeekDays } from '../../calendar/utils/calend
 import { useGoalsStore } from '../../goals/store/goals.store';
 import { useIntentionsStore } from '../../intentions/store/intentions.store';
 import { useProjectsStore } from '../../projects/store/projects.store';
-import { useSettingsStore } from '../../settings/store/settings.store';
 import { useDefaultCalendarModalPreset } from '../../settings/hooks/useDefaultCalendarModalPreset';
+import { useWeekStartsOnMonday } from '../../settings/hooks/useWeekStartsOnMonday';
 import type { CommandPaletteCommand } from '../types/commandPalette.types';
 import { filterCommands, getCalendarItemBadge, searchCalendarItems } from '../utils/commandSearch';
 
@@ -26,7 +26,7 @@ export function useCommandPaletteCommands({
   const navigate = useNavigate();
   const items = useCalendarStore((state) => state.events);
   const selectedWeekDate = useCalendarStore((state) => state.selectedWeekDate);
-  const weekStartsOnMonday = useSettingsStore((state) => state.preferences.weekStartsOnMonday);
+  const weekStartsOnMonday = useWeekStartsOnMonday();
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const openAddEventModal = useCalendarStore((state) => state.openAddEventModal);
   const openEditEventModal = useCalendarStore((state) => state.openEditEventModal);

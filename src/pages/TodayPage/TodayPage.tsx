@@ -15,6 +15,7 @@ import SuggestionReviewModal from '../../features/planning/components/Suggestion
 import { useReflectionsStore } from '../../features/reflections';
 import type { DailyReflectionDraft } from '../../features/reflections';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
+import { useWeekStartsOnMonday } from '../../features/settings/hooks/useWeekStartsOnMonday';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import { getTimeQualityLabel } from '../../features/timeQuality';
 import { routes } from '../../app/routes';
@@ -153,6 +154,7 @@ export default function TodayPage() {
     setIsReflectionModalOpen(false);
     setToastMessage('Reflection saved');
   };
+  const weekStartsOnMonday = useWeekStartsOnMonday();
 
   const handleAcceptSuggestion = (suggestion: PlanningSuggestion) => {
     if (!planningIntention) {
@@ -166,7 +168,7 @@ export default function TodayPage() {
       start: new Date(suggestion.proposedStart),
       end: new Date(suggestion.proposedEnd),
       now: new Date(),
-      weekStartsOnMonday: preferences.weekStartsOnMonday,
+      weekStartsOnMonday,
     });
 
     if (!validation.isValid) {
@@ -394,7 +396,7 @@ export default function TodayPage() {
         intention={planningIntention}
         calendarItems={sourceEvents}
         energyProfile={preferences.energyProfile}
-        weekStartsOnMonday={preferences.weekStartsOnMonday}
+        weekStartsOnMonday={weekStartsOnMonday}
         onClose={() => setPlanningIntentionId(null)}
         onAccept={handleAcceptSuggestion}
       />

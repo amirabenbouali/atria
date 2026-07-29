@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { defaultThemeId, isThemeId } from '../constants/theme.constants';
 import { useSettingsStore } from '../store/settings.store';
 
 export function useApplyTheme() {
-  const themeId = useSettingsStore((state) => state.preferences.themeId);
+  const appearance = useSettingsStore((state) => state.preferences.appearance);
 
   useEffect(() => {
-    const nextThemeId = isThemeId(themeId) ? themeId : defaultThemeId;
-    document.documentElement.dataset.theme = nextThemeId;
-  }, [themeId]);
+    document.documentElement.dataset.atmosphere = appearance.atmosphere;
+    document.documentElement.dataset.accent = appearance.accent;
+    document.documentElement.dataset.workspaceMode = appearance.workspaceMode;
+    document.documentElement.dataset.theme = appearance.atmosphere;
+  }, [appearance.accent, appearance.atmosphere, appearance.workspaceMode]);
 }

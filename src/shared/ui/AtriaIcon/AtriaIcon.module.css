@@ -1,6 +1,6 @@
 .bare,
 .shell {
-  --atria-icon-tone: #f6a6be;
+  --atria-icon-tone: var(--color-neon-pink);
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
@@ -56,11 +56,11 @@
 }
 
 .rose {
-  --atria-icon-tone: #f18db5;
+  --atria-icon-tone: var(--color-neon-pink);
 }
 
 .violet {
-  --atria-icon-tone: #c89bff;
+  --atria-icon-tone: var(--color-neon-violet);
 }
 
 .mauve {

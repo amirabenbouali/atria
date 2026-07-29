@@ -1,5 +1,5 @@
 import { BatteryMedium, RotateCcw } from 'lucide-react';
-import type { ChangeEvent, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type {
   DayPeriod,
   EnergyLevel,
@@ -14,7 +14,7 @@ import {
   timeQualities,
 } from '../../../features/timeQuality';
 import Button from '../../../shared/components/Button/Button';
-import SelectControl from '../../../shared/components/SelectControl/SelectControl';
+import SelectControl, { type SelectControlChangeEvent } from '../../../shared/components/SelectControl/SelectControl';
 import AtriaIcon from '../../../shared/ui/AtriaIcon';
 import styles from '../SettingsPage.module.css';
 
@@ -41,7 +41,7 @@ export default function EnergyProfileSettings({
   onSetQualities,
   onReset,
 }: EnergyProfileSettingsProps) {
-  const handleEnergyChange = (period: DayPeriod) => (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleEnergyChange = (period: DayPeriod) => (event: SelectControlChangeEvent) => {
     onSetEnergy(period, Number(event.target.value) as EnergyLevel);
   };
 

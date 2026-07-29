@@ -32,14 +32,27 @@ describe('settings storage', () => {
     }));
     const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
 
-    expect(readStoredSettingsPreferences()).toMatchObject({
-      weekStartsOnMonday: false,
-      defaultItemType: 'task',
-      defaultCategory: 'Health',
-      defaultView: 'today',
-      themeId: 'soft-rose-glass',
-      hasCompletedOnboarding: false,
-      onboardingVersion: 1,
+    const preferences = readStoredSettingsPreferences();
+
+    expect(preferences).toMatchObject({
+      schemaVersion: 2,
+      calendar: {
+        weekStartsOn: 'sunday',
+      },
+      planningDefaults: {
+        defaultItemType: 'task',
+        defaultCategory: 'Health',
+        defaultView: 'today',
+      },
+      appearance: {
+        atmosphere: 'dawn',
+        accent: 'rose',
+        workspaceMode: 'balanced',
+      },
+      onboarding: {
+        hasCompleted: false,
+        version: 1,
+      },
       energyProfile: {
         morning: { energy: 4, preferredQualities: ['deep-focus', 'creative'] },
       },
@@ -58,9 +71,15 @@ describe('settings storage', () => {
     const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
 
     expect(readStoredSettingsPreferences()).toMatchObject({
-      weekStartsOnMonday: false,
-      defaultCategory: 'Finance',
-      hasCompletedOnboarding: false,
+      calendar: {
+        weekStartsOn: 'sunday',
+      },
+      planningDefaults: {
+        defaultCategory: 'Finance',
+      },
+      onboarding: {
+        hasCompleted: false,
+      },
       energyProfile: {
         morning: { energy: 4, preferredQualities: ['creative'] },
         afternoon: { energy: 5, preferredQualities: [] },
@@ -77,9 +96,67 @@ describe('settings storage', () => {
     const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
 
     expect(readStoredSettingsPreferences()).toMatchObject({
-      themeId: 'blue-hour',
-      hasCompletedOnboarding: true,
-      onboardingVersion: 1,
+      appearance: {
+        atmosphere: 'daylight',
+      },
+      onboarding: {
+        hasCompleted: true,
+        version: 1,
+      },
+    });
+  });
+
+  it('normalizes malformed observatory settings without crashing', async () => {
+    installLocalStorageMock(JSON.stringify({
+      schemaVersion: 2,
+      profile: {
+        displayName: '   ',
+        roleOrFocus: '  Portfolio demo  ',
+        avatarStyle: 'photo',
+      },
+      appearance: {
+        atmosphere: 'bad',
+        accent: 'radioactive',
+        workspaceMode: 'planner',
+      },
+      calendar: {
+        weekStartsOn: 'sunday',
+        timeFormat: '13-hour',
+        defaultEventDurationMinutes: 15,
+        showWeekends: false,
+      },
+      notifications: {
+        inAppDailyOverview: false,
+        quietHoursEnabled: true,
+        quietHoursStart: 'bad',
+        quietHoursEnd: '22:30',
+      },
+    }));
+    const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
+
+    expect(readStoredSettingsPreferences()).toMatchObject({
+      profile: {
+        displayName: 'Atria user',
+        roleOrFocus: 'Portfolio demo',
+        avatarStyle: 'symbol',
+      },
+      appearance: {
+        atmosphere: 'dawn',
+        accent: 'rose',
+        workspaceMode: 'planner',
+      },
+      calendar: {
+        weekStartsOn: 'sunday',
+        timeFormat: '24-hour',
+        defaultEventDurationMinutes: 60,
+        showWeekends: false,
+      },
+      notifications: {
+        inAppDailyOverview: false,
+        quietHoursEnabled: true,
+        quietHoursStart: '21:00',
+        quietHoursEnd: '22:30',
+      },
     });
   });
 });

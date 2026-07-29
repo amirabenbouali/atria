@@ -39,8 +39,14 @@
   position: fixed;
   left: 14px;
   top: 14px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
   z-index: calc(var(--z-modal) + 1);
-  transform: translateY(-140%);
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  transform: translateY(-10px);
+  opacity: 0;
   border: 1px solid color-mix(in srgb, var(--color-neon-pink) 34%, white 8%);
   border-radius: var(--radius-pill);
   padding: 10px 14px;
@@ -49,10 +55,20 @@
   text-decoration: none;
   background: var(--color-surface-ink-strong);
   box-shadow: var(--shadow-neon);
-  transition: transform var(--duration-fast) ease;
+  white-space: nowrap;
+  transition:
+    opacity var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
 }
 
-.skipLink:focus {
+.skipLink:focus,
+.skipLink:focus-visible {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  opacity: 1;
   transform: translateY(0);
 }
 
@@ -65,7 +81,7 @@
   border: 1px solid var(--color-glass-border);
   border-radius: 26px;
   background:
-    radial-gradient(circle at 24% 0%, rgba(243, 155, 188, 0.055), transparent 34%),
+    radial-gradient(circle at 24% 0%, color-mix(in srgb, var(--color-neon-pink) 6%, transparent), transparent 34%),
     rgba(9, 9, 12, 0.78);
   box-shadow: var(--shadow-glass);
   backdrop-filter: blur(14px);
@@ -83,7 +99,7 @@
   border: 0;
   border-bottom: 1px solid var(--color-glass-border);
   background:
-    radial-gradient(circle at 26% 0%, rgba(243, 155, 188, 0.08), transparent 42%),
+    radial-gradient(circle at 26% 0%, color-mix(in srgb, var(--color-neon-pink) 8%, transparent), transparent 42%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent);
 }
 
@@ -101,7 +117,7 @@
   letter-spacing: -0.035em;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 0 28px rgba(246, 166, 190, 0.16);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--color-neon-pink) 16%, transparent);
 }
 
 .weekIdentity span {

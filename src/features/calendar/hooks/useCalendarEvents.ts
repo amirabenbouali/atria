@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSettingsStore } from '../../settings/store/settings.store';
+import { useWeekStartsOnMonday } from '../../settings/hooks/useWeekStartsOnMonday';
 import { useCalendarStore } from '../store/calendar.store';
 import { getWeekLabel } from '../utils/calendarDates';
 import { getVisibleCalendarOccurrences } from '../utils/calendarRecurrence';
@@ -8,7 +8,7 @@ import { getCompletedEventCount } from '../utils/eventSorting';
 export function useCalendarEvents() {
   const events = useCalendarStore((state) => state.events);
   const selectedWeekDate = useCalendarStore((state) => state.selectedWeekDate);
-  const weekStartsOnMonday = useSettingsStore((state) => state.preferences.weekStartsOnMonday);
+  const weekStartsOnMonday = useWeekStartsOnMonday();
   const visibleEvents = useMemo(
     () => getVisibleCalendarOccurrences(events, selectedWeekDate, weekStartsOnMonday),
     [events, selectedWeekDate, weekStartsOnMonday],

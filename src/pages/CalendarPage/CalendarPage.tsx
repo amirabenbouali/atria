@@ -7,6 +7,7 @@ import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import { getWeekOrbitDescription } from '../../features/calendar/utils/weekOrbitSummary';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
+import { useSettingsStore } from '../../features/settings/store/settings.store';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Toast from '../../shared/components/Toast/Toast';
 
@@ -41,6 +42,7 @@ export default function CalendarPage() {
   const resetDemoWorkspace = useResetDemoWorkspace();
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
+  const confirmBeforeDeleting = useSettingsStore((state) => state.preferences.calendar.confirmBeforeDeleting);
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
 
   useEffect(() => {
@@ -71,6 +73,14 @@ export default function CalendarPage() {
     resetDemoWorkspace();
     setToastMessage('Demo week restored');
   }, [resetDemoWorkspace]);
+
+  const handleDelete = useCallback((id: string) => {
+    if (confirmBeforeDeleting && !window.confirm('Delete this calendar item?')) {
+      return;
+    }
+
+    deleteEvent(id);
+  }, [confirmBeforeDeleting, deleteEvent]);
 
   return (
     <AppLayout
@@ -103,7 +113,7 @@ export default function CalendarPage() {
         onCopyToNextWeek={handleCopyToNextWeek}
         onMoveCalendarItem={moveCalendarItem}
         onMoveTask={moveTask}
-        onDelete={deleteEvent}
+        onDelete={handleDelete}
         onToggleComplete={toggleEventComplete}
       />
       <AddEventModal

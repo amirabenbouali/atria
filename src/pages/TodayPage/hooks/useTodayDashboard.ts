@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCalendarStore } from '../../../features/calendar/store/calendar.store';
 import { useIntentionsStore } from '../../../features/intentions';
 import { useReflectionsStore } from '../../../features/reflections';
+import { useWeekStartsOnMonday } from '../../../features/settings/hooks/useWeekStartsOnMonday';
 import { useSettingsStore } from '../../../features/settings/store/settings.store';
 import { buildTodayViewModel } from '../utils/todayDashboard';
 
@@ -17,6 +18,7 @@ export function useTodayDashboard() {
   const intentions = useIntentionsStore((state) => state.intentions);
   const reflectionsByDate = useReflectionsStore((state) => state.reflections);
   const preferences = useSettingsStore((state) => state.preferences);
+  const weekStartsOnMonday = useWeekStartsOnMonday();
 
   useEffect(() => {
     const intervalId = window.setInterval(() => setNow(getCurrentMinuteDate()), 60_000);
@@ -32,9 +34,9 @@ export function useTodayDashboard() {
         intentions,
         energyProfile: preferences.energyProfile,
         reflections,
-        weekStartsOnMonday: preferences.weekStartsOnMonday,
+        weekStartsOnMonday,
       }),
-    [intentions, now, preferences.energyProfile, preferences.weekStartsOnMonday, reflections, sourceEvents],
+    [intentions, now, preferences.energyProfile, reflections, sourceEvents, weekStartsOnMonday],
   );
 
   return {

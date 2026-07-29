@@ -11,7 +11,7 @@ import type { MemoryFilter } from '../../features/memories';
 import MemoryWeekGroup from '../../features/memories/components/MemoryWeekGroup';
 import { useIntentionsStore } from '../../features/intentions/store/intentions.store';
 import { useReflectionsStore } from '../../features/reflections';
-import { useSettingsStore } from '../../features/settings/store/settings.store';
+import { useWeekStartsOnMonday } from '../../features/settings/hooks/useWeekStartsOnMonday';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
 import { routes } from '../../app/routes';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
@@ -50,7 +50,7 @@ export default function MemoriesPage() {
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
   const intentions = useIntentionsStore((state) => state.intentions);
   const reflectionsByDate = useReflectionsStore((state) => state.reflections);
-  const weekStartsOnMonday = useSettingsStore((state) => state.preferences.weekStartsOnMonday);
+  const weekStartsOnMonday = useWeekStartsOnMonday();
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const resetDemoWorkspace = useResetDemoWorkspace();
   const today = new Date();

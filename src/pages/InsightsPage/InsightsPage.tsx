@@ -16,6 +16,7 @@ import { useIntentionsStore } from '../../features/intentions/store/intentions.s
 import { useReflectionsStore } from '../../features/reflections';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
+import { useWeekStartsOnMonday } from '../../features/settings/hooks/useWeekStartsOnMonday';
 import { routes } from '../../app/routes';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import SelectControl from '../../shared/components/SelectControl/SelectControl';
@@ -137,9 +138,10 @@ export default function InsightsPage() {
   const intentions = useIntentionsStore((state) => state.intentions);
   const reflectionsByDate = useReflectionsStore((state) => state.reflections);
   const preferences = useSettingsStore((state) => state.preferences);
+  const weekStartsOnMonday = useWeekStartsOnMonday();
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const resetDemoWorkspace = useResetDemoWorkspace();
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
   const range = useMemo(() => getGentleInsightRange(rangeKey, now), [now, rangeKey]);
   const reflections = useMemo(() => Object.values(reflectionsByDate), [reflectionsByDate]);
   const insights = useMemo(
@@ -152,9 +154,9 @@ export default function InsightsPage() {
         rangeStart: range.rangeStart,
         rangeEnd: range.rangeEnd,
         now,
-        weekStartsOnMonday: preferences.weekStartsOnMonday,
+        weekStartsOnMonday,
       }),
-    [intentions, now, preferences.energyProfile, preferences.weekStartsOnMonday, range.rangeEnd, range.rangeStart, reflections, sourceEvents],
+    [intentions, now, preferences.energyProfile, range.rangeEnd, range.rangeStart, reflections, sourceEvents, weekStartsOnMonday],
   );
   const periodSummary = useMemo(
     () =>
@@ -166,9 +168,9 @@ export default function InsightsPage() {
         rangeStart: range.rangeStart,
         rangeEnd: range.rangeEnd,
         now,
-        weekStartsOnMonday: preferences.weekStartsOnMonday,
+        weekStartsOnMonday,
       }),
-    [intentions, now, preferences.energyProfile, preferences.weekStartsOnMonday, range.rangeEnd, range.rangeStart, reflections, sourceEvents],
+    [intentions, now, preferences.energyProfile, range.rangeEnd, range.rangeStart, reflections, sourceEvents, weekStartsOnMonday],
   );
   const visibleInsights = insights.filter((insight) => !dismissedInsightIds.includes(insight.id));
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
@@ -184,7 +186,7 @@ export default function InsightsPage() {
     <AppLayout
       totalEvents={sourceEvents.length}
       completedEvents={completedEvents}
-      weekLabel={getWeekLabel(selectedWeekDate, preferences.weekStartsOnMonday)}
+      weekLabel={getWeekLabel(selectedWeekDate, weekStartsOnMonday)}
       topbarEyebrow="Gentle Insights"
       topbarTitle="Insights"
       showWeekControls={false}

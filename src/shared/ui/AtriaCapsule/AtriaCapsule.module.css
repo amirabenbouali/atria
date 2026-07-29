@@ -1,5 +1,5 @@
 .capsule {
-  --capsule-tone: #f18db5;
+  --capsule-tone: var(--color-neon-pink);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -44,8 +44,8 @@
     rgba(20, 18, 22, 0.82);
 }
 
-.rose { --capsule-tone: #f18db5; }
-.violet { --capsule-tone: #c89bff; }
+.rose { --capsule-tone: var(--color-neon-pink); }
+.violet { --capsule-tone: var(--color-neon-violet); }
 .mauve { --capsule-tone: #d989a6; }
 .neutral { --capsule-tone: rgba(255, 255, 255, 0.72); }
 .success { --capsule-tone: #ebc7d4; }

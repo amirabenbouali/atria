@@ -27,7 +27,7 @@ describe('settings store energy profile actions', () => {
     useSettingsStore.getState().setEnergyForPeriod('evening', 5);
     const after = useSettingsStore.getState().preferences;
 
-    expect(after.defaultView).toBe(before.defaultView);
+    expect(after.planningDefaults.defaultView).toBe(before.planningDefaults.defaultView);
     expect(after.energyProfile.evening.energy).toBe(5);
     expect(after.energyProfile.morning).toEqual(before.energyProfile.morning);
     expect(after.energyProfile.afternoon).toEqual(before.energyProfile.afternoon);
@@ -50,11 +50,16 @@ describe('settings store energy profile actions', () => {
     installLocalStorageMock();
     const { useSettingsStore } = await import('./settings.store');
 
-    useSettingsStore.getState().updatePreferences({ defaultView: 'insights' });
+    useSettingsStore.getState().updatePreferences({
+      planningDefaults: {
+        ...useSettingsStore.getState().preferences.planningDefaults,
+        defaultView: 'insights',
+      },
+    });
     useSettingsStore.getState().setEnergyForPeriod('morning', 1);
     useSettingsStore.getState().resetEnergyProfile();
 
-    expect(useSettingsStore.getState().preferences.defaultView).toBe('insights');
+    expect(useSettingsStore.getState().preferences.planningDefaults.defaultView).toBe('insights');
     expect(useSettingsStore.getState().preferences.energyProfile.morning).toEqual({
       energy: 4,
       preferredQualities: ['deep-focus', 'creative'],

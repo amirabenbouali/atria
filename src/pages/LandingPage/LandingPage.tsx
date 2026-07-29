@@ -63,7 +63,7 @@ function BrandMark() {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const defaultView = useSettingsStore((state) => state.preferences.defaultView);
+  const defaultView = useSettingsStore((state) => state.preferences.planningDefaults.defaultView);
   const [authMode, setAuthMode] = useState<AuthMode>('register');
   const [modalView, setModalView] = useState<ModalView>('auth');
   const [isModalOpen, setIsModalOpen] = useState(false);

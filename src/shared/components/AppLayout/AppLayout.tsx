@@ -50,7 +50,7 @@ export default function AppLayout({
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
   const preferences = useSettingsStore((state) => state.preferences);
   const completeOnboarding = useSettingsStore((state) => state.completeOnboarding);
-  const defaultItemType = preferences.defaultItemType;
+  const defaultItemType = preferences.planningDefaults.defaultItemType;
   const createButtonLabel = createButtonLabelOverride ?? (defaultItemType === 'task' ? 'New Task' : 'New Event');
   const pageTitle = `${topbarTitle ?? topbarEyebrow} · Atria`;
 
@@ -160,7 +160,7 @@ export default function AppLayout({
         onResetDemoData={onResetDemoData}
       />
       <OnboardingModal
-        isOpen={!preferences.hasCompletedOnboarding}
+        isOpen={!preferences.onboarding.hasCompleted}
         onClose={completeOnboarding}
       />
       <Toast message={storageWarning} />
