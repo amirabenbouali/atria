@@ -18,7 +18,7 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 - Project detail drawer with linked task actions and prelinked task creation
 - Calm Today view with current/next commitments, one primary intention, expected energy, daily load, and optional reflection
 - Memories timeline for past events, focus sessions, completed intentions, and daily reflections
-- Insights dashboard for weekly progress, focus hours, category balance, routines, and project health
+- Gentle Insights page with deterministic, evidence-backed observations about recent focus, load, recovery, intentions, and reflections
 - Global command palette with search, navigation, creation commands, and demo reset
 - Settings page for app preferences, appearance notes, and local data controls
 - Transparent rule-based planning suggestions for active intentions
@@ -75,6 +75,8 @@ Planning suggestions are temporary and are not stored as separate records. When 
 
 Memories are derived at view time from calendar items, intentions, and reflections. Atria does not store duplicated history snapshots, so edits to source records can alter past memory views. Recurring calendar items are expanded only for the selected month/range.
 
+Insights are deterministic observations derived locally from calendar items, intentions, reflections, and energy settings. Every visible insight has an evidence threshold, confidence reflects evidence amount and consistency rather than probability, and insights never alter the calendar. Atria does not use external AI services, medical claims, psychological claims, productivity grades, or benchmarking.
+
 ## Demo Flow
 
 1. Reset demo data from the sidebar or command palette.
@@ -88,7 +90,7 @@ Memories are derived at view time from calendar items, intentions, and reflectio
 9. Open Goals and expand a goal to show linked projects and tasks.
 10. Open Projects and click a project card to reveal the detail drawer.
 11. Create a new task from the project drawer.
-12. Open Insights to show weekly analytics and project health.
+12. Open Insights to show gentle evidence-backed observations.
 13. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
 
 ## Current Limitations
@@ -105,6 +107,7 @@ Memories are derived at view time from calendar items, intentions, and reflectio
 - Default view redirects from `/workspace`; direct app routes remain available
 - Planning suggestions are deterministic heuristics, not AI or behavioural learning
 - Memories do not use AI summaries or behavioural inference
+- Insights are thresholded heuristics, not AI analysis or behavioural diagnosis
 - Accepted focus sessions are single blocks only, not recurring sessions
 - Today load is a scheduling heuristic based on timed commitments, not a productivity score
 - Expected energy comes from explicit settings, not behavioural inference

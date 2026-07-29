@@ -42,6 +42,8 @@ Accepted planning suggestions become standard timed calendar events with `source
 
 `features/memories/` owns the derived memory timeline. It combines bounded calendar occurrence expansion, completed intentions, and daily reflections into private day summaries. Memories do not have their own Zustand store or LocalStorage key; the source of truth remains calendar items, intentions, and reflections. Historical edits to those source records may change the derived timeline. Recurrence is expanded only for the selected range, and no AI summary or behavioural inference is performed.
 
+`features/insights/` owns gentle deterministic observations. It reads calendar occurrences, focus-session metadata, intentions, reflections, and energy settings for an explicit recent range, then returns thresholded insights with stable IDs and machine-readable evidence. Confidence labels describe evidence amount and consistency, not statistical probability. Insights never write to storage, alter schedules, infer recovery from empty time, or make medical, psychological, productivity-score, or AI claims.
+
 `pages/TodayPage/` composes a pure Today view model from calendar occurrences, intentions, settings energy profile, and reflections. It derives current and next commitments, one primary intention, accepted focus sessions, expected energy, scheduling load, recovery-labelled minutes, and the optional reflection for the current local date. Today does not reschedule automatically or persist a primary-intention choice.
 
 `shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
@@ -70,7 +72,7 @@ The current product supports the portfolio MVP behavior:
 - recurring events and tasks
 - per-occurrence recurring completion
 - drag-and-drop task and event movement with `@dnd-kit/core`
-- Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
+- Today, Tasks, Goals, Projects, Gentle Insights, Settings, and command palette routes
 - Memories route for a derived private history of past days, reflections, focus sessions, and completed intentions
 - a public landing/front-page route with a prototype auth and onboarding overlay
 - Today current/next derivation, primary intention, expected energy, daily load, and optional reflection
