@@ -38,6 +38,8 @@ Energy profiles are explicit user preferences stored in settings. The current pr
 
 Accepted planning suggestions become standard timed calendar events with `source: "planning-suggestion"` and `focusSession` metadata linking back to the source intention. These focus sessions persist through the existing calendar LocalStorage service and remain editable/draggable through current calendar flows. Recurring focus sessions and behavioural learning are intentionally out of scope.
 
+`pages/TodayPage/` composes a pure Today view model from calendar occurrences, intentions, settings energy profile, and reflections. It derives current and next commitments, one primary intention, accepted focus sessions, expected energy, scheduling load, recovery-labelled minutes, and the optional reflection for the current local date. Today does not reschedule automatically or persist a primary-intention choice.
+
 `shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
 
 `styles/` contains global design language: tokens, reset, aurora effects, and base typography. Component-specific styling belongs beside the component as a CSS Module.
@@ -65,6 +67,7 @@ The current product supports the portfolio MVP behavior:
 - per-occurrence recurring completion
 - drag-and-drop task and event movement with `@dnd-kit/core`
 - Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
+- Today current/next derivation, primary intention, expected energy, daily load, and optional reflection
 - an Intentions inbox for capturing outcomes before scheduling
 - deterministic planning suggestions that can create accepted focus sessions
 - domain foundations for daily reflections and time quality

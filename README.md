@@ -15,7 +15,7 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 - Goals page with goal cards, linked projects, linked tasks, and progress
 - Projects page with project cards, linked goals, progress, and a detail drawer
 - Project detail drawer with linked task actions and prelinked task creation
-- Today dashboard with daily progress, schedule, flexible tasks, focus line, and category pulse
+- Calm Today view with current/next commitments, one primary intention, expected energy, daily load, and optional reflection
 - Insights dashboard for weekly progress, focus hours, category balance, routines, and project health
 - Global command palette with search, navigation, creation commands, and demo reset
 - Settings page for app preferences, appearance notes, and local data controls
@@ -64,6 +64,7 @@ Atria is an MVP with no backend. Data is stored locally in the browser:
 - Goals: `atria-goals`
 - Projects: `atria-projects`
 - Daily focus entries: `atria-daily-focus`
+- Daily reflections: `atria-reflections`
 - Settings preferences: `atria-settings-preferences`
 
 Stored data is normalized on read so older or partially invalid LocalStorage values can safely fall back to defaults.
@@ -76,7 +77,7 @@ Planning suggestions are temporary and are not stored as separate records. When 
 2. Open Calendar and scan the sample week.
 3. Add or edit an event.
 4. Drag a flexible task to another day.
-5. Open Today to show the daily command dashboard.
+5. Open Today to show the current moment, primary intention, daily load, and reflection entry point.
 6. Open Tasks and filter by goal or project.
 7. Open Goals and expand a goal to show linked projects and tasks.
 8. Open Projects and click a project card to reveal the detail drawer.
@@ -96,6 +97,8 @@ Planning suggestions are temporary and are not stored as separate records. When 
 - Default view redirects only from the root route
 - Planning suggestions are deterministic heuristics, not AI or behavioural learning
 - Accepted focus sessions are single blocks only, not recurring sessions
+- Today load is a scheduling heuristic based on timed commitments, not a productivity score
+- Expected energy comes from explicit settings, not behavioural inference
 
 ## Why Atria Is Different
 

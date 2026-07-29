@@ -1,55 +1,45 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCalendarStore } from '../../../features/calendar/store/calendar.store';
+import { useIntentionsStore } from '../../../features/intentions';
+import { useReflectionsStore } from '../../../features/reflections';
 import { useSettingsStore } from '../../../features/settings/store/settings.store';
-import { getVisibleCalendarOccurrences } from '../../../features/calendar/utils/calendarRecurrence';
-import {
-  getCategoryProgress,
-  getProgressPercentage,
-  getTodayDisplayDate,
-  getTodayFlexibleTasks,
-  getTodayIsoDate,
-  getTodayScheduledEvents,
-} from '../utils/todayDashboard';
+import { buildTodayViewModel } from '../utils/todayDashboard';
+
+function getCurrentMinuteDate() {
+  const date = new Date();
+  date.setSeconds(0, 0);
+  return date;
+}
 
 export function useTodayDashboard() {
+  const [now, setNow] = useState(() => getCurrentMinuteDate());
   const sourceEvents = useCalendarStore((state) => state.events);
-  const dailyFocusByDate = useCalendarStore((state) => state.dailyFocusByDate);
-  const weekStartsOnMonday = useSettingsStore((state) => state.preferences.weekStartsOnMonday);
-  const todayIsoDate = useMemo(() => getTodayIsoDate(), []);
-  const todayLabel = useMemo(() => getTodayDisplayDate(), []);
-  const visibleItems = useMemo(
+  const intentions = useIntentionsStore((state) => state.intentions);
+  const reflectionsByDate = useReflectionsStore((state) => state.reflections);
+  const preferences = useSettingsStore((state) => state.preferences);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setNow(getCurrentMinuteDate()), 60_000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  const reflections = useMemo(() => Object.values(reflectionsByDate), [reflectionsByDate]);
+  const viewModel = useMemo(
     () =>
-      getVisibleCalendarOccurrences(sourceEvents, new Date(), weekStartsOnMonday).filter(
-        (item) => item.date === todayIsoDate,
-      ),
-    [sourceEvents, todayIsoDate, weekStartsOnMonday],
+      buildTodayViewModel({
+        now,
+        calendarItems: sourceEvents,
+        intentions,
+        energyProfile: preferences.energyProfile,
+        reflections,
+        weekStartsOnMonday: preferences.weekStartsOnMonday,
+      }),
+    [intentions, now, preferences.energyProfile, preferences.weekStartsOnMonday, reflections, sourceEvents],
   );
-  const scheduledEvents = useMemo(
-    () => getTodayScheduledEvents(visibleItems, todayIsoDate),
-    [visibleItems, todayIsoDate],
-  );
-  const flexibleTasks = useMemo(
-    () => getTodayFlexibleTasks(visibleItems, todayIsoDate),
-    [visibleItems, todayIsoDate],
-  );
-  const completedCount = useMemo(
-    () => visibleItems.filter((item) => item.completed).length,
-    [visibleItems],
-  );
-  const progress = getProgressPercentage(completedCount, visibleItems.length);
-  const categoryProgress = useMemo(() => getCategoryProgress(visibleItems), [visibleItems]);
 
   return {
-    todayIsoDate,
-    todayLabel,
-    visibleItems,
+    now,
     sourceEvents,
-    scheduledEvents,
-    flexibleTasks,
-    categoryProgress,
-    completedCount,
-    totalCount: visibleItems.length,
-    progress,
-    dailyFocus: dailyFocusByDate[todayIsoDate] ?? '',
+    viewModel,
   };
 }
