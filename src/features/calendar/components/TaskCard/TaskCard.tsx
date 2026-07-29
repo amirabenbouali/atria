@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
-import { GripVertical } from 'lucide-react';
+import { ArrowDown, ArrowUp, GripVertical } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
 import AtriaIcon from '../../../../shared/ui/AtriaIcon';
 import { CompletedBadge, RecurringBadge } from '../../../../shared/ui/AtriaBadge';
@@ -19,6 +19,10 @@ type TaskCardProps = {
   onMoveTask: (id: string, direction: 'up' | 'down') => void;
   onDelete: (id: string) => void;
   onToggleComplete: (id: string) => void;
+  orderPosition?: number;
+  orderTotal?: number;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
 };
 
 export default function TaskCard({
@@ -30,6 +34,10 @@ export default function TaskCard({
   onMoveTask,
   onDelete,
   onToggleComplete,
+  orderPosition = 0,
+  orderTotal = 0,
+  canMoveUp = true,
+  canMoveDown = true,
 }: TaskCardProps) {
   const {
     attributes,
@@ -67,6 +75,9 @@ export default function TaskCard({
     >
       <div className={styles.taskHeader}>
         <span>{task.category}</span>
+        {orderPosition > 0 && orderTotal > 1 ? (
+          <em className={styles.orderBadge}>{orderPosition}/{orderTotal}</em>
+        ) : null}
         <button
           className={styles.dragHandle}
           type="button"
@@ -98,22 +109,26 @@ export default function TaskCard({
         <Button
           variant="ghost"
           className={styles.secondaryAction}
+          disabled={!canMoveUp}
+          aria-label={`Move ${task.title} up`}
           onClick={(clickEvent) => {
             clickEvent.stopPropagation();
             onMoveTask(task.id, 'up');
           }}
         >
-          ↑
+          <ArrowUp size={13} aria-hidden="true" />
         </Button>
         <Button
           variant="ghost"
           className={styles.secondaryAction}
+          disabled={!canMoveDown}
+          aria-label={`Move ${task.title} down`}
           onClick={(clickEvent) => {
             clickEvent.stopPropagation();
             onMoveTask(task.id, 'down');
           }}
         >
-          ↓
+          <ArrowDown size={13} aria-hidden="true" />
         </Button>
         <Button
           variant="ghost"

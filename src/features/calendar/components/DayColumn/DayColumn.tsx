@@ -6,6 +6,7 @@ import { createDayDropId, createHourDropId } from '../../utils/calendarDrag';
 import {
   getFlexibleTasksForDate,
   getScheduledEventsForDate,
+  getTaskOrderMetadata,
   sortEventsByTime,
   sortTasksByStatus,
 } from '../../utils/eventSorting';
@@ -126,19 +127,27 @@ export default function DayColumn({
 
         {sortedTasks.length > 0 ? (
           <div className={styles.taskList}>
-            {sortedTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onEdit={onEdit}
-                onDuplicate={onDuplicate}
-                onCopyToTomorrow={onCopyToTomorrow}
-                onCopyToNextWeek={onCopyToNextWeek}
-                onMoveTask={onMoveTask}
-                onDelete={onDelete}
-                onToggleComplete={onToggleComplete}
-              />
-            ))}
+            {sortedTasks.map((task) => {
+              const orderMetadata = getTaskOrderMetadata(sortedTasks, task.id);
+
+              return (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  orderPosition={orderMetadata.position}
+                  orderTotal={orderMetadata.total}
+                  canMoveUp={orderMetadata.canMoveUp}
+                  canMoveDown={orderMetadata.canMoveDown}
+                  onEdit={onEdit}
+                  onDuplicate={onDuplicate}
+                  onCopyToTomorrow={onCopyToTomorrow}
+                  onCopyToNextWeek={onCopyToNextWeek}
+                  onMoveTask={onMoveTask}
+                  onDelete={onDelete}
+                  onToggleComplete={onToggleComplete}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className={styles.tasksEmptyState}>

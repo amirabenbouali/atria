@@ -31,3 +31,26 @@ export function sortTasksByStatus(tasks: FlexibleCalendarTask[]) {
     return first.order - second.order || first.createdAt.localeCompare(second.createdAt);
   });
 }
+
+export function getTaskOrderMetadata(tasks: FlexibleCalendarTask[], taskId: string) {
+  const task = tasks.find((item) => item.id === taskId);
+
+  if (!task) {
+    return {
+      position: 0,
+      total: 0,
+      canMoveUp: false,
+      canMoveDown: false,
+    };
+  }
+
+  const laneTasks = sortTasksByStatus(tasks).filter((item) => item.completed === task.completed);
+  const index = laneTasks.findIndex((item) => item.id === taskId);
+
+  return {
+    position: index >= 0 ? index + 1 : 0,
+    total: laneTasks.length,
+    canMoveUp: index > 0,
+    canMoveDown: index >= 0 && index < laneTasks.length - 1,
+  };
+}

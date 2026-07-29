@@ -54,6 +54,7 @@ export default function TasksPage() {
   const updateEvent = useCalendarStore((state) => state.updateEvent);
   const deleteEvent = useCalendarStore((state) => state.deleteEvent);
   const toggleEventComplete = useCalendarStore((state) => state.toggleEventComplete);
+  const moveTask = useCalendarStore((state) => state.moveTask);
   const resetDemoWorkspace = useResetDemoWorkspace();
   const goToToday = useCalendarStore((state) => state.goToToday);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
@@ -154,6 +155,7 @@ export default function TasksPage() {
                 onEdit={openEditEventModal}
                 onDelete={handleDelete}
                 onToggleComplete={toggleEventComplete}
+                onMoveTask={moveTask}
               />
             ))}
           </div>

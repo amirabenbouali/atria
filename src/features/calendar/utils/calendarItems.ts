@@ -111,7 +111,12 @@ export function reorderTaskWithinDate(
   }
 
   const tasksForDay = events
-    .filter((event): event is FlexibleCalendarTask => event.itemType === 'task' && event.date === task.date)
+    .filter(
+      (event): event is FlexibleCalendarTask =>
+        event.itemType === 'task' &&
+        event.date === task.date &&
+        event.completed === task.completed,
+    )
     .sort((first, second) => first.order - second.order || first.createdAt.localeCompare(second.createdAt));
   const currentIndex = tasksForDay.findIndex((item) => item.id === taskId);
   const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;

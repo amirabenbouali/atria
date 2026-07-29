@@ -97,6 +97,20 @@
   white-space: nowrap;
 }
 
+.orderBadge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 23px;
+  border: 1px solid color-mix(in srgb, var(--task-color) 22%, white 6%);
+  border-radius: var(--radius-pill);
+  color: rgba(255, 255, 255, 0.66);
+  font-style: normal;
+  background:
+    radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--task-color) 12%, transparent), transparent 42%),
+    rgba(255, 255, 255, 0.035);
+}
+
 .dragHandle {
   width: 23px;
   height: 23px;
@@ -178,9 +192,19 @@
 }
 
 .taskActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 27px;
   padding: 0 8px;
   font-size: 0.68rem;
+}
+
+.taskActions button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .deleteButton {
