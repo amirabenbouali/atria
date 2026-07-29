@@ -4,6 +4,7 @@ import DefaultRoute from './DefaultRoute';
 import { routes } from './routes';
 
 const CalendarPage = lazy(() => import('../pages/CalendarPage/CalendarPage'));
+const LandingPage = lazy(() => import('../pages/LandingPage/LandingPage'));
 const TodayPage = lazy(() => import('../pages/TodayPage/TodayPage'));
 const InsightsPage = lazy(() => import('../pages/InsightsPage/InsightsPage'));
 const TasksPage = lazy(() => import('../pages/TasksPage/TasksPage'));
@@ -15,6 +16,10 @@ const SettingsPage = lazy(() => import('../pages/SettingsPage/SettingsPage'));
 export const router = createBrowserRouter([
   {
     path: routes.root,
+    element: <LandingPage />,
+  },
+  {
+    path: routes.workspace,
     element: <DefaultRoute />,
   },
   {

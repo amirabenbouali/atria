@@ -1,5 +1,6 @@
 export const routes = {
   root: '/',
+  workspace: '/workspace',
   calendar: '/calendar',
   today: '/today',
   insights: '/insights',

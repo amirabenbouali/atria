@@ -7,6 +7,7 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 ## Features
 
 - Weekly calendar with Sunday or Monday week-start preference
+- Public front page with a quiet Soft Rose Glass product story
 - Scheduled events and flexible day tasks
 - Create, edit, complete, delete, duplicate, copy, and drag items
 - Recurring events and tasks: daily, weekly, and monthly
@@ -74,27 +75,29 @@ Planning suggestions are temporary and are not stored as separate records. When 
 ## Demo Flow
 
 1. Reset demo data from the sidebar or command palette.
-2. Open Calendar and scan the sample week.
-3. Add or edit an event.
-4. Drag a flexible task to another day.
-5. Open Today to show the current moment, primary intention, daily load, and reflection entry point.
-6. Open Tasks and filter by goal or project.
-7. Open Goals and expand a goal to show linked projects and tasks.
-8. Open Projects and click a project card to reveal the detail drawer.
-9. Create a new task from the project drawer.
-10. Open Insights to show weekly analytics and project health.
-11. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
+2. Open the front page at `/` and enter the workspace.
+3. Open Calendar and scan the sample week.
+4. Add or edit an event.
+5. Drag a flexible task to another day.
+6. Open Today to show the current moment, primary intention, daily load, and reflection entry point.
+7. Open Tasks and filter by goal or project.
+8. Open Goals and expand a goal to show linked projects and tasks.
+9. Open Projects and click a project card to reveal the detail drawer.
+10. Create a new task from the project drawer.
+11. Open Insights to show weekly analytics and project health.
+12. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
 
 ## Current Limitations
 
 - No backend sync or authentication
+- Front-page sign-in and onboarding are visual prototype flows only
 - No multi-device persistence
 - Recurring item editing/deletion applies to the whole series
 - No single-occurrence recurring edits yet
 - Dragging recurring occurrences moves the source series
 - Project and goal progress use a stable MVP calculation rather than historical analytics
 - Deleting a project removes task `projectId` links but preserves task `goalId` for safety
-- Default view redirects only from the root route
+- Default view redirects from `/workspace`; direct app routes remain available
 - Planning suggestions are deterministic heuristics, not AI or behavioural learning
 - Accepted focus sessions are single blocks only, not recurring sessions
 - Today load is a scheduling heuristic based on timed commitments, not a productivity score

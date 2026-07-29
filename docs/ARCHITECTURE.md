@@ -18,6 +18,8 @@ src/
 
 `app/` owns bootstrapping. It should not contain calendar business logic.
 
+The root route `/` is the public front-page experience. The app workspace remains available through direct routes and `/workspace`, where the saved default-view redirect is applied.
+
 `pages/` compose features. Pages can connect stores to components, but they should avoid persistence, date math, and mutation logic.
 
 `features/calendar/` owns the calendar domain: event and task types, recurrence, drag-and-drop movement rules, state, storage services, date utilities, and calendar-specific components.
@@ -67,6 +69,7 @@ The current product supports the portfolio MVP behavior:
 - per-occurrence recurring completion
 - drag-and-drop task and event movement with `@dnd-kit/core`
 - Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
+- a public landing/front-page route with a prototype auth and onboarding overlay
 - Today current/next derivation, primary intention, expected energy, daily load, and optional reflection
 - an Intentions inbox for capturing outcomes before scheduling
 - deterministic planning suggestions that can create accepted focus sessions
