@@ -5,7 +5,12 @@ import { eventCategories } from '../../features/calendar/constants/calendar.cons
 import { useCalendarEvents } from '../../features/calendar/hooks/useCalendarEvents';
 import { useCalendarStore } from '../../features/calendar/store/calendar.store';
 import type { CalendarItemType, EventCategory } from '../../features/calendar/types/calendar.types';
+import { downloadAtriaExport } from '../../features/dataExport/services/dataExport.service';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
+import { useGoalsStore } from '../../features/goals/store/goals.store';
+import { useIntentionsStore } from '../../features/intentions/store/intentions.store';
+import { useProjectsStore } from '../../features/projects/store/projects.store';
+import { useReflectionsStore } from '../../features/reflections';
 import { getThemeDefinition, themeDefinitions } from '../../features/settings/constants/theme.constants';
 import { useSettingsStore } from '../../features/settings/store/settings.store';
 import type { DefaultView, ThemeId } from '../../features/settings/types/settings.types';
@@ -33,6 +38,7 @@ export default function SettingsPage() {
   const setEnergyForPeriod = useSettingsStore((state) => state.setEnergyForPeriod);
   const setPreferredQualitiesForPeriod = useSettingsStore((state) => state.setPreferredQualitiesForPeriod);
   const resetEnergyProfile = useSettingsStore((state) => state.resetEnergyProfile);
+  const resetPreferences = useSettingsStore((state) => state.resetPreferences);
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const isAddEventModalOpen = useCalendarStore((state) => state.isAddEventModalOpen);
   const editingEventId = useCalendarStore((state) => state.editingEventId);
@@ -44,6 +50,10 @@ export default function SettingsPage() {
   const resetDemoWorkspace = useResetDemoWorkspace();
   const clearCalendarData = useCalendarStore((state) => state.clearCalendarData);
   const clearDailyFocusData = useCalendarStore((state) => state.clearDailyFocusData);
+  const clearIntentions = useIntentionsStore((state) => state.clearIntentions);
+  const clearReflections = useReflectionsStore((state) => state.clearReflections);
+  const clearGoals = useGoalsStore((state) => state.clearGoals);
+  const clearProjects = useProjectsStore((state) => state.clearProjects);
   const goToToday = useCalendarStore((state) => state.goToToday);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
@@ -68,6 +78,24 @@ export default function SettingsPage() {
     setToastMessage(toast);
   }, []);
 
+  const clearAllData = useCallback(() => {
+    clearCalendarData();
+    clearDailyFocusData();
+    clearIntentions();
+    clearReflections();
+    clearGoals();
+    clearProjects();
+    resetPreferences();
+  }, [
+    clearCalendarData,
+    clearDailyFocusData,
+    clearGoals,
+    clearIntentions,
+    clearProjects,
+    clearReflections,
+    resetPreferences,
+  ]);
+
   return (
     <AppLayout
       totalEvents={totalEventCount}
@@ -88,27 +116,45 @@ export default function SettingsPage() {
     >
       <GlassPanel className={styles.settingsShell}>
         <section className={styles.heroPanel}>
-          <p className="eyebrow">Soft Rose Glass</p>
+          <p className="eyebrow">Release Controls</p>
           <h1>Atria Settings</h1>
-          <span>Preferences, local data, and the current visual system.</span>
+          <span>A calm calendar for shaping, understanding, and remembering your time.</span>
         </section>
 
         <div className={styles.settingsGrid}>
-          <SettingsSection eyebrow="Local Data" title="Data controls">
+          <SettingsSection eyebrow="Sample Data" title="Demo workspace">
             <div className={styles.actionStack}>
               <div>
-                <strong>Reset demo data</strong>
-                <span>Restore the curated portfolio sample week.</span>
+                <strong>Load sample data</strong>
+                <span>Replace current calendar, goals, projects, intentions, and reflections with a coherent demo set.</span>
               </div>
               <Button
                 variant="secondary"
                 onClick={() => confirmAction(
-                  'Reset demo data? This replaces your current calendar, goals, and projects.',
+                  'Load sample data? This replaces your current calendar, goals, projects, intentions, and reflections.',
                   resetDemoWorkspace,
-                  'Demo data restored',
+                  'Sample data loaded',
                 )}
               >
-                Reset
+                Load sample data
+              </Button>
+            </div>
+          </SettingsSection>
+
+          <SettingsSection eyebrow="Local Data" title="Export and clear">
+            <div className={styles.actionStack}>
+              <div>
+                <strong>Export Atria data</strong>
+                <span>Download a local JSON backup. Nothing is sent to a server.</span>
+              </div>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  downloadAtriaExport();
+                  setToastMessage('Data exported');
+                }}
+              >
+                Export JSON
               </Button>
             </div>
 
@@ -132,19 +178,55 @@ export default function SettingsPage() {
 
             <div className={styles.actionStack}>
               <div>
-                <strong>Clear daily focus</strong>
-                <span>Remove saved focus lines from Today.</span>
+                <strong>Clear intentions</strong>
+                <span>Remove outcomes, statuses, and planning context. Linked focus sessions remain in Calendar.</span>
               </div>
               <Button
                 variant="ghost"
                 className={styles.dangerButton}
                 onClick={() => confirmAction(
-                  'Clear all daily focus data? This cannot be undone.',
-                  clearDailyFocusData,
-                  'Daily focus cleared',
+                  'Clear all intentions? Existing calendar focus sessions will keep their metadata but missing links will be treated as archived context.',
+                  clearIntentions,
+                  'Intentions cleared',
                 )}
               >
                 Clear
+              </Button>
+            </div>
+
+            <div className={styles.actionStack}>
+              <div>
+                <strong>Clear reflections</strong>
+                <span>Remove daily reflections used by Today, Memories, and Insights.</span>
+              </div>
+              <Button
+                variant="ghost"
+                className={styles.dangerButton}
+                onClick={() => confirmAction(
+                  'Clear all reflections? This cannot be undone.',
+                  clearReflections,
+                  'Reflections cleared',
+                )}
+              >
+                Clear
+              </Button>
+            </div>
+
+            <div className={styles.actionStack}>
+              <div>
+                <strong>Clear all Atria data</strong>
+                <span>Reset local data, settings, and onboarding to a fresh first-run state.</span>
+              </div>
+              <Button
+                variant="ghost"
+                className={styles.dangerButton}
+                onClick={() => confirmAction(
+                  'Clear all Atria data and reset settings? This cannot be undone unless you exported a backup.',
+                  clearAllData,
+                  'Atria data cleared',
+                )}
+              >
+                Clear all
               </Button>
             </div>
           </SettingsSection>
@@ -199,6 +281,22 @@ export default function SettingsPage() {
                 <option value="insights">Insights</option>
               </SelectControl>
             </label>
+
+            <div className={styles.actionStack}>
+              <div>
+                <strong>Onboarding</strong>
+                <span>Reopen the short product introduction on your next view.</span>
+              </div>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  updatePreferences({ hasCompletedOnboarding: false });
+                  setToastMessage('Onboarding reopened');
+                }}
+              >
+                Reopen
+              </Button>
+            </div>
           </SettingsSection>
 
           <SettingsSection eyebrow="Daily Energy" title="Energy profile">
@@ -252,8 +350,8 @@ export default function SettingsPage() {
           <SettingsSection eyebrow="About" title="Atria">
             <div className={styles.aboutCard}>
               <strong>Atria</strong>
-              <span>A calendar-first personal planning system.</span>
-              <em>MVP version 0.1.0</em>
+              <span>A calm calendar that helps you shape, understand, and remember your time.</span>
+              <em>Release candidate 1.0.0-rc.1</em>
             </div>
           </SettingsSection>
         </div>

@@ -13,6 +13,7 @@ const MemoriesPage = lazy(() => import('../pages/MemoriesPage/MemoriesPage'));
 const GoalsPage = lazy(() => import('../pages/GoalsPage/GoalsPage'));
 const ProjectsPage = lazy(() => import('../pages/ProjectsPage/ProjectsPage'));
 const SettingsPage = lazy(() => import('../pages/SettingsPage/SettingsPage'));
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage/NotFoundPage'));
 
 export const router = createBrowserRouter([
   {
@@ -58,5 +59,9 @@ export const router = createBrowserRouter([
   {
     path: routes.settings,
     element: <SettingsPage />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);

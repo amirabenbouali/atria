@@ -10,6 +10,8 @@ export type SettingsPreferences = {
   defaultCategory: EventCategory;
   defaultView: DefaultView;
   themeId: ThemeId;
+  hasCompletedOnboarding: boolean;
+  onboardingVersion: number;
   energyProfile: EnergyProfile;
 };
 

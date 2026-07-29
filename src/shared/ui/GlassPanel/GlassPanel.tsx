@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react';
+import { forwardRef, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from 'react';
 import { cn } from '../../utils/cn';
 import styles from './GlassPanel.module.css';
 
@@ -8,17 +8,22 @@ type GlassPanelProps<T extends ElementType> = {
   className?: string;
 } & Omit<ComponentPropsWithoutRef<T>, 'as' | 'children' | 'className'>;
 
-export default function GlassPanel<T extends ElementType = 'div'>({
-  as,
-  children,
-  className,
-  ...props
-}: GlassPanelProps<T>) {
+const GlassPanel = forwardRef<HTMLElement, GlassPanelProps<ElementType>>(function GlassPanel(
+  {
+    as,
+    children,
+    className,
+    ...props
+  },
+  ref,
+) {
   const Component = as ?? 'div';
 
   return (
-    <Component className={cn(styles.panel, className)} {...props}>
+    <Component className={cn(styles.panel, className)} ref={ref} {...props}>
       {children}
     </Component>
   );
-}
+});
+
+export default GlassPanel;

@@ -11,6 +11,7 @@ import { defaultThemeId, isThemeId } from '../constants/theme.constants';
 import type { SettingsPreferences } from '../types/settings.types';
 
 const settingsStorageKey = 'atria-settings-preferences';
+export const currentOnboardingVersion = 1;
 
 export const defaultSettingsPreferences: SettingsPreferences = {
   weekStartsOnMonday: true,
@@ -18,6 +19,8 @@ export const defaultSettingsPreferences: SettingsPreferences = {
   defaultCategory: 'Work',
   defaultView: 'calendar',
   themeId: defaultThemeId,
+  hasCompletedOnboarding: false,
+  onboardingVersion: currentOnboardingVersion,
   energyProfile: defaultEnergyProfile,
 };
 
@@ -39,6 +42,11 @@ function normalizePreferences(preferences: unknown): SettingsPreferences {
     themeId: isThemeId(storedPreferences.themeId)
       ? storedPreferences.themeId
       : defaultSettingsPreferences.themeId,
+    hasCompletedOnboarding:
+      storedPreferences.onboardingVersion === currentOnboardingVersion
+        ? Boolean(storedPreferences.hasCompletedOnboarding)
+        : false,
+    onboardingVersion: currentOnboardingVersion,
     energyProfile: normalizeEnergyProfile(storedPreferences.energyProfile),
   };
 }

@@ -1,87 +1,117 @@
 # Atria Architecture
 
-Atria is calendar-first. Time is the primary object, and tasks, habits, projects, notes, and goals should attach to time rather than becoming disconnected lists.
+Atria is calendar-first. Time is the primary object, intentions describe outcomes, focus sessions connect outcomes to time, reflections record what mattered, and Memories/Insights are derived from source records.
 
 ## Source Layout
 
 ```txt
 src/
-  app/                 Application wiring, providers, routes, and router setup.
+  app/                 Router, providers, default route, error boundary.
   pages/               Route-level screens that compose features and shared layout.
-  features/            Domain-owned product areas, starting with calendar.
-  shared/              Reusable UI, hooks, services, utilities, and common types.
-  styles/              Global reset, tokens, effects, and base application styles.
-  assets/              Static images and icons.
+  features/            Domain-owned state, services, utilities, types, and components.
+  shared/              Reusable UI, services, and small utilities.
+  styles/              Global reset, tokens, effects, and base styles.
 ```
 
-## Boundaries
+## Routes
 
-`app/` owns bootstrapping. It should not contain calendar business logic.
+The public front page is `/`. The app workspace is available through `/workspace`, which redirects to the saved default view. Direct routes remain available:
 
-The root route `/` is the public front-page experience. The app workspace remains available through direct routes and `/workspace`, where the saved default-view redirect is applied.
+- `/calendar`
+- `/today`
+- `/tasks`
+- `/intentions`
+- `/memories`
+- `/goals`
+- `/projects`
+- `/insights`
+- `/settings`
 
-`pages/` compose features. Pages can connect stores to components, but they should avoid persistence, date math, and mutation logic.
+Unknown routes render a restrained Not Found page. Workspace routes use `AppLayout`, which provides the sidebar, command palette shortcut, onboarding modal, page title updates, storage warning toast, skip link, and optional contextual panel.
 
-`features/calendar/` owns the calendar domain: event and task types, recurrence, drag-and-drop movement rules, state, storage services, date utilities, and calendar-specific components.
+## Feature Boundaries
 
-`features/goals/` and `features/projects/` own longer-range planning entities and their LocalStorage-backed state.
+- `features/calendar` owns calendar events, flexible tasks, recurrence, drag-and-drop movement rules, daily focus text, and accepted focus sessions.
+- `features/intentions` owns desired outcomes, quick capture, filtering, status transitions, and persistence.
+- `features/planning` owns deterministic suggestion scoring. Suggestions are temporary until accepted.
+- `features/reflections` owns daily reflections keyed by local date.
+- `features/timeQuality` owns energy and time-quality vocabulary.
+- `features/memories` derives a private timeline from calendar items, completed intentions, and reflections.
+- `features/insights` derives thresholded observations from local evidence.
+- `features/goals` and `features/projects` own long-term planning entities.
+- `features/settings` owns preferences, theme selection, onboarding state, and energy profile.
+- `features/dataExport` creates typed local JSON backups from normalized source stores.
 
-`features/intentions/` owns the typed domain foundation for desired outcomes that may later become scheduled focus sessions. It is intentionally separate from calendar events and tasks.
+Pages compose feature state and UI, but business rules should remain in stores, services, and utilities.
 
-The user-facing intention inbox lives at `/intentions`. Quick capture uses a small deterministic parser for supported phrases such as relative deadlines, durations, time-of-day hints, and priority signals. It is not an AI service and does not place intentions onto the calendar.
+## Persistence
 
-`features/reflections/` owns lightweight daily reflection data keyed by local calendar date. Reflection state should not be placed inside the calendar store.
+Atria uses LocalStorage for the MVP. Each domain has a service boundary and normalizes stored values on read.
 
-`features/timeQuality/` owns shared time-quality and energy vocabulary for planning suggestions and reflection metadata.
+Current keys:
 
-Energy profiles are explicit user preferences stored in settings. The current profile uses three fixed local day periods: morning `05:00-11:59`, afternoon `12:00-16:59`, and evening `17:00-23:59`, with `00:00-04:59` falling back to evening. Atria does not learn from behaviour.
+- `atria-events`
+- `atria-daily-focus`
+- `atria-intentions`
+- `atria-reflections`
+- `atria-goals`
+- `atria-projects`
+- `atria-settings-preferences`
 
-`features/planning/` owns the transparent suggestion engine. It is deterministic and rule-based, not an AI service. The engine reads calendar availability, intention metadata, and explicit energy settings, then returns temporary reviewable suggestions with machine-readable reason and warning codes. It never writes to state, creates events, moves events, or modifies intentions. Users must explicitly accept a proposed block.
+The shared LocalStorage service handles malformed reads and write failures without crashing the app. In development it logs diagnostic context; in the UI, workspace pages show a restrained storage warning toast.
 
-Accepted planning suggestions become standard timed calendar events with `source: "planning-suggestion"` and `focusSession` metadata linking back to the source intention. These focus sessions persist through the existing calendar LocalStorage service and remain editable/draggable through current calendar flows. Recurring focus sessions and behavioural learning are intentionally out of scope.
+## Onboarding
 
-`features/memories/` owns the derived memory timeline. It combines bounded calendar occurrence expansion, completed intentions, and daily reflections into private day summaries. Memories do not have their own Zustand store or LocalStorage key; the source of truth remains calendar items, intentions, and reflections. Historical edits to those source records may change the derived timeline. Recurrence is expanded only for the selected range, and no AI summary or behavioural inference is performed.
+Onboarding is a short, skippable modal shown for workspace routes until settings contain:
 
-`features/insights/` owns gentle deterministic observations. It reads calendar occurrences, focus-session metadata, intentions, reflections, and energy settings for an explicit recent range, then returns thresholded insights with stable IDs and machine-readable evidence. Confidence labels describe evidence amount and consistency, not statistical probability. Insights never write to storage, alter schedules, infer recovery from empty time, or make medical, psychological, productivity-score, or AI claims.
-
-`pages/TodayPage/` composes a pure Today view model from calendar occurrences, intentions, settings energy profile, and reflections. It derives current and next commitments, one primary intention, accepted focus sessions, expected energy, scheduling load, recovery-labelled minutes, and the optional reflection for the current local date. Today does not reschedule automatically or persist a primary-intention choice.
-
-`shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
-
-`styles/` contains global design language: tokens, reset, aurora effects, and base typography. Component-specific styling belongs beside the component as a CSS Module.
-
-## Data Flow
-
-```txt
-Page
-  -> feature hooks / Zustand store
-  -> feature services
-  -> shared browser services
-  -> LocalStorage now, Supabase later
+```ts
+hasCompletedOnboarding: true
+onboardingVersion: 1
 ```
 
-Components receive data and callbacks. Business rules live in stores, services, and utilities.
+Skipping counts as completion. Settings can reopen onboarding by resetting the completion flag.
 
-## Current Feature Scope
+## Themes
 
-The current product supports the portfolio MVP behavior:
+Theme selection is stored in settings as `themeId`. `useApplyTheme` applies the selected theme to `document.documentElement.dataset.theme`; CSS token overrides then update the app shell, controls, ambient lights, and major accents.
 
-- weekly calendar with configurable week start
-- LocalStorage-backed events and flexible tasks
-- add event modal
-- recurring events and tasks
-- per-occurrence recurring completion
-- drag-and-drop task and event movement with `@dnd-kit/core`
-- Today, Tasks, Goals, Projects, Gentle Insights, Settings, and command palette routes
-- Memories route for a derived private history of past days, reflections, focus sessions, and completed intentions
-- a public landing/front-page route with a prototype auth and onboarding overlay
-- Today current/next derivation, primary intention, expected energy, daily load, and optional reflection
-- an Intentions inbox for capturing outcomes before scheduling
-- deterministic planning suggestions that can create accepted focus sessions
-- domain foundations for daily reflections and time quality
+Current themes:
 
-React Big Calendar and backend storage are intentionally deferred. LocalStorage remains the current persistence layer behind feature service boundaries.
+- Soft Rose Glass
+- Violet Dusk
+- Blue Hour
+- Ember Noir
+
+## Derived Data
+
+Memories and Insights are derived at view time. They are not persisted as separate snapshots. Editing source records can therefore change historical views, which is an explicit MVP tradeoff.
+
+Recurring calendar items are stored as source series and expanded only for visible ranges. Export includes recurrence sources, not generated occurrences.
+
+## Export
+
+The export service creates:
+
+```ts
+type AtriaExport = {
+  exportedAt: string;
+  appVersion: string;
+  schemaVersion: 1;
+  calendar: { events: CalendarEvent[]; dailyFocusByDate: Record<string, string> };
+  intentions: Intention[];
+  reflections: ReflectionsByDate;
+  goals: Goal[];
+  projects: Project[];
+  settings: SettingsPreferences;
+};
+```
+
+Import is intentionally future work for this release candidate.
+
+## Error Handling
+
+`ErrorBoundary` catches unexpected render failures and presents a calm recovery page. It does not erase storage. Validation errors remain handled inside forms and domain utilities.
 
 ## Testing
 
-Vitest covers pure domain utilities, normalization, and persistence edge cases. Component and browser tests are not part of the current setup.
+Vitest covers domain utilities, validation, persistence normalization, settings actions, export payload shape, planning logic, Memories derivation, Today derivation, and Insights evidence rules. Browser E2E tests are not part of the current setup.

@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import {
+  currentOnboardingVersion,
+  defaultSettingsPreferences,
   readStoredSettingsPreferences,
   writeStoredSettingsPreferences,
 } from '../services/settingsStorage.service';
@@ -14,6 +16,8 @@ import {
 type SettingsState = {
   preferences: SettingsPreferences;
   updatePreferences: (preferences: Partial<SettingsPreferences>) => void;
+  completeOnboarding: () => void;
+  resetPreferences: () => void;
   setEnergyForPeriod: (period: DayPeriod, energy: EnergyLevel) => void;
   setPreferredQualitiesForPeriod: (period: DayPeriod, qualities: TimeQuality[]) => void;
   resetEnergyProfile: () => void;
@@ -45,6 +49,18 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         ...nextPreferences,
       }),
     })),
+  completeOnboarding: () =>
+    set((state) => ({
+      preferences: persistPreferences({
+        ...state.preferences,
+        hasCompletedOnboarding: true,
+        onboardingVersion: currentOnboardingVersion,
+      }),
+    })),
+  resetPreferences: () =>
+    set({
+      preferences: persistPreferences(defaultSettingsPreferences),
+    }),
   setEnergyForPeriod: (period, energy) => {
     if (!isEnergyLevel(energy)) {
       return;

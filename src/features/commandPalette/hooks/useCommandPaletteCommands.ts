@@ -135,18 +135,6 @@ export function useCommandPaletteCommands({
         },
       },
       {
-        id: 'open-projects',
-        title: 'Open Projects',
-        subtitle: 'Inspect project workstreams and linked tasks',
-        type: 'navigation',
-        badge: 'Route',
-        accentColor: categoryColors.Work,
-        execute: () => {
-          navigate(routes.projects);
-          onClose();
-        },
-      },
-      {
         id: 'create-event-today',
         title: 'New event today',
         subtitle: 'Create a scheduled block for today',
@@ -283,8 +271,8 @@ export function useCommandPaletteCommands({
       },
       {
         id: 'reset-demo-data',
-        title: 'Reset demo data',
-        subtitle: 'Restore the portfolio-ready sample week',
+        title: 'Load sample data',
+        subtitle: 'Replace current local data with the portfolio-ready demo workspace',
         type: 'system',
         badge: 'System',
         accentColor: categoryColors.Personal,

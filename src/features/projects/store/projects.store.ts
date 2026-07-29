@@ -16,6 +16,7 @@ type ProjectsState = {
   setProjectStatus: (id: string, status: ProjectStatus) => void;
   deleteProject: (id: string) => void;
   resetDemoProjects: () => void;
+  clearProjects: () => void;
 };
 
 function persistProjects(projects: Project[]) {
@@ -75,4 +76,6 @@ export const useProjectsStore = create<ProjectsState>((set) => ({
     })),
   resetDemoProjects: () =>
     set({ projects: persistProjects(createDemoProjects()), isProjectModalOpen: false, editingProjectId: null }),
+  clearProjects: () =>
+    set({ projects: persistProjects([]), isProjectModalOpen: false, editingProjectId: null }),
 }));

@@ -35,6 +35,27 @@
     linear-gradient(180deg, rgba(1, 2, 8, 0.08), rgba(1, 2, 8, 0.68));
 }
 
+.skipLink {
+  position: fixed;
+  left: 14px;
+  top: 14px;
+  z-index: calc(var(--z-modal) + 1);
+  transform: translateY(-140%);
+  border: 1px solid color-mix(in srgb, var(--color-neon-pink) 34%, white 8%);
+  border-radius: var(--radius-pill);
+  padding: 10px 14px;
+  color: var(--color-text);
+  font-weight: 900;
+  text-decoration: none;
+  background: var(--color-surface-ink-strong);
+  box-shadow: var(--shadow-neon);
+  transition: transform var(--duration-fast) ease;
+}
+
+.skipLink:focus {
+  transform: translateY(0);
+}
+
 .mainPanel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);

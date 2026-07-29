@@ -16,6 +16,7 @@ type GoalsState = {
   setGoalStatus: (id: string, status: GoalStatus) => void;
   deleteGoal: (id: string) => void;
   resetDemoGoals: () => void;
+  clearGoals: () => void;
 };
 
 function persistGoals(goals: Goal[]) {
@@ -78,4 +79,5 @@ export const useGoalsStore = create<GoalsState>((set) => ({
       goals: persistGoals(state.goals.filter((goal) => goal.id !== id)),
     })),
   resetDemoGoals: () => set({ goals: persistGoals(createDemoGoals()), isGoalModalOpen: false, editingGoalId: null }),
+  clearGoals: () => set({ goals: persistGoals([]), isGoalModalOpen: false, editingGoalId: null }),
 }));

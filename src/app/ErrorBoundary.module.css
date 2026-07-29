@@ -1,0 +1,59 @@
+.errorPage {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: var(--space-5);
+  background: var(--gradient-page);
+}
+
+.errorPage section {
+  display: grid;
+  gap: var(--space-4);
+  width: min(560px, 100%);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-2xl);
+  padding: clamp(24px, 5vw, 44px);
+  background: var(--glass-surface-raised);
+  box-shadow: var(--shadow-glass);
+}
+
+.errorPage h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 4rem);
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+
+.errorPage span {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.errorPage div {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.errorPage button,
+.errorPage a {
+  display: inline-grid;
+  min-height: 42px;
+  place-items: center;
+  border-radius: var(--radius-md);
+  padding: 0 18px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.errorPage button {
+  border: 0;
+  color: #2b1420;
+  background: var(--gradient-action);
+}
+
+.errorPage a {
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text);
+  background: var(--glass-button-secondary);
+}

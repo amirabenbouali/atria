@@ -28,6 +28,7 @@ type IntentionsState = {
   removeIntention: (id: string) => void;
   setIntentionStatus: (id: string, status: IntentionStatus) => void;
   resetDemoIntentions: () => void;
+  clearIntentions: () => void;
 };
 
 function persistIntentions(intentions: Intention[]) {
@@ -101,6 +102,12 @@ export const useIntentionsStore = create<IntentionsState>((set, get) => ({
   resetDemoIntentions: () =>
     set({
       intentions: persistIntentions(createDemoIntentions()),
+      isIntentionModalOpen: false,
+      editingIntentionId: null,
+    }),
+  clearIntentions: () =>
+    set({
+      intentions: persistIntentions([]),
       isIntentionModalOpen: false,
       editingIntentionId: null,
     }),

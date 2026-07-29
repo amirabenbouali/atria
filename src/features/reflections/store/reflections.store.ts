@@ -15,6 +15,7 @@ type ReflectionsState = {
   removeReflection: (date: string) => void;
   getReflectionByDate: (date: string) => DailyReflection | undefined;
   resetDemoReflections: () => void;
+  clearReflections: () => void;
 };
 
 function persistReflections(reflections: ReflectionsByDate) {
@@ -51,4 +52,5 @@ export const useReflectionsStore = create<ReflectionsState>((set, get) => ({
     }),
   getReflectionByDate: (date) => get().reflections[date],
   resetDemoReflections: () => set({ reflections: persistReflections(createDemoReflections()) }),
+  clearReflections: () => set({ reflections: persistReflections({}) }),
 }));

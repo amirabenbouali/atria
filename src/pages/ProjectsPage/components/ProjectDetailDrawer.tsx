@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import type { MouseEvent } from 'react';
 import { format, parseISO } from 'date-fns';
 import { BriefcaseBusiness, CalendarDays, RefreshCw, Target, X } from 'lucide-react';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
@@ -57,7 +58,7 @@ export default function ProjectDetailDrawer({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 32 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            onMouseDown={(event) => event.stopPropagation()}
+            onMouseDown={(event: MouseEvent) => event.stopPropagation()}
           >
             <header className={styles.drawerHeader}>
               <div>

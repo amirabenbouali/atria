@@ -1,9 +1,12 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import CommandPalette from '../../../features/commandPalette/components/CommandPalette/CommandPalette';
+import OnboardingModal from '../../../features/onboarding/components/OnboardingModal/OnboardingModal';
 import { useSettingsStore } from '../../../features/settings/store/settings.store';
+import { storageFailureEventName } from '../../services/localStorage.service';
 import Button from '../Button/Button';
 import Sidebar from '../Sidebar/Sidebar';
+import Toast from '../Toast/Toast';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
 import { cn } from '../../utils/cn';
 import styles from './AppLayout.module.css';
@@ -44,11 +47,24 @@ export default function AppLayout({
   onResetDemoData,
 }: AppLayoutProps) {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
-  const defaultItemType = useSettingsStore((state) => state.preferences.defaultItemType);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
+  const preferences = useSettingsStore((state) => state.preferences);
+  const completeOnboarding = useSettingsStore((state) => state.completeOnboarding);
+  const defaultItemType = preferences.defaultItemType;
   const createButtonLabel = createButtonLabelOverride ?? (defaultItemType === 'task' ? 'New Task' : 'New Event');
+  const pageTitle = `${topbarTitle ?? topbarEyebrow} · Atria`;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      const isEditableTarget =
+        target instanceof HTMLElement &&
+        (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
+
+      if (isEditableTarget) {
+        return;
+      }
+
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
         setIsCommandPaletteOpen((isOpen) => !isOpen);
@@ -59,8 +75,33 @@ export default function AppLayout({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
+
+  useEffect(() => {
+    const handleStorageFailure = () => {
+      setStorageWarning('Changes could not be saved locally');
+    };
+
+    window.addEventListener(storageFailureEventName, handleStorageFailure);
+    return () => window.removeEventListener(storageFailureEventName, handleStorageFailure);
+  }, []);
+
+  useEffect(() => {
+    if (!storageWarning) {
+      return undefined;
+    }
+
+    const timeout = window.setTimeout(() => setStorageWarning(null), 2800);
+    return () => window.clearTimeout(timeout);
+  }, [storageWarning]);
+
   return (
     <div className={cn(styles.appShell, Boolean(contextPanel) && styles.withContext)}>
+      <a className={styles.skipLink} href="#atria-main">
+        Skip to main content
+      </a>
       <div className="aurora auroraOne" />
       <div className="aurora auroraTwo" />
       <div className="aurora auroraThree" />
@@ -73,7 +114,7 @@ export default function AppLayout({
         onResetDemoData={onResetDemoData}
       />
 
-      <main className={styles.mainPanel}>
+      <main className={styles.mainPanel} id="atria-main" tabIndex={-1}>
         <GlassPanel
           as={motion.header}
           className={styles.topbar}
@@ -118,6 +159,11 @@ export default function AppLayout({
         onClose={() => setIsCommandPaletteOpen(false)}
         onResetDemoData={onResetDemoData}
       />
+      <OnboardingModal
+        isOpen={!preferences.hasCompletedOnboarding}
+        onClose={completeOnboarding}
+      />
+      <Toast message={storageWarning} />
     </div>
   );
 }

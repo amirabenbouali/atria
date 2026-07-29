@@ -1,30 +1,35 @@
 # Atria
 
-Atria is a calendar-first personal planning system built as a polished portfolio MVP. It combines weekly scheduling, flexible tasks, goals, projects, a focused Today dashboard, insights, recurring routines, local persistence, and a cinematic Soft Rose Glass interface.
+Atria is a local-first calendar for shaping intentions, finding suitable time, reflecting on completed days, and noticing gentle patterns without productivity scoring.
 
-This is not a Notion clone or a generic task list. Atria starts from time: events occupy the calendar, tasks belong to days, projects organize workstreams, and goals give long-term direction.
+It is designed as a calm calendar that helps you shape, understand, and remember your time. Calendar items represent committed time, intentions represent outcomes, focus sessions connect intentions to time, reflections capture what mattered, Memories revisit past days, and Insights describe patterns cautiously.
+
+## Status
+
+Release candidate: `1.0.0-rc.1`
+
+This is a portfolio-ready MVP, not a cloud product. There is no authentication, backend sync, external calendar provider, payment system, collaboration, or external AI service.
 
 ## Features
 
-- Weekly calendar with Sunday or Monday week-start preference
-- Public front page with a quiet Soft Rose Glass product story
+- Public Atria front page with a quiet product story
+- First-run onboarding for the local workspace
+- Weekly calendar with configurable week start
 - Scheduled events and flexible day tasks
-- Create, edit, complete, delete, duplicate, copy, and drag items
-- Recurring events and tasks: daily, weekly, and monthly
+- Create, edit, complete, delete, duplicate, copy, and drag calendar items
+- Daily, weekly, and monthly recurring events/tasks
 - Per-occurrence completion for recurring items
+- Today dashboard with current/next commitments, primary intention, daily load, energy, and reflection
+- Intentions inbox for outcomes before scheduling
+- Transparent rule-based planning suggestions and accepted focus sessions
 - Tasks page with date grouping plus goal/project filters
-- Goals page with goal cards, linked projects, linked tasks, and progress
-- Projects page with project cards, linked goals, progress, and a detail drawer
-- Project detail drawer with linked task actions and prelinked task creation
-- Calm Today view with current/next commitments, one primary intention, expected energy, daily load, and optional reflection
-- Memories timeline for past events, focus sessions, completed intentions, and daily reflections
-- Gentle Insights page with deterministic, evidence-backed observations about recent focus, load, recovery, intentions, and reflections
-- Global command palette with search, navigation, creation commands, and demo reset
-- Settings page for app preferences, appearance notes, and local data controls
-- Transparent rule-based planning suggestions for active intentions
-- Accepted focus sessions linked back to intentions
-- Coherent demo data reset for screenshots and walkthroughs
-- Soft Rose Glass theme with dark glossy surfaces and warm rose/mauve accents
+- Goals and Projects pages with linked task progress
+- Memories timeline derived from calendar items, completed intentions, and reflections
+- Gentle Insights with evidence thresholds and confidence labels
+- Command palette with navigation and creation commands
+- Settings for planning defaults, energy profile, appearance themes, onboarding, export, demo data, and clear-data controls
+- Selectable themes: Soft Rose Glass, Violet Dusk, Blue Hour, and Ember Noir
+- Local JSON export for backups
 
 ## Tech Stack
 
@@ -34,10 +39,11 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 - React Router
 - Zustand
 - Framer Motion
-- @dnd-kit/core
-- date-fns
+- `@dnd-kit/core`
+- `date-fns`
 - CSS Modules
 - LocalStorage
+- Vitest
 
 ## Run Locally
 
@@ -52,83 +58,80 @@ Build for production:
 npm run build
 ```
 
+Run tests:
+
+```bash
+npm run test:run
+```
+
 Preview the production build:
 
 ```bash
 npm run preview
 ```
 
-## Data Storage
+## Data And Privacy
 
-Atria is an MVP with no backend. Data is stored locally in the browser:
+Atria is local-first in the current version. Data is stored in the browser through LocalStorage service boundaries:
 
 - Calendar items: `atria-events`
+- Daily focus entries: `atria-daily-focus`
+- Intentions: `atria-intentions`
+- Reflections: `atria-reflections`
 - Goals: `atria-goals`
 - Projects: `atria-projects`
-- Daily focus entries: `atria-daily-focus`
-- Daily reflections: `atria-reflections`
-- Settings preferences: `atria-settings-preferences`
+- Settings: `atria-settings-preferences`
 
-Stored data is normalized on read so older or partially invalid LocalStorage values can safely fall back to defaults.
-
-Planning suggestions are temporary and are not stored as separate records. When accepted, they become normal timed calendar events in `atria-events` with metadata linking them to the source intention.
-
-Memories are derived at view time from calendar items, intentions, and reflections. Atria does not store duplicated history snapshots, so edits to source records can alter past memory views. Recurring calendar items are expanded only for the selected month/range.
-
-Insights are deterministic observations derived locally from calendar items, intentions, reflections, and energy settings. Every visible insight has an evidence threshold, confidence reflects evidence amount and consistency rather than probability, and insights never alter the calendar. Atria does not use external AI services, medical claims, psychological claims, productivity grades, or benchmarking.
+No behavioural data is sent to a server. No external AI API is used. Exports are created locally as JSON files. Clearing browser storage may remove Atria data, so export a backup if portability matters.
 
 ## Demo Flow
 
-1. Reset demo data from the sidebar or command palette.
-2. Open the front page at `/` and enter the workspace.
-3. Open Calendar and scan the sample week.
-4. Add or edit an event.
-5. Drag a flexible task to another day.
-6. Open Today to show the current moment, primary intention, daily load, and reflection entry point.
-7. Open Memories and search for a past reflected day.
-8. Open Tasks and filter by goal or project.
-9. Open Goals and expand a goal to show linked projects and tasks.
-10. Open Projects and click a project card to reveal the detail drawer.
-11. Create a new task from the project drawer.
-12. Open Insights to show gentle evidence-backed observations.
-13. Open the command palette with Cmd/Ctrl + K and navigate or create from there.
+1. Open Settings and choose `Load sample data`.
+2. Open Calendar and scan the weekly orbit.
+3. Add or edit an event.
+4. Drag a flexible task to another day.
+5. Open Today to show current commitments, primary intention, energy, and reflection.
+6. Open Intentions and create an outcome.
+7. Use Find time from an intention and accept a focus session.
+8. Open Memories and search a reflected day.
+9. Open Tasks and filter by goal or project.
+10. Open Goals and Projects to inspect linked progress.
+11. Open Insights to show gentle evidence-backed observations.
+12. Open the command palette with Cmd/Ctrl + K.
+13. Export local data from Settings.
+
+## Architecture
+
+Routes live in `src/app/router.tsx` and are lazy-loaded. Feature domains own their own stores, services, utilities, types, and normalization. Pages compose features and shared UI. Shared services remain domain-neutral.
+
+Important boundaries:
+
+- Calendar owns events, tasks, recurrence, drag movement, and focus-session calendar records.
+- Intentions own outcome capture and status.
+- Planning owns deterministic suggestion scoring.
+- Reflections own daily reflection records.
+- Memories and Insights are derived at view time and are not stored as duplicated data.
+- Settings owns preferences, onboarding state, theme selection, and energy profile.
+- Data export reads normalized source stores and does not export derived Memories or Insights.
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for more detail.
 
 ## Current Limitations
 
-- No backend sync or authentication
-- Front-page sign-in and onboarding are visual prototype flows only
-- No multi-device persistence
-- Recurring item editing/deletion applies to the whole series
-- No single-occurrence recurring edits yet
+- Browser-local storage only
+- No cross-device sync
+- No import flow yet
+- No external calendar import/export
+- No collaborative calendars
+- No notifications
+- Local timezone assumptions
+- Rule-based planning rather than autonomous scheduling
+- Recurring edits/deletes apply to the whole series
 - Dragging recurring occurrences moves the source series
-- Memories are derived from current source data, not immutable historical snapshots
-- Project and goal progress use a stable MVP calculation rather than historical analytics
-- Deleting a project removes task `projectId` links but preserves task `goalId` for safety
-- Default view redirects from `/workspace`; direct app routes remain available
-- Planning suggestions are deterministic heuristics, not AI or behavioural learning
-- Memories do not use AI summaries or behavioural inference
+- Memories are derived from current source records, so historical views can change when source records are edited
+- Accepted focus sessions are single scheduled blocks
 - Insights are thresholded heuristics, not AI analysis or behavioural diagnosis
-- Accepted focus sessions are single blocks only, not recurring sessions
-- Today load is a scheduling heuristic based on timed commitments, not a productivity score
-- Expected energy comes from explicit settings, not behavioural inference
-
-## Why Atria Is Different
-
-Atria treats time as the primary object. Tasks are planned into days, events reserve time, projects structure workstreams, and goals connect the week to a larger direction.
-
-The product direction is closer to a futuristic personal planning cockpit: calendar-first, time-based, daily-focused, insight-aware, and wrapped in a soft cinematic glass UI.
-
-## Roadmap
-
-- Single-occurrence editing for recurring items
-- Recurring exception dates
-- Project detail routes
-- Notes attached to events
-- Import/export local data
-- Supabase sync
-- Authentication
-- Mobile-first planning refinements
 
 ## Deployment
 
-The app is ready for Vercel. A `vercel.json` rewrite is included so direct navigation to client routes works correctly.
+The app is ready for Vercel-style SPA hosting. `vercel.json` rewrites direct route requests to `index.html`.

@@ -1,0 +1,83 @@
+.onboarding {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.onboarding header {
+  display: grid;
+  gap: 8px;
+}
+
+.onboarding h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+}
+
+.onboarding header span,
+.stepList p {
+  color: var(--color-text-muted);
+}
+
+.stepList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepList li {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  border: 1px solid rgba(255, 220, 230, 0.09);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.014)),
+    rgba(18, 16, 18, 0.62);
+}
+
+.stepList li > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--color-neon-pink) 28%, white 8%);
+  border-radius: 14px;
+  color: var(--color-neon-pink);
+  font-family: var(--font-detail);
+  font-size: 0.7rem;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.stepList div {
+  display: grid;
+  gap: 5px;
+}
+
+.stepList strong {
+  font-size: 0.96rem;
+}
+
+.stepList p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .actions > button {
+    flex: 1 1 160px;
+  }
+}

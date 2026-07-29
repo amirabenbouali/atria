@@ -37,6 +37,9 @@ describe('settings storage', () => {
       defaultItemType: 'task',
       defaultCategory: 'Health',
       defaultView: 'today',
+      themeId: 'soft-rose-glass',
+      hasCompletedOnboarding: false,
+      onboardingVersion: 1,
       energyProfile: {
         morning: { energy: 4, preferredQualities: ['deep-focus', 'creative'] },
       },
@@ -57,10 +60,26 @@ describe('settings storage', () => {
     expect(readStoredSettingsPreferences()).toMatchObject({
       weekStartsOnMonday: false,
       defaultCategory: 'Finance',
+      hasCompletedOnboarding: false,
       energyProfile: {
         morning: { energy: 4, preferredQualities: ['creative'] },
         afternoon: { energy: 5, preferredQualities: [] },
       },
+    });
+  });
+
+  it('accepts current onboarding completion and supported themes', async () => {
+    installLocalStorageMock(JSON.stringify({
+      themeId: 'blue-hour',
+      hasCompletedOnboarding: true,
+      onboardingVersion: 1,
+    }));
+    const { readStoredSettingsPreferences } = await import('./settingsStorage.service');
+
+    expect(readStoredSettingsPreferences()).toMatchObject({
+      themeId: 'blue-hour',
+      hasCompletedOnboarding: true,
+      onboardingVersion: 1,
     });
   });
 });
