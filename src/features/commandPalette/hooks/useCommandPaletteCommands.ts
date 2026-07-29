@@ -10,7 +10,14 @@ import { useProjectsStore } from '../../projects/store/projects.store';
 import { useDefaultCalendarModalPreset } from '../../settings/hooks/useDefaultCalendarModalPreset';
 import { useWeekStartsOnMonday } from '../../settings/hooks/useWeekStartsOnMonday';
 import type { CommandPaletteCommand } from '../types/commandPalette.types';
-import { filterCommands, getCalendarItemBadge, searchCalendarItems } from '../utils/commandSearch';
+import {
+  filterCommands,
+  getCalendarItemBadge,
+  searchCalendarItems,
+  searchGoals,
+  searchIntentions,
+  searchProjects,
+} from '../utils/commandSearch';
 
 type UseCommandPaletteCommandsOptions = {
   query: string;
@@ -30,11 +37,26 @@ export function useCommandPaletteCommands({
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const openAddEventModal = useCalendarStore((state) => state.openAddEventModal);
   const openEditEventModal = useCalendarStore((state) => state.openEditEventModal);
+  const goals = useGoalsStore((state) => state.goals);
   const openGoalModal = useGoalsStore((state) => state.openGoalModal);
+  const openEditGoalModal = useGoalsStore((state) => state.openEditGoalModal);
+  const intentions = useIntentionsStore((state) => state.intentions);
   const openIntentionModal = useIntentionsStore((state) => state.openIntentionModal);
+  const openEditIntentionModal = useIntentionsStore((state) => state.openEditIntentionModal);
+  const projects = useProjectsStore((state) => state.projects);
   const openProjectModal = useProjectsStore((state) => state.openProjectModal);
+  const openEditProjectModal = useProjectsStore((state) => state.openEditProjectModal);
   const todayDate = formatInputDate();
   const weekStartDate = getCurrentWeekDays(selectedWeekDate, weekStartsOnMonday)[0]?.isoDate ?? todayDate;
+  const goalTitleById = useMemo(
+    () => Object.fromEntries(goals.map((goal) => [goal.id, goal.title])),
+    [goals],
+  );
+  const projectTitleById = useMemo(
+    () => Object.fromEntries(projects.map((project) => [project.id, project.title])),
+    [projects],
+  );
+  const searchContext = useMemo(() => ({ goals, projects, intentions }), [goals, intentions, projects]);
 
   const baseCommands = useMemo<CommandPaletteCommand[]>(
     () => [
@@ -298,23 +320,109 @@ export function useCommandPaletteCommands({
 
   const calendarCommands = useMemo<CommandPaletteCommand[]>(
     () =>
-      searchCalendarItems(items, query).map((item) => ({
-        id: `calendar-item-${item.id}`,
-        title: item.title,
-        subtitle: `${item.category} · ${item.date}${item.description ? ` · ${item.description}` : ''}`,
-        type: 'calendarItem',
-        badge: getCalendarItemBadge(item),
-        accentColor: item.accentColor,
+      searchCalendarItems(items, query, searchContext).map((item) => {
+        const linkedGoalTitle = item.itemType === 'task' && item.goalId ? goalTitleById[item.goalId] : undefined;
+        const linkedProjectTitle = item.itemType === 'task' && item.projectId ? projectTitleById[item.projectId] : undefined;
+        const linkedContext = [linkedGoalTitle, linkedProjectTitle].filter(Boolean).join(' · ');
+
+        return {
+          id: `calendar-item-${item.id}`,
+          title: item.title,
+          subtitle: [
+            item.category,
+            item.date,
+            item.itemType === 'event' ? `${item.startTime}-${item.endTime}` : 'Flexible task',
+            linkedContext,
+            item.description,
+          ].filter(Boolean).join(' · '),
+          type: 'calendarItem',
+          badge: getCalendarItemBadge(item),
+          accentColor: item.accentColor,
+          execute: () => {
+            openEditEventModal(item.id);
+            onClose();
+          },
+        };
+      }),
+    [goalTitleById, items, onClose, openEditEventModal, projectTitleById, query, searchContext],
+  );
+
+  const goalCommands = useMemo<CommandPaletteCommand[]>(
+    () =>
+      searchGoals(goals, query).map((goal) => ({
+        id: `goal-${goal.id}`,
+        title: goal.title,
+        subtitle: [goal.category, goal.status, goal.targetDate ? `Target ${goal.targetDate}` : '', goal.description]
+          .filter(Boolean)
+          .join(' · '),
+        type: 'goal',
+        badge: 'Goal',
+        accentColor: categoryColors[goal.category],
         execute: () => {
-          openEditEventModal(item.id);
+          navigate(routes.goals);
+          openEditGoalModal(goal.id);
           onClose();
         },
       })),
-    [items, onClose, openEditEventModal, query],
+    [goals, navigate, onClose, openEditGoalModal, query],
+  );
+
+  const projectCommands = useMemo<CommandPaletteCommand[]>(
+    () =>
+      searchProjects(projects, query, searchContext).map((project) => ({
+        id: `project-${project.id}`,
+        title: project.title,
+        subtitle: [
+          project.category,
+          project.status,
+          project.stage,
+          project.goalId ? goalTitleById[project.goalId] : '',
+          project.description,
+        ].filter(Boolean).join(' · '),
+        type: 'project',
+        badge: 'Project',
+        accentColor: categoryColors[project.category],
+        execute: () => {
+          navigate(routes.projects);
+          openEditProjectModal(project.id);
+          onClose();
+        },
+      })),
+    [goalTitleById, navigate, onClose, openEditProjectModal, projects, query, searchContext],
+  );
+
+  const intentionCommands = useMemo<CommandPaletteCommand[]>(
+    () =>
+      searchIntentions(intentions, query).map((intention) => ({
+        id: `intention-${intention.id}`,
+        title: intention.title,
+        subtitle: [
+          intention.status,
+          intention.priority,
+          intention.deadline ? `Due ${intention.deadline}` : '',
+          intention.desiredOutcome,
+          intention.description,
+        ].filter(Boolean).join(' · '),
+        type: 'intention',
+        badge: 'Intention',
+        accentColor: categoryColors.Personal,
+        execute: () => {
+          navigate(routes.intentions);
+          openEditIntentionModal(intention.id);
+          onClose();
+        },
+      })),
+    [intentions, navigate, onClose, openEditIntentionModal, query],
   );
 
   return useMemo(
-    () => [...filterCommands(baseCommands, query), ...calendarCommands].slice(0, 14),
-    [baseCommands, calendarCommands, query],
+    () => [
+      ...filterCommands(baseCommands, query),
+      ...calendarCommands,
+      ...goalCommands,
+      ...projectCommands,
+      ...intentionCommands,
+    ].slice(0, 14),
+    [baseCommands, calendarCommands, goalCommands, intentionCommands, projectCommands, query],
   );
 }

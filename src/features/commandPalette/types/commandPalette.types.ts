@@ -1,4 +1,11 @@
-export type CommandPaletteCommandType = 'navigation' | 'creation' | 'calendarItem' | 'system';
+export type CommandPaletteCommandType =
+  | 'navigation'
+  | 'creation'
+  | 'calendarItem'
+  | 'goal'
+  | 'project'
+  | 'intention'
+  | 'system';
 
 export type CommandPaletteCommand = {
   id: string;

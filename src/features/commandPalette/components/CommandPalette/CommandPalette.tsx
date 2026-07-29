@@ -3,9 +3,12 @@ import {
   CalendarDays,
   Command,
   FilePlus2,
+  FolderKanban,
+  Lightbulb,
   Navigation,
   RotateCcw,
   Search,
+  Target,
   type LucideIcon,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
@@ -27,6 +30,9 @@ const commandIcons: Record<CommandPaletteCommandType, LucideIcon> = {
   navigation: Navigation,
   creation: FilePlus2,
   calendarItem: CalendarDays,
+  goal: Target,
+  project: FolderKanban,
+  intention: Lightbulb,
   system: RotateCcw,
 };
 
@@ -145,7 +151,15 @@ export default function CommandPalette({
                     <AtriaIcon
                       className={styles.resultIcon}
                       icon={commandIcons[command.type] ?? Command}
-                      tone={command.type === 'system' ? 'warning' : command.type === 'calendarItem' ? 'mauve' : 'rose'}
+                      tone={
+                        command.type === 'system'
+                          ? 'warning'
+                          : command.type === 'calendarItem' || command.type === 'project'
+                            ? 'mauve'
+                            : command.type === 'goal'
+                              ? 'violet'
+                              : 'rose'
+                      }
                       size="sm"
                       shell
                       glow
