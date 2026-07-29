@@ -22,6 +22,7 @@ import { downloadAtriaExport } from '../../features/dataExport/services/dataExpo
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useGoalsStore } from '../../features/goals/store/goals.store';
 import { useIntentionsStore } from '../../features/intentions/store/intentions.store';
+import { useNotificationsStore } from '../../features/notifications/store/notifications.store';
 import { useProjectsStore } from '../../features/projects/store/projects.store';
 import { useReflectionsStore } from '../../features/reflections';
 import {
@@ -78,6 +79,7 @@ export default function SettingsPage() {
   const resetAppearance = useSettingsStore((state) => state.resetAppearance);
   const resetCalendarBehaviour = useSettingsStore((state) => state.resetCalendarBehaviour);
   const resetNotifications = useSettingsStore((state) => state.resetNotifications);
+  const resetNotificationDismissals = useNotificationsStore((state) => state.resetNotifications);
   const createDefaultPreset = useDefaultCalendarModalPreset();
   const isAddEventModalOpen = useCalendarStore((state) => state.isAddEventModalOpen);
   const editingEventId = useCalendarStore((state) => state.editingEventId);
@@ -500,7 +502,7 @@ export default function SettingsPage() {
 
             <SettingsSection eyebrow="Notifications" title="Local prompts">
               <p className={styles.microcopy}>
-                Atria does not enable browser push notifications in this MVP. These settings control local in-app prompt surfaces only.
+                Atria does not enable browser push notifications in this MVP. These settings control the local bell and in-app prompt surfaces.
               </p>
               <div className={styles.toggleGrid}>
                 <label className={styles.toggleRow}>
@@ -534,6 +536,7 @@ export default function SettingsPage() {
                 variant="secondary"
                 onClick={() => {
                   resetNotifications();
+                  resetNotificationDismissals();
                   setToastMessage('Notifications reset');
                 }}
               >

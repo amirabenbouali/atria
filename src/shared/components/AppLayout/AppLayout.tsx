@@ -1,6 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { Bell } from 'lucide-react';
 import CommandPalette from '../../../features/commandPalette/components/CommandPalette/CommandPalette';
+import NotificationCenter from '../../../features/notifications/components/NotificationCenter/NotificationCenter';
+import { useAtriaNotifications } from '../../../features/notifications/hooks/useAtriaNotifications';
 import OnboardingModal from '../../../features/onboarding/components/OnboardingModal/OnboardingModal';
 import { useSettingsStore } from '../../../features/settings/store/settings.store';
 import { storageFailureEventName } from '../../services/localStorage.service';
@@ -51,10 +54,18 @@ export default function AppLayout({
   onResetDemoData,
 }: AppLayoutProps) {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
   const [storageWarning, setStorageWarning] = useState<string | null>(null);
   const preferences = useSettingsStore((state) => state.preferences);
   const completeOnboarding = useSettingsStore((state) => state.completeOnboarding);
   const defaultItemType = preferences.planningDefaults.defaultItemType;
+  const {
+    notifications,
+    notificationCount,
+    quietHoursActive,
+    dismissNotification,
+    dismissAllNotifications,
+  } = useAtriaNotifications();
   const createButtonLabel = createButtonLabelOverride ?? (defaultItemType === 'task' ? 'New Task' : 'New Event');
   const pageTitle = `${topbarTitle ?? topbarEyebrow} · Atria`;
 
@@ -72,6 +83,10 @@ export default function AppLayout({
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
         setIsCommandPaletteOpen((isOpen) => !isOpen);
+      }
+
+      if (event.key === 'Escape') {
+        setIsNotificationCenterOpen(false);
       }
     };
 
@@ -139,6 +154,16 @@ export default function AppLayout({
             >
               Search Atria <span className={styles.shortcutHint}>⌘K</span>
             </Button>
+            <Button
+              className={styles.notificationButton}
+              variant="icon"
+              onClick={() => setIsNotificationCenterOpen((isOpen) => !isOpen)}
+              aria-label={notificationCount > 0 ? `Open notifications, ${notificationCount} unread` : 'Open notifications'}
+              aria-expanded={isNotificationCenterOpen}
+            >
+              <Bell size={17} aria-hidden="true" />
+              {notificationCount > 0 ? <span className={styles.notificationBadge}>{notificationCount}</span> : null}
+            </Button>
             {showWeekControls ? (
               <>
                 <Button variant="icon" onClick={onGoToPreviousWeek} aria-label={previousLabel}>
@@ -155,6 +180,14 @@ export default function AppLayout({
             <Button onClick={onCreateEvent}>{createButtonLabel}</Button>
           </div>
         </GlassPanel>
+        <NotificationCenter
+          isOpen={isNotificationCenterOpen}
+          notifications={notifications}
+          quietHoursActive={quietHoursActive}
+          onClose={() => setIsNotificationCenterOpen(false)}
+          onDismiss={dismissNotification}
+          onDismissAll={dismissAllNotifications}
+        />
         {children}
       </main>
       {contextPanel ? <aside className={styles.contextRail}>{contextPanel}</aside> : null}
