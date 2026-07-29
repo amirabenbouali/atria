@@ -6,7 +6,12 @@ import {
   writeStoredDailyFocus,
   writeStoredCalendarEvents,
 } from '../services/calendarStorage.service';
-import type { CalendarEvent, CalendarEventDraft, CalendarModalPreset } from '../types/calendar.types';
+import type {
+  CalendarEvent,
+  CalendarEventDraft,
+  CalendarFocusSessionDraft,
+  CalendarModalPreset,
+} from '../types/calendar.types';
 import { createId } from '../../../shared/utils/id';
 import {
   copyCalendarItem,
@@ -32,6 +37,7 @@ type CalendarState = {
   goToPreviousWeek: () => void;
   goToNextWeek: () => void;
   addEvent: (event: CalendarEventDraft) => void;
+  addFocusSessionFromSuggestion: (event: CalendarFocusSessionDraft) => CalendarEvent;
   updateEvent: (id: string, event: CalendarEventDraft) => void;
   duplicateEvent: (id: string) => void;
   copyEventToTomorrow: (id: string) => void;
@@ -99,6 +105,7 @@ export const useCalendarStore = create<CalendarState>((set) => ({
             id: createId(),
             completed: false,
             recurringCompletions: {},
+            source: 'manual',
             createdAt: timestamp,
             updatedAt: timestamp,
           },
@@ -108,6 +115,26 @@ export const useCalendarStore = create<CalendarState>((set) => ({
         modalPreset: null,
       };
     }),
+  addFocusSessionFromSuggestion: (eventDraft) => {
+    const timestamp = new Date().toISOString();
+    const event = {
+      ...eventDraft,
+      id: createId(),
+      completed: false,
+      recurringCompletions: {},
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    } satisfies CalendarEvent;
+
+    set((state) => ({
+      events: persistEvents([...state.events, event]),
+      isAddEventModalOpen: false,
+      editingEventId: null,
+      modalPreset: null,
+    }));
+
+    return event;
+  },
   updateEvent: (id, eventDraft) => {
     const target = getSourceActionTarget(id);
     // MVP limitation: editing a recurring occurrence updates the whole source series.

@@ -11,6 +11,13 @@ import {
   type IntentionPriority,
   type IntentionStatus,
 } from '../../features/intentions';
+import SuggestionReviewModal from '../../features/planning/components/SuggestionReviewModal/SuggestionReviewModal';
+import {
+  getFocusSessionDraft,
+  validateAdjustedSuggestion,
+  type PlanningSuggestion,
+} from '../../features/planning';
+import { getFocusSessionCountByIntention } from '../../features/planning/utils/intentionPlanning';
 import type {
   IntentionListOptions,
   IntentionPriorityFilter,
@@ -19,6 +26,7 @@ import type {
   IntentionTimeFilter,
 } from '../../features/intentions';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
+import { useSettingsStore } from '../../features/settings/store/settings.store';
 import type { PreferredTimeOfDay } from '../../features/timeQuality';
 import AppLayout from '../../shared/components/AppLayout/AppLayout';
 import Button from '../../shared/components/Button/Button';
@@ -74,6 +82,7 @@ export default function IntentionsPage() {
   const [timeFilter, setTimeFilter] = useState<IntentionTimeFilter>('all');
   const [sort, setSort] = useState<IntentionSortOption>('recent');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [planningIntentionId, setPlanningIntentionId] = useState<string | null>(null);
   const options = useMemo(
     () => ({
       search,
@@ -90,6 +99,7 @@ export default function IntentionsPage() {
     weekLabel,
     totalEventCount,
     completedEventCount,
+    weekStartsOnMonday,
   } = useCalendarEvents();
   const { intentions, visibleIntentions, summary } = useIntentionsPageData(options);
   const isIntentionModalOpen = useIntentionsStore((state) => state.isIntentionModalOpen);
@@ -109,12 +119,19 @@ export default function IntentionsPage() {
   const closeAddEventModal = useCalendarStore((state) => state.closeAddEventModal);
   const addEvent = useCalendarStore((state) => state.addEvent);
   const updateEvent = useCalendarStore((state) => state.updateEvent);
+  const addFocusSessionFromSuggestion = useCalendarStore((state) => state.addFocusSessionFromSuggestion);
   const resetDemoWorkspace = useResetDemoWorkspace();
   const goToToday = useCalendarStore((state) => state.goToToday);
   const goToPreviousWeek = useCalendarStore((state) => state.goToPreviousWeek);
   const goToNextWeek = useCalendarStore((state) => state.goToNextWeek);
   const editingIntention = intentions.find((intention) => intention.id === editingIntentionId) ?? null;
+  const planningIntention = intentions.find((intention) => intention.id === planningIntentionId) ?? null;
   const editingEvent = sourceEvents.find((event) => event.id === editingEventId) ?? null;
+  const energyProfile = useSettingsStore((state) => state.preferences.energyProfile);
+  const focusSessionCountByIntention = useMemo(
+    () => getFocusSessionCountByIntention(sourceEvents),
+    [sourceEvents],
+  );
   const hasIntentions = intentions.length > 0;
   const filtersActive = hasActiveFilters(options);
 
@@ -164,6 +181,45 @@ export default function IntentionsPage() {
 
     removeIntention(id);
     setToastMessage('Intention deleted');
+  };
+
+  const handleAcceptSuggestion = (suggestion: PlanningSuggestion) => {
+    if (!planningIntention) {
+      return false;
+    }
+
+    if (
+      sourceEvents.some(
+        (event) => event.itemType === 'event' && event.focusSession?.planningSuggestionId === suggestion.id,
+      )
+    ) {
+      setToastMessage('This focus session is already planned');
+      return false;
+    }
+
+    const validation = validateAdjustedSuggestion({
+      intention: planningIntention,
+      calendarItems: sourceEvents,
+      energyProfile,
+      start: new Date(suggestion.proposedStart),
+      end: new Date(suggestion.proposedEnd),
+      now: new Date(),
+      weekStartsOnMonday,
+    });
+
+    if (!validation.isValid) {
+      return false;
+    }
+
+    addFocusSessionFromSuggestion(getFocusSessionDraft({ intention: planningIntention, suggestion }));
+
+    if (planningIntention.status !== 'scheduled') {
+      setIntentionStatus(planningIntention.id, 'scheduled');
+    }
+
+    setPlanningIntentionId(null);
+    setToastMessage('Focus session planned');
+    return true;
   };
 
   return (
@@ -242,6 +298,8 @@ export default function IntentionsPage() {
                 onEdit={openEditIntentionModal}
                 onSetStatus={handleSetStatus}
                 onDelete={handleDelete}
+                onFindTime={setPlanningIntentionId}
+                plannedSessionCount={focusSessionCountByIntention[intention.id] ?? 0}
               />
             ))}
           </div>
@@ -279,6 +337,15 @@ export default function IntentionsPage() {
         onClose={closeAddEventModal}
         onAddEvent={addEvent}
         onUpdateEvent={updateEvent}
+      />
+      <SuggestionReviewModal
+        isOpen={Boolean(planningIntention)}
+        intention={planningIntention}
+        calendarItems={sourceEvents}
+        energyProfile={energyProfile}
+        weekStartsOnMonday={weekStartsOnMonday}
+        onClose={() => setPlanningIntentionId(null)}
+        onAccept={handleAcceptSuggestion}
       />
       <Toast message={toastMessage} />
     </AppLayout>

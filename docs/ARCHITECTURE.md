@@ -30,9 +30,13 @@ The user-facing intention inbox lives at `/intentions`. Quick capture uses a sma
 
 `features/reflections/` owns lightweight daily reflection data keyed by local calendar date. Reflection state should not be placed inside the calendar store.
 
-`features/timeQuality/` owns shared time-quality and energy vocabulary for future planning suggestions and reflection metadata.
+`features/timeQuality/` owns shared time-quality and energy vocabulary for planning suggestions and reflection metadata.
 
-Energy profiles are explicit user preferences stored in settings. The current profile uses three fixed local day periods: morning `05:00-11:59`, afternoon `12:00-16:59`, and evening `17:00-23:59`, with `00:00-04:59` falling back to evening. Atria does not learn from behaviour or make scheduling suggestions from this profile yet.
+Energy profiles are explicit user preferences stored in settings. The current profile uses three fixed local day periods: morning `05:00-11:59`, afternoon `12:00-16:59`, and evening `17:00-23:59`, with `00:00-04:59` falling back to evening. Atria does not learn from behaviour.
+
+`features/planning/` owns the transparent suggestion engine. It is deterministic and rule-based, not an AI service. The engine reads calendar availability, intention metadata, and explicit energy settings, then returns temporary reviewable suggestions with machine-readable reason and warning codes. It never writes to state, creates events, moves events, or modifies intentions. Users must explicitly accept a proposed block.
+
+Accepted planning suggestions become standard timed calendar events with `source: "planning-suggestion"` and `focusSession` metadata linking back to the source intention. These focus sessions persist through the existing calendar LocalStorage service and remain editable/draggable through current calendar flows. Recurring focus sessions and behavioural learning are intentionally out of scope.
 
 `shared/` contains code that is useful outside a single feature. Shared code should not import from feature folders.
 
@@ -62,6 +66,7 @@ The current product supports the portfolio MVP behavior:
 - drag-and-drop task and event movement with `@dnd-kit/core`
 - Today, Tasks, Goals, Projects, Insights, Settings, and command palette routes
 - an Intentions inbox for capturing outcomes before scheduling
+- deterministic planning suggestions that can create accepted focus sessions
 - domain foundations for daily reflections and time quality
 
 React Big Calendar and backend storage are intentionally deferred. LocalStorage remains the current persistence layer behind feature service boundaries.

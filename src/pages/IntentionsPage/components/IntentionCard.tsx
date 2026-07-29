@@ -1,7 +1,8 @@
 import { format, parseISO } from 'date-fns';
-import { BatteryMedium, CalendarDays, Clock3, MoreHorizontal, Sunrise } from 'lucide-react';
+import { BatteryMedium, CalendarDays, Clock3, MoreHorizontal, SearchCheck, Sunrise } from 'lucide-react';
 import type { Intention, IntentionStatus } from '../../../features/intentions';
 import { getIntentionNextAction } from '../../../features/intentions';
+import { getPlannedSessionLabel } from '../../../features/planning/utils/intentionPlanning';
 import Button from '../../../shared/components/Button/Button';
 import AtriaBadge from '../../../shared/ui/AtriaBadge';
 import AtriaCapsule from '../../../shared/ui/AtriaCapsule';
@@ -13,6 +14,8 @@ type IntentionCardProps = {
   onEdit: (id: string) => void;
   onSetStatus: (id: string, status: IntentionStatus) => void;
   onDelete: (id: string) => void;
+  onFindTime: (id: string) => void;
+  plannedSessionCount: number;
 };
 
 function formatDeadline(deadline?: string) {
@@ -36,9 +39,12 @@ export default function IntentionCard({
   onEdit,
   onSetStatus,
   onDelete,
+  onFindTime,
+  plannedSessionCount,
 }: IntentionCardProps) {
   const nextAction = getIntentionNextAction(intention);
   const deadlineLabel = formatDeadline(intention.deadline);
+  const canFindTime = intention.status === 'active' || intention.status === 'scheduled';
 
   return (
     <article className={`${styles.intentionCard} ${styles[intention.status]}`}>
@@ -55,6 +61,9 @@ export default function IntentionCard({
             </summary>
             <div>
               <button type="button" onClick={() => onEdit(intention.id)}>Edit</button>
+              {canFindTime ? (
+                <button type="button" onClick={() => onFindTime(intention.id)}>Find time</button>
+              ) : null}
               {intention.status !== 'active' ? (
                 <button type="button" onClick={() => onSetStatus(intention.id, 'active')}>Mark active</button>
               ) : null}
@@ -88,10 +97,20 @@ export default function IntentionCard({
           <span>Next</span>
           <strong>{nextAction}</strong>
         </div>
+
+        <div className={styles.nextAction}>
+          <span>Schedule</span>
+          <strong>{getPlannedSessionLabel(plannedSessionCount)}</strong>
+        </div>
       </div>
 
       <div className={styles.cardFooter}>
         <Button variant="secondary" onClick={() => onEdit(intention.id)}>Edit</Button>
+        {canFindTime ? (
+          <Button variant="secondary" onClick={() => onFindTime(intention.id)}>
+            <SearchCheck size={15} aria-hidden="true" /> Find time
+          </Button>
+        ) : null}
         {intention.status === 'completed' ? (
           <Button variant="ghost" onClick={() => onSetStatus(intention.id, 'active')}>Reopen</Button>
         ) : (

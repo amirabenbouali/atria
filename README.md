@@ -19,6 +19,8 @@ This is not a Notion clone or a generic task list. Atria starts from time: event
 - Insights dashboard for weekly progress, focus hours, category balance, routines, and project health
 - Global command palette with search, navigation, creation commands, and demo reset
 - Settings page for app preferences, appearance notes, and local data controls
+- Transparent rule-based planning suggestions for active intentions
+- Accepted focus sessions linked back to intentions
 - Coherent demo data reset for screenshots and walkthroughs
 - Soft Rose Glass theme with dark glossy surfaces and warm rose/mauve accents
 
@@ -66,6 +68,8 @@ Atria is an MVP with no backend. Data is stored locally in the browser:
 
 Stored data is normalized on read so older or partially invalid LocalStorage values can safely fall back to defaults.
 
+Planning suggestions are temporary and are not stored as separate records. When accepted, they become normal timed calendar events in `atria-events` with metadata linking them to the source intention.
+
 ## Demo Flow
 
 1. Reset demo data from the sidebar or command palette.
@@ -90,6 +94,8 @@ Stored data is normalized on read so older or partially invalid LocalStorage val
 - Project and goal progress use a stable MVP calculation rather than historical analytics
 - Deleting a project removes task `projectId` links but preserves task `goalId` for safety
 - Default view redirects only from the root route
+- Planning suggestions are deterministic heuristics, not AI or behavioural learning
+- Accepted focus sessions are single blocks only, not recurring sessions
 
 ## Why Atria Is Different
 

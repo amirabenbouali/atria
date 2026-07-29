@@ -5,7 +5,13 @@ import {
   defaultEventCategory,
   eventCategories,
 } from '../constants/calendar.constants';
-import type { CalendarEvent, CalendarRecurrence, EventCategory } from '../types/calendar.types';
+import type {
+  CalendarEvent,
+  CalendarItemSource,
+  CalendarRecurrence,
+  EventCategory,
+  FocusSessionMetadata,
+} from '../types/calendar.types';
 import { getDateForWeekday } from '../utils/calendarDates';
 import {
   readJsonFromLocalStorage,
@@ -69,6 +75,29 @@ function normalizeCompletionMap(completions: unknown): Record<string, boolean> {
   );
 }
 
+function normalizeSource(source: unknown): CalendarItemSource {
+  return source === 'planning-suggestion' ? 'planning-suggestion' : 'manual';
+}
+
+function normalizeFocusSession(focusSession: unknown): FocusSessionMetadata | undefined {
+  if (!focusSession || typeof focusSession !== 'object' || Array.isArray(focusSession)) {
+    return undefined;
+  }
+
+  const metadata = focusSession as Partial<FocusSessionMetadata>;
+
+  if (typeof metadata.intentionId !== 'string' || !metadata.intentionId.trim()) {
+    return undefined;
+  }
+
+  return {
+    intentionId: metadata.intentionId,
+    ...(typeof metadata.planningSuggestionId === 'string' && metadata.planningSuggestionId
+      ? { planningSuggestionId: metadata.planningSuggestionId }
+      : {}),
+  };
+}
+
 function normalizeStoredEvent(event: StoredCalendarEvent): CalendarEvent {
   const category = normalizeCategory(event.category);
   const startTime = normalizeTime(event.startTime ?? event.time, '09:00');
@@ -86,6 +115,8 @@ function normalizeStoredEvent(event: StoredCalendarEvent): CalendarEvent {
     recurrence: normalizeRecurrence(event.recurrence),
     recurrenceEndDate: event.recurrenceEndDate,
     recurringCompletions: normalizeCompletionMap(event.recurringCompletions),
+    source: normalizeSource(event.source),
+    ...(normalizeFocusSession(event.focusSession) ? { focusSession: normalizeFocusSession(event.focusSession) } : {}),
     createdAt: event.createdAt ?? event.updatedAt ?? timestamp,
     updatedAt: event.updatedAt ?? event.createdAt ?? timestamp,
   };

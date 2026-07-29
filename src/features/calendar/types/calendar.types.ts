@@ -2,6 +2,12 @@ export type EventCategory = 'Work' | 'Personal' | 'Fitness' | 'Learning' | 'Heal
 
 export type CalendarItemType = 'event' | 'task';
 export type CalendarRecurrence = 'none' | 'daily' | 'weekly' | 'monthly';
+export type CalendarItemSource = 'manual' | 'planning-suggestion';
+
+export type FocusSessionMetadata = {
+  intentionId: string;
+  planningSuggestionId?: string;
+};
 
 type CalendarItemBase = {
   id: string;
@@ -18,6 +24,8 @@ type CalendarItemBase = {
   recurrence: CalendarRecurrence;
   recurrenceEndDate?: string;
   recurringCompletions: Record<string, boolean>;
+  source?: CalendarItemSource;
+  focusSession?: FocusSessionMetadata;
   createdAt: string;
   updatedAt: string;
 };
@@ -48,6 +56,8 @@ export type CalendarEventDraft =
       | 'isRecurringOccurrence'
       | 'completed'
       | 'recurringCompletions'
+      | 'source'
+      | 'focusSession'
       | 'createdAt'
       | 'updatedAt'
     >
@@ -59,10 +69,24 @@ export type CalendarEventDraft =
       | 'isRecurringOccurrence'
       | 'completed'
       | 'recurringCompletions'
+      | 'source'
+      | 'focusSession'
       | 'createdAt'
       | 'updatedAt'
       | 'order'
     >;
+
+export type CalendarFocusSessionDraft = Omit<
+  ScheduledCalendarEvent,
+  | 'id'
+  | 'sourceId'
+  | 'occurrenceDate'
+  | 'isRecurringOccurrence'
+  | 'completed'
+  | 'recurringCompletions'
+  | 'createdAt'
+  | 'updatedAt'
+>;
 
 export type CalendarEventFormValues = {
   itemType: CalendarItemType;

@@ -1,0 +1,173 @@
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: 18px;
+}
+
+.modalHeader h2 {
+  margin: 3px 0 0;
+  font-size: 1.45rem;
+  line-height: 1.1;
+}
+
+.summary {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  color: var(--color-text-muted);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.014)),
+    rgba(20, 19, 24, 0.72);
+}
+
+.summary strong {
+  color: var(--color-text);
+}
+
+.metaRow,
+.suggestionMeta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.suggestionList {
+  display: grid;
+  gap: 12px;
+}
+
+.suggestionCard,
+.activeSuggestionCard,
+.emptyState,
+.adjustPanel {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-xl);
+  padding: 14px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(241, 141, 181, 0.09), transparent 38%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.052), rgba(255, 255, 255, 0.016)),
+    rgba(20, 19, 24, 0.78);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.activeSuggestionCard {
+  border-color: rgba(241, 141, 181, 0.32);
+  box-shadow: var(--shadow-neon), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.suggestionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.suggestionHeader h3 {
+  margin: 3px 0 0;
+  font-size: 1rem;
+}
+
+.suggestionHeader span,
+.emptyState span,
+.adjustPanel span,
+.message {
+  color: var(--color-text-muted);
+}
+
+.reasonList,
+.warningList {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.warningList {
+  color: #f3c6d6;
+}
+
+.cardActions,
+.modalActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.adjustPanel {
+  margin-top: 12px;
+}
+
+.adjustGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.adjustGrid label {
+  display: grid;
+  gap: 7px;
+  color: rgba(247, 244, 247, 0.72);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.adjustGrid input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+  padding: 0 12px;
+  color: white;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(20, 19, 24, 0.82);
+  outline: none;
+}
+
+.adjustGrid input:focus {
+  border-color: rgba(241, 141, 181, 0.55);
+  box-shadow: 0 0 0 4px rgba(241, 141, 181, 0.08);
+}
+
+.errorList {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  color: #fecdd3;
+  font-size: 0.78rem;
+}
+
+.emptyState {
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .adjustGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalActions,
+  .cardActions {
+    justify-content: stretch;
+  }
+
+  .modalActions button,
+  .cardActions button {
+    flex: 1 1 auto;
+  }
+}
