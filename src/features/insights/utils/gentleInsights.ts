@@ -644,7 +644,7 @@ function deriveReflectionInsights(
       code: 'reflection-coverage',
       key: 'recorded',
       title: 'Reflections are part of the recent record',
-      summary: `You recorded reflections on ${validReflections.length} days in this period${highlights.length ? `, including ${highlights.length} highlights` : ''}.`,
+      summary: `You recorded reflections on ${validReflections.length} days in this period${highlights.length ? `, including ${highlights.length} highlight${highlights.length === 1 ? '' : 's'}` : ''}.`,
       confidence: getConfidence(validReflections.length, config.reflectionMinimumDays, 8),
       evidence: validReflections.map((reflection) => ({ type: 'reflection', dateKey: reflection.date, sourceId: reflection.date, label: reflection.highlight ?? 'Reflection' })),
       rangeStart,

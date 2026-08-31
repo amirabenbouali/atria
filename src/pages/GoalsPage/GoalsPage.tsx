@@ -175,7 +175,7 @@ export default function GoalsPage() {
         <section className={styles.heroPanel}>
           <p className="eyebrow">Strategic Layer</p>
           <h1>Goals</h1>
-          <span>{activeGoalCount} active objectives · {completedGoalCount} completed</span>
+          <span>{activeGoalCount} active objective{activeGoalCount === 1 ? '' : 's'} · {completedGoalCount} completed</span>
           <button type="button" onClick={openGoalModal}>
             + New Goal
           </button>

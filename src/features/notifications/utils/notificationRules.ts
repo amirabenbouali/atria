@@ -130,7 +130,7 @@ export function buildAtriaNotifications({
       id: `daily-overview:${today}`,
       kind: 'daily-overview',
       title: 'Today has shape',
-      body: `${scheduledEvents.length} scheduled · ${openTasks.length} open tasks · ${completedToday}/${todayItems.length} complete`,
+      body: `${scheduledEvents.length} scheduled · ${openTasks.length} open task${openTasks.length === 1 ? '' : 's'} · ${completedToday}/${todayItems.length} complete`,
       tone: 'rose',
       createdForDate: today,
       actionLabel: 'Open today',

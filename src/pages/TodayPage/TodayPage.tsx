@@ -344,7 +344,7 @@ export default function TodayPage() {
                 <AtriaCapsule label={getHoursLabel(viewModel.scheduledMinutes)} icon={CalendarClock} tone="mauve" uppercase={false} />
               </div>
               <p className={styles.message}>{getLoadMessage(viewModel.dailyLoad)}</p>
-              <p className={styles.message}>{viewModel.overloadObservation}</p>
+              {viewModel.overloadObservation ? <p className={styles.message}>{viewModel.overloadObservation}</p> : null}
               <p className={styles.message}>
                 {viewModel.recoveryMinutes > 0
                   ? `${viewModel.recoveryMinutes} minutes are labelled for recovery.`

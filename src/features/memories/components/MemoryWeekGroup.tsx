@@ -20,7 +20,7 @@ export default function MemoryWeekGroup({ week, onOpenCalendar, onOpenIntentions
         <p className="sectionLabel" id={`memory-week-${week.weekStart}`}>
           {formatWeekLabel(week)}
         </p>
-        <span>{week.days.length} days remembered</span>
+        <span>{week.days.length} day{week.days.length === 1 ? '' : 's'} remembered</span>
       </header>
       <div className={styles.dayStack}>
         {week.days.map((day) => (

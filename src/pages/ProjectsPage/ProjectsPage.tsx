@@ -163,7 +163,7 @@ export default function ProjectsPage() {
         <section className={styles.heroPanel}>
           <p className="eyebrow">Structured Work</p>
           <h1>Projects</h1>
-          <span>{activeProjectCount} active workstreams · {completedProjectCount} completed</span>
+          <span>{activeProjectCount} active workstream{activeProjectCount === 1 ? '' : 's'} · {completedProjectCount} completed</span>
           <button type="button" onClick={openProjectModal}>
             + New Project
           </button>

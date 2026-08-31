@@ -76,8 +76,8 @@ export default function DayColumn({
     >
       <header className={styles.dayPlannerHeader}>
         <div className={styles.daySummary}>
-          <span>{sortedEvents.length} events</span>
-          <span>{sortedTasks.length} tasks</span>
+          <span>{sortedEvents.length} event{sortedEvents.length === 1 ? '' : 's'}</span>
+          <span>{sortedTasks.length} task{sortedTasks.length === 1 ? '' : 's'}</span>
           <span>{events.filter((event) => event.completed).length} done</span>
         </div>
         <div className={styles.quickActions}>

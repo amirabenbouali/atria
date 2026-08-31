@@ -12,5 +12,10 @@ export function getWeekOrbitDescription(events: CalendarEvent[]) {
     return 'A quiet week with room to place the first signal.';
   }
 
-  return `${focusBlocks || scheduledEvents.length} focused blocks. ${openDays} open days. ${taskDays} task signals.`;
+  const blockCount = focusBlocks || scheduledEvents.length;
+  const blockLabel = `${blockCount} focused block${blockCount === 1 ? '' : 's'}`;
+  const dayLabel = `${openDays} open day${openDays === 1 ? '' : 's'}`;
+  const taskLabel = `${taskDays} task signal${taskDays === 1 ? '' : 's'}`;
+
+  return `${blockLabel}. ${dayLabel}. ${taskLabel}.`;
 }

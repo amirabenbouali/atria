@@ -135,8 +135,8 @@ export default function MemoriesPage() {
           </div>
           <div className={styles.heroMetrics} aria-label="Memory summary">
             <strong>{totalMemoryDays}</strong>
-            <span>days in view</span>
-            <em>{completedCount} completed intentions</em>
+            <span>day{totalMemoryDays === 1 ? '' : 's'} in view</span>
+            <em>{completedCount} completed intention{completedCount === 1 ? '' : 's'}</em>
           </div>
         </section>
 

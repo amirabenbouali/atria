@@ -262,7 +262,7 @@ function hasBackToBackCommitments(items: TodayItem[]) {
   });
 }
 
-function getOverloadObservation(items: TodayItem[], now: Date, todayEnd: Date, recoveryMinutes: number) {
+function getOverloadObservation(items: TodayItem[], now: Date, todayEnd: Date) {
   if (hasBackToBackCommitments(items)) {
     return 'Some commitments sit close together today.';
   }
@@ -273,11 +273,7 @@ function getOverloadObservation(items: TodayItem[], now: Date, todayEnd: Date, r
     return `You have a ${largestGap}-minute open block later today.`;
   }
 
-  if (recoveryMinutes === 0) {
-    return 'No recovery block is labelled today.';
-  }
-
-  return `${recoveryMinutes} minutes are labelled for recovery today.`;
+  return '';
 }
 
 function getHeaderMessage(dayState: TodayDayState, remainingCount: number, dailyLoad: DailyLoad, nextItem?: TodayItem, finalItem?: TodayItem) {
@@ -437,7 +433,7 @@ export function buildTodayViewModel({
     preferredQualities: energyProfile[currentDayPeriod].preferredQualities,
     dailyLoad,
     overloadState: getOverloadState(dailyLoad),
-    overloadObservation: getOverloadObservation(timedItems, now, todayEnd, recoveryMinutes),
+    overloadObservation: getOverloadObservation(timedItems, now, todayEnd),
     scheduledMinutes,
     recoveryMinutes,
     reflection: reflections.find((reflection) => reflection.date === dateKey),

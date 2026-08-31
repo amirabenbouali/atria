@@ -127,9 +127,9 @@ export default function MemoryDayCard({ day, onOpenCalendar, onOpenIntentions }:
       ) : null}
 
       <footer className={styles.dayFooter}>
-        <span>{day.eventCount} events</span>
+        <span>{day.eventCount} event{day.eventCount === 1 ? '' : 's'}</span>
         <span>{day.focusMinutes} focus min</span>
-        <span>{day.completedCount} intentions</span>
+        <span>{day.completedCount} intention{day.completedCount === 1 ? '' : 's'}</span>
       </footer>
     </article>
   );
