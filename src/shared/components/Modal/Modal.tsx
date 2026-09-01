@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import GlassPanel from '../../ui/GlassPanel/GlassPanel';
 import styles from './Modal.module.css';
@@ -32,7 +33,7 @@ export default function Modal({ children, labelledBy, onClose }: ModalProps) {
     };
   }, [onClose]);
 
-  return (
+  return createPortal(
     <motion.div
       className={styles.backdrop}
       role="presentation"
@@ -57,6 +58,7 @@ export default function Modal({ children, labelledBy, onClose }: ModalProps) {
       >
         {children}
       </GlassPanel>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 }

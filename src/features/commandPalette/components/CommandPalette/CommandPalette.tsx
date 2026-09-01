@@ -12,6 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { createPortal } from 'react-dom';
 import AtriaIcon from '../../../../shared/ui/AtriaIcon';
 import AtriaBadge from '../../../../shared/ui/AtriaBadge';
 import type { CommandPaletteCommandType } from '../../types/commandPalette.types';
@@ -92,7 +93,7 @@ export default function CommandPalette({
     }
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen ? (
         <motion.div
@@ -187,6 +188,7 @@ export default function CommandPalette({
           </motion.section>
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
