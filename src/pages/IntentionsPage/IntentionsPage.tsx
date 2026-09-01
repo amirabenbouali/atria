@@ -245,7 +245,7 @@ export default function IntentionsPage() {
         <section className={styles.heroPanel}>
           <div>
             <p className="eyebrow">Outcome Inbox</p>
-            <h1>Intentions</h1>
+            <h1>Outcomes first, scheduling second.</h1>
             <span>Capture outcomes before deciding when they belong in your calendar.</span>
           </div>
           <Button onClick={openIntentionModal}>New intention</Button>

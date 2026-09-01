@@ -203,12 +203,8 @@ export default function TodayPage() {
     >
       <GlassPanel className={styles.todayShell}>
         <section className={styles.todayHeader}>
-          <div>
-            <p className="eyebrow">Daily Shape</p>
-            <h1>Today</h1>
-            <span>{viewModel.dateLabel}</span>
-          </div>
-          <p>{viewModel.headerMessage}</p>
+          <p className="eyebrow">{viewModel.dateLabel}</p>
+          <h1>{viewModel.headerMessage}</h1>
         </section>
 
         <section className={styles.nowCard} aria-labelledby="today-now-heading">

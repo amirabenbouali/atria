@@ -130,7 +130,7 @@ export default function MemoriesPage() {
         <section className={styles.heroPanel}>
           <div>
             <p className="eyebrow">Private History</p>
-            <h1>Memories</h1>
+            <h1>How your time actually felt.</h1>
             <span>Revisit the days, moments, and intentions you chose to keep.</span>
           </div>
           <div className={styles.heroMetrics} aria-label="Memory summary">

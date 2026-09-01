@@ -90,8 +90,8 @@
 
 .topbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
-  align-items: end;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, max-content);
+  align-items: start;
   gap: var(--space-6);
   min-height: 132px;
   padding: 30px 36px 24px;
@@ -106,18 +106,17 @@
 
 .weekIdentity {
   min-width: 0;
+  padding-top: 4px;
 }
 
 .weekIdentity h1 {
   margin: 0 0 -4px;
-  overflow: hidden;
   padding: 0.03em 0.08em 0.08em 0;
-  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-size: clamp(1.7rem, 2.4vw, 2.6rem);
   font-weight: 850;
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  overflow-wrap: break-word;
   text-shadow: 0 0 28px color-mix(in srgb, var(--color-neon-pink) 16%, transparent);
 }
 

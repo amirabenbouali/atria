@@ -201,7 +201,7 @@ export default function InsightsPage() {
         <section className={styles.heroPanel}>
           <div>
             <p className="eyebrow">Observed, not judged</p>
-            <h1>Insights</h1>
+            <h1>Patterns, without the scorekeeping.</h1>
             <span>Gentle observations based on the time and reflections you have recorded.</span>
           </div>
           <SelectControl

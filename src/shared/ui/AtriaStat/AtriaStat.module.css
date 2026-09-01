@@ -30,9 +30,9 @@
 }
 
 .stat strong {
-  font-family: var(--font-detail);
-  font-size: 1.72rem;
-  font-weight: 900;
+  font-size: 1.9rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
   line-height: 1;
   text-shadow: 0 0 22px color-mix(in srgb, var(--color-neon-pink) 14%, transparent);
 }

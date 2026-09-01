@@ -33,11 +33,12 @@
 }
 
 .heroPanel h1 {
-  margin: 0 0 -4px;
+  max-width: 640px;
+  margin: 0;
   padding: 0.03em 0.08em 0.08em 0;
-  font-size: clamp(2.4rem, 5vw, 5rem);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.14;
+  letter-spacing: -0.025em;
 }
 
 .heroPanel span,

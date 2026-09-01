@@ -174,7 +174,7 @@ export default function GoalsPage() {
       <GlassPanel className={styles.goalsShell}>
         <section className={styles.heroPanel}>
           <p className="eyebrow">Strategic Layer</p>
-          <h1>Goals</h1>
+          <h1>Long-range direction, not busywork.</h1>
           <span>{activeGoalCount} active objective{activeGoalCount === 1 ? '' : 's'} · {completedGoalCount} completed</span>
           <button type="button" onClick={openGoalModal}>
             + New Goal

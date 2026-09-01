@@ -49,11 +49,20 @@
 }
 
 .heroPanel h1 {
-  margin: 4px 0 -4px;
+  max-width: 620px;
+  margin: 6px 0 0;
   padding: 0.03em 0.08em 0.08em 0;
-  font-size: clamp(2.4rem, 5vw, 4.8rem);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
+  font-size: clamp(1.7rem, 2.8vw, 2.6rem);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+
+.heroPanel span {
+  display: block;
+  max-width: 520px;
+  margin-top: 10px;
+  font-size: 0.98rem;
+  line-height: 1.5;
 }
 
 .heroPanel span,
@@ -81,8 +90,9 @@
 .summaryGrid strong {
   position: relative;
   z-index: 1;
-  font-family: var(--font-detail);
   font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 850;
+  letter-spacing: -0.03em;
   line-height: 0.9;
 }
 

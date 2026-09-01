@@ -99,7 +99,7 @@ export default function TasksPage() {
       <GlassPanel className={styles.tasksShell}>
         <section className={styles.heroPanel}>
           <p className="eyebrow">Flexible Planning</p>
-          <h1>Tasks</h1>
+          <h1>Loose ends, grouped by day.</h1>
           <span>{tasks.length} task signal{tasks.length === 1 ? '' : 's'} in view</span>
           <button type="button" onClick={() => openAddEventModal(createDefaultPreset({ itemType: 'task' }))}>
             + New Task

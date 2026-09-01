@@ -162,7 +162,7 @@ export default function ProjectsPage() {
       <GlassPanel className={styles.projectsShell}>
         <section className={styles.heroPanel}>
           <p className="eyebrow">Structured Work</p>
-          <h1>Projects</h1>
+          <h1>Important work, kept in view.</h1>
           <span>{activeProjectCount} active workstream{activeProjectCount === 1 ? '' : 's'} · {completedProjectCount} completed</span>
           <button type="button" onClick={openProjectModal}>
             + New Project
