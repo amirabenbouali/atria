@@ -7,9 +7,9 @@ export function useDefaultCalendarModalPreset() {
 
   return useCallback(
     (overrides: CalendarModalPreset = {}): CalendarModalPreset => ({
+      ...overrides,
       itemType: overrides.itemType ?? planningDefaults.defaultItemType,
       category: overrides.category ?? planningDefaults.defaultCategory,
-      date: overrides.date,
     }),
     [planningDefaults.defaultCategory, planningDefaults.defaultItemType],
   );
