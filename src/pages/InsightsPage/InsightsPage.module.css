@@ -57,7 +57,7 @@
   letter-spacing: -0.025em;
 }
 
-.heroPanel span {
+.heroPanel > div > span {
   display: block;
   max-width: 520px;
   margin-top: 10px;
