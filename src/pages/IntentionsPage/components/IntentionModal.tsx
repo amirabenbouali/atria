@@ -166,6 +166,7 @@ export default function IntentionModal({
 
     if (savedIntention) {
       onSaved(savedIntention, editingIntention ? 'edit' : 'create');
+      onClose();
     }
   };
 

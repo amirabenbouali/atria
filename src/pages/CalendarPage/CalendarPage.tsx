@@ -86,6 +86,11 @@ export default function CalendarPage() {
     week: ['Previous week', 'Next week'],
     month: ['Previous month', 'Next month'],
   } satisfies Record<CalendarView, [string, string]>;
+  const topbarEyebrow = {
+    day: 'Daily Orbit',
+    week: 'Weekly Orbit',
+    month: 'Monthly Orbit',
+  } satisfies Record<CalendarView, string>;
 
   useEffect(() => {
     setCalendarView(defaultCalendarView);
@@ -161,6 +166,7 @@ export default function CalendarPage() {
       totalEvents={visibleCalendarEvents.length}
       completedEvents={visibleCompletedEventCount}
       weekLabel={calendarLabel}
+      topbarEyebrow={topbarEyebrow[calendarView]}
       topbarDescription={getWeekOrbitDescription(visibleCalendarEvents)}
       previousLabel={navigationLabels[calendarView][0]}
       nextLabel={navigationLabels[calendarView][1]}

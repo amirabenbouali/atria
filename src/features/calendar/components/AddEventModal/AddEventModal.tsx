@@ -61,10 +61,11 @@ export default function AddEventModal({
     onSubmit: (eventDraft) => {
       if (editingEvent) {
         onUpdateEvent(editingEvent.id, eventDraft, isEditingRecurringOccurrence ? editScope : 'series');
-        return;
+      } else {
+        onAddEvent(eventDraft);
       }
 
-      onAddEvent(eventDraft);
+      onClose();
     },
   });
   const goals = useGoalsStore((state) => state.goals);

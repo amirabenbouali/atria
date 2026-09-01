@@ -108,6 +108,8 @@ export default function ProjectModal({
     } else {
       onAddProject(draft);
     }
+
+    onClose();
   };
 
   return (

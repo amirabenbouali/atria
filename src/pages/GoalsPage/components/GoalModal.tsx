@@ -88,6 +88,8 @@ export default function GoalModal({
     } else {
       onAddGoal(draft);
     }
+
+    onClose();
   };
 
   return (
