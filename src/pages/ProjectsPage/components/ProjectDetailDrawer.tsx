@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import type { MouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { format, parseISO } from 'date-fns';
 import { BriefcaseBusiness, CalendarDays, Gauge, Layers3, RefreshCw, Target, X } from 'lucide-react';
 import type { FlexibleCalendarTask } from '../../../features/calendar/types/calendar.types';
@@ -45,7 +46,7 @@ export default function ProjectDetailDrawer({
 }: ProjectDetailDrawerProps) {
   const targetLabel = project?.targetDate ? format(parseISO(project.targetDate), 'MMM d, yyyy') : 'Open target';
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {project ? (
         <motion.div
@@ -143,6 +144,7 @@ export default function ProjectDetailDrawer({
           </GlassPanel>
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

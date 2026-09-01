@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import styles from './Toast.module.css';
 
 type ToastProps = {
@@ -6,7 +7,7 @@ type ToastProps = {
 };
 
 export default function Toast({ message }: ToastProps) {
-  return (
+  return createPortal(
     <AnimatePresence>
       {message ? (
         <motion.div
@@ -20,6 +21,7 @@ export default function Toast({ message }: ToastProps) {
           {message}
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
