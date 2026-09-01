@@ -14,7 +14,7 @@ import {
   getMonthGridDays,
   getMonthLabel,
 } from '../../features/calendar/utils/calendarDates';
-import { getEditableCalendarItem, getVisibleCalendarOccurrencesForDays } from '../../features/calendar/utils/calendarRecurrence';
+import { getEditableCalendarItem, getVisibleCalendarOccurrencesForDays, parseOccurrenceId } from '../../features/calendar/utils/calendarRecurrence';
 import { getWeekOrbitDescription } from '../../features/calendar/utils/weekOrbitSummary';
 import { useResetDemoWorkspace } from '../../features/demo/hooks/useResetDemoWorkspace';
 import { useDefaultCalendarModalPreset } from '../../features/settings/hooks/useDefaultCalendarModalPreset';
@@ -154,7 +154,11 @@ export default function CalendarPage() {
   }, [calendarView, goToNextMonth, goToNextWeek, selectedWeekDate, setSelectedDate, showWeekends]);
 
   const handleDelete = useCallback((id: string) => {
-    if (confirmBeforeDeleting && !window.confirm('Delete this calendar item?')) {
+    const confirmMessage = parseOccurrenceId(id).isOccurrence
+      ? 'Delete this calendar item? Recurring items are deleted as a full series.'
+      : 'Delete this calendar item?';
+
+    if (confirmBeforeDeleting && !window.confirm(confirmMessage)) {
       return;
     }
 
