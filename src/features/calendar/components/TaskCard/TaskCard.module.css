@@ -207,6 +207,12 @@
   box-shadow: none;
 }
 
+.taskActions .menuTrigger {
+  min-height: 26px;
+  padding: 0;
+  font-size: inherit;
+}
+
 .deleteButton {
   color: #fecdd3;
 }

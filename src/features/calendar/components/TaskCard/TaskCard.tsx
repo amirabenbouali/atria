@@ -3,6 +3,7 @@ import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { ArrowDown, ArrowUp, GripVertical } from 'lucide-react';
 import Button from '../../../../shared/components/Button/Button';
+import CardMenu from '../../../../shared/components/CardMenu/CardMenu';
 import AtriaIcon from '../../../../shared/ui/AtriaIcon';
 import { CompletedBadge, RecurringBadge } from '../../../../shared/ui/AtriaBadge';
 import { cn } from '../../../../shared/utils/cn';
@@ -130,46 +131,16 @@ export default function TaskCard({
         >
           <ArrowDown size={13} aria-hidden="true" />
         </Button>
-        <Button
-          variant="ghost"
-          className={styles.secondaryAction}
-          onClick={(clickEvent) => {
-            clickEvent.stopPropagation();
-            onCopyToTomorrow(task.id);
-          }}
-        >
-          +1d
-        </Button>
-        <Button
-          variant="ghost"
-          className={styles.secondaryAction}
-          onClick={(clickEvent) => {
-            clickEvent.stopPropagation();
-            onCopyToNextWeek(task.id);
-          }}
-        >
-          +1w
-        </Button>
-        <Button
-          variant="ghost"
-          className={styles.secondaryAction}
-          onClick={(clickEvent) => {
-            clickEvent.stopPropagation();
-            onDuplicate(task.id);
-          }}
-        >
-          Copy
-        </Button>
-        <Button
-          variant="ghost"
-          className={styles.deleteButton}
-          onClick={(clickEvent) => {
-            clickEvent.stopPropagation();
-            onDelete(task.id);
-          }}
-        >
-          Delete
-        </Button>
+        <CardMenu
+          className={styles.menuTrigger}
+          label={`More actions for ${task.title}`}
+          actions={[
+            { label: 'Copy to tomorrow', onSelect: () => onCopyToTomorrow(task.id) },
+            { label: 'Copy to next week', onSelect: () => onCopyToNextWeek(task.id) },
+            { label: 'Duplicate', onSelect: () => onDuplicate(task.id) },
+            { label: 'Delete', tone: 'danger', onSelect: () => onDelete(task.id) },
+          ]}
+        />
       </div>
     </motion.div>
   );
